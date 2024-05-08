@@ -1,0 +1,44 @@
+#Download and extract kafka 
+wget https://archive.apache.org/dist/kafka/3.6.1/kafka_2.12-3.6.1.tgz
+tar xzvf kafka_2.12-3.6.1.tgz
+
+
+# Reset advertised listeners and log directory location
+vi config/kraft/server.properties
+advertised.listeners=PLAINTEXT://[::1]:9092
+Change log/dirs
+
+#Formatting kraft location
+KAFKA_CLUSTER_ID="$(bin/kafka-storage.sh random-uuid)"
+bin/kafka-storage.sh format -t $KAFKA_CLUSTER_ID -c config/kraft/server.properties
+
+#Start Kafka
+bin/kafka-server-start.sh -daemon config/kraft/server.properties
+
+
+# Create Rides topic
+bin/kafka-topics.sh --create --topic rides --partitions 3 --replication-factor 1 --bootstrap-server [::1]:9092
+
+# Create riders Topic 
+bin/kafka-topics.sh --create --topic riders --partitions 3 --replication-factor 1 --bootstrap-server [::1]:9092
+
+# Create Drivers Topic
+bin/kafka-topics.sh --create --topic drivers --partitions 3 --replication-factor 1 --bootstrap-server [::1]:9092
+
+# Create a topic for Enriched Rides
+bin/kafka-topics.sh --create --topic rides_enriched --partitions 3 --replication-factor 1 --bootstrap-server [::1]:9092
+
+# List all topics
+bin/kafka-topics.sh --bootstrap-server [::1]:9092 --list
+
+# Produce data to rides topic
+bin/kafka-console-producer.sh --topic rides --bootstrap-server [::1]:9092 --property "parse.key=true" --property "key.separator=@@@"
+
+# Consume data from rides topic
+bin/kafka-console-consumer.sh --topic rides --bootstrap-server [::1]:9092 --property "print.key=true"
+
+# Sample payload for ride
+{ "ride_id":"000001"}@@@{"ride_id": "000001","rider_id": "100001","driver_id": "200001","location_id": "300001","amount": 350,"ride_status": "In Progress","start_lat" : 12.99070744,"start_lng" : 77.57087025,"dest_lat": 12.88772573, "dest_lng": 77.56097347}
+
+# Delete a topic 
+bin/kafka-topics.sh --delete --topic rides --bootstrap-server [::1]:9092

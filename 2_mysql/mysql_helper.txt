@@ -1,0 +1,34 @@
+# Install mysql
+sudo apt install mysql-server
+
+#Start mysql
+sudo systemctl start mysql.service
+
+#Start the client
+sudo mysql
+
+#Create database 
+create database analytics;
+
+#use analytics DB
+use analytics;
+
+#Grant access in mysql
+CREATE USER 'analyticsuser'@'localhost' IDENTIFIED BY 'password';
+GRANT ALL PRIVILEGES ON analytics.* TO 'analyticsuser'@'localhost';
+
+#Create mysql location table
+CREATE TABLE Location (
+    location_id varchar(255) NOT NULL,
+    city varchar(255),
+    country varchar(255),
+    PRIMARY KEY (location_id)
+); 
+
+
+
+
+# Insert location data into location table in mysql
+insert into Location (location_id,city,country) values ('300001','Bengaluru','India');
+insert into Location (location_id,city,country) values ('300002','Mumbai','India');
+insert into Location (location_id,city,country) values ('300003','New Delhi','India');

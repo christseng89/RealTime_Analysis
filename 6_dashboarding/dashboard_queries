@@ -1,0 +1,18 @@
+# Find a breakdown at City level for total Rides
+select count(1),city from rides_enriched where request_time >toDateTime(now()-60*60*1000,'yyyy-MM-dd HH:mm:ss Z') and ride_status!='Cancelled' group by city
+
+# Find a breakdown of ride status
+select count(1),ride_status from rides_enriched where request_time >toDateTime(now()-60*60*1000,'yyyy-MM-dd HH:mm:ss Z') group by ride_status
+
+# Find a breakdown of vehicle type
+select count(1),vehicle_type from rides_enriched where request_time >toDateTime(now()-60*60*1000,'yyyy-MM-dd HH:mm:ss Z') group by vehicle_type
+
+# Find a breakdown of rides taken based on membership
+select count(1),membership_status from rides_enriched where request_time >toDateTime(now()-60*60*1000,'yyyy-MM-dd HH:mm:ss Z')  and ride_status!='Cancelled' group by membership_status
+
+# Find the Total revenue in last 1 hour
+select sum(amount) from rides_enriched where request_time >toDateTime(now()-60*60*1000,'yyyy-MM-dd HH:mm:ss Z') and ride_status!='Cancelled'
+
+# Find average revenue per user in last 1 hour
+select avg(amount) from rides_enriched where request_time >toDateTime(now()-60*60*1000,'yyyy-MM-dd HH:mm:ss Z')  and ride_status!='Cancelled'
+

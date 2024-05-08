@@ -1,0 +1,8 @@
+# Example user data
+{"driver_id":"200001"}@@@{"name":"ABCD", "vehicle_type": "Sedan", "last_updated_at":"2024-01-13 11:00:00","driver_id":"200001"}
+{"driver_id":"200002"}@@@{"name":"BCDA", "vehicle_type": "SUV", "last_updated_at":"2024-01-13 11:00:00","driver_id":"200002"}
+{"driver_id":"200003"}@@@{"name":"CDDA", "vehicle_type": "Hatchback", "last_updated_at":"2024-01-13 13:00:00","driver_id":"200003"}
+{"driver_id":"200004"}@@@{"name":"DCBA", "vehicle_type": "Sedan", "last_updated_at":"2024-01-13 13:00:00","driver_id":"200004"}
+
+# Kafka producer for users data
+bin/kafka-console-producer.sh --topic drivers --bootstrap-server [::1]:9092 --property "parse.key=true" --property "key.separator=@@@"

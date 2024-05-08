@@ -1,0 +1,13 @@
+
+{
+    "ride_id": "000001",
+    "rider_id": "100001",
+    "driver_id": "200001",
+    "location_id": "300001",
+    "amount": 350,
+    "ride_status": "In Progress",
+    "start_lat" : 12.99070744,
+    "start_lng" : 77.57087025,
+    "dest_lat": 12.88772573, 
+    "dest_lng": 77.56097347
+}

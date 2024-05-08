@@ -1,0 +1,130 @@
+#Rides table creation
+CREATE TABLE RideTest (
+  `ride_id` STRING,
+  `rider_id` STRING,
+  `driver_id` STRING,
+  `location_id` STRING,
+  `amount` FLOAT,
+  `ride_status` STRING,
+  `start_lat` FLOAT,
+  `start_lng` FLOAT,
+  `dest_lat` FLOAT,
+  `dest_lng` FLOAT,
+  `request_time` TIMESTAMP(3) METADATA FROM 'timestamp',
+  `processing_time` as PROCTIME()
+) WITH (
+  'connector' = 'kafka',
+  'topic' = 'rides',
+  'properties.bootstrap.servers' = '[::1]:9092',
+  'properties.group.id' = 'test',
+  'scan.startup.mode' = 'latest-offset',
+  'format' = 'json'
+);
+
+
+#Rides table creation
+CREATE TABLE Rides (
+  `ride_id` STRING,
+  `rider_id` STRING,
+  `driver_id` STRING,
+  `location_id` STRING,
+  `amount` FLOAT,
+  `ride_status` STRING,
+  `start_lat` FLOAT,
+  `start_lng` FLOAT,
+  `dest_lat` FLOAT,
+  `dest_lng` FLOAT,
+  `request_time` TIMESTAMP(3) METADATA FROM 'timestamp',
+  `processing_time` as PROCTIME(),
+  WATERMARK FOR request_time AS request_time - INTERVAL '1' SECOND
+) WITH (
+  'connector' = 'kafka',
+  'topic' = 'rides',
+  'properties.bootstrap.servers' = '[::1]:9092',
+  'properties.group.id' = 'rides-flink-consumer',
+  'scan.startup.mode' = 'group-offsets',
+  'format' = 'json'
+);
+
+
+#Riders table creation
+CREATE TABLE Riders (
+  `rider_id` STRING,
+  `name` STRING,
+  `membership_status` STRING,
+  `last_updated_at`  TIMESTAMP(3),
+   WATERMARK FOR last_updated_at AS last_updated_at - INTERVAL '15' SECOND,
+   PRIMARY KEY(`rider_id`) NOT ENFORCED
+) WITH (
+  'connector' = 'upsert-kafka',
+  'topic' = 'riders',
+  'properties.bootstrap.servers' = '[::1]:9092',
+  'properties.group.id' = 'testGroup',
+  'value.format' = 'json',
+  'key.format' = 'json'
+);
+
+#Drivers table creation
+CREATE TABLE Drivers (
+  `driver_id` STRING,
+  `name` STRING,
+  `vehicle_type` STRING,
+  `last_updated_at`  TIMESTAMP(3),
+  WATERMARK FOR last_updated_at AS last_updated_at - INTERVAL '15' SECOND,
+  PRIMARY KEY(`driver_id`) NOT ENFORCED
+) WITH (
+  'connector' = 'upsert-kafka',
+  'topic' = 'drivers',
+  'properties.bootstrap.servers' = '[::1]:9092',
+  'properties.group.id' = 'testGroup',
+  'value.format' = 'json',
+  'key.format' = 'json'
+);
+
+
+
+#Create Location table
+CREATE TABLE Location (
+  location_id STRING,
+  city STRING,
+  country STRING,
+  PRIMARY KEY (location_id) NOT ENFORCED
+) WITH (
+   'connector' = 'jdbc',
+   'url' = 'jdbc:mysql://localhost:3306/analytics',
+   'table-name' = 'Location',
+   'username' = 'analyticsuser',
+   'password' = 'password'
+);
+
+
+#Create RidesEnriched table
+CREATE TABLE RidesEnriched (
+  `rider_id` STRING,
+  `rider_name` STRING,
+  `driver_id` STRING,
+  `driver_name` STRING,
+  `vehicle_type` STRING,
+  `ride_id` STRING,
+  `amount` FLOAT,
+  `request_time`  TIMESTAMP_LTZ(3),
+  `membership_status` STRING,
+  `city` STRING,
+  `country` STRING,
+  `ride_status` STRING,
+  `start_lat` FLOAT,
+  `start_lng` FLOAT,
+  `dest_lat` FLOAT,
+  `dest_lng` FLOAT,
+  PRIMARY KEY(`ride_id`) NOT ENFORCED
+  ) WITH (
+  'connector' = 'upsert-kafka',
+  'topic' = 'rides_enriched',
+  'properties.bootstrap.servers' = '[::1]:9092',
+  'properties.group.id' = 'testGroup',
+  'value.format' = 'json',
+  'key.format' = 'json'
+);
+
+
+

@@ -1,0 +1,88 @@
+{
+  "schemaName": "rides_enriched",
+  "dimensionFieldSpecs": [
+    {
+      "name": "rider_id",
+      "dataType": "STRING"
+    },
+    {
+      "name": "rider_name",
+      "dataType": "STRING"
+    },
+    {
+      "name": "driver_id",
+      "dataType": "STRING"
+    },
+    {
+      "name": "driver_name",
+      "dataType": "STRING"
+    },
+    {
+      "name": "vehicle_type",
+      "dataType": "STRING"
+    },
+    {
+      "name": "ride_id",
+      "dataType": "STRING"
+    },
+    {
+      "name": "membership_status",
+      "dataType": "STRING"
+    },
+    {
+      "name": "city",
+      "dataType": "STRING"
+    },
+    {
+      "name": "country",
+      "dataType": "STRING"
+    },
+    {
+      "name": "ride_status",
+      "dataType": "STRING"
+    },
+    {
+      "name": "start_lat",
+      "dataType": "FLOAT"
+    },
+    {
+      "name": "start_lng",
+      "dataType": "FLOAT"
+    },
+    {
+      "name": "dest_lat",
+      "dataType": "FLOAT"
+    },
+    {
+      "name": "dest_lng",
+      "dataType": "FLOAT"
+    },
+    {
+      "name": "location_start",
+      "dataType": "BYTES",
+      "transformFunction": "toSphericalGeography(stPoint(start_lng,start_lat))"
+    },
+    {
+      "name": "location_dest",
+      "dataType": "BYTES",
+      "transformFunction": "toSphericalGeography(stPoint(dest_lng,dest_lat))"
+    }
+  ],
+  "metricFieldSpecs": [
+    {
+      "name": "amount",
+      "dataType": "FLOAT"
+    }
+  ],
+  "dateTimeFieldSpecs": [
+    {
+      "name": "request_time",
+      "dataType": "STRING",
+      "format": "SIMPLE_DATE_FORMAT|yyyy-MM-dd HH:mm:ss|UTC",
+      "granularity": "1:MILLISECONDS"
+    }
+  ],
+  "primaryKeyColumns": [
+    "ride_id"
+  ]
+}

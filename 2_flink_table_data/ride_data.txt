@@ -1,0 +1,39 @@
+# Rides
+{ "ride_id":"000001"}@@@{"ride_id": "000001","rider_id": "100001","driver_id": "200001","location_id": "300001","amount": 350,"ride_status": "Booked","start_lat" : 12.990707,"start_lng" : 77.570870,"dest_lat": 12.887725, "dest_lng": 77.560973}
+{ "ride_id":"000002"}@@@{"ride_id": "000002","rider_id": "100002","driver_id": "200002","location_id": "300002","amount": 400,"ride_status": "Booked","start_lat" : 19.108072,"start_lng" : 72.853497,"dest_lat": 19.115333, "dest_lng": 72.848341}
+{ "ride_id":"000003"}@@@{"ride_id": "000003","rider_id": "100003","driver_id": "200003","location_id": "300003","amount": 200,"ride_status": "Booked","start_lat" : 28.640173,"start_lng" : 77.177126,"dest_lat": 28.603112, "dest_lng": 77.201626}
+{ "ride_id":"000004"}@@@{"ride_id": "000004","rider_id": "100004","driver_id": "200004","location_id": "300001","amount": 100,"ride_status": "Booked","start_lat" : 12.990707,"start_lng" : 77.570870,"dest_lat": 12.887725, "dest_lng": 77.560973}
+
+{ "ride_id":"000001"}@@@{"ride_id": "000001","rider_id": "100001","driver_id": "200001","location_id": "300001","amount": 350,"ride_status": "In Progress","start_lat" : 12.990707,"start_lng" : 77.570870,"dest_lat": 12.887725, "dest_lng": 77.560973}
+{ "ride_id":"000002"}@@@{"ride_id": "000002","rider_id": "100002","driver_id": "200002","location_id": "300002","amount": 400,"ride_status": "In Progress","start_lat" : 19.108072,"start_lng" : 72.853497,"dest_lat": 19.115333, "dest_lng": 72.848341}
+{ "ride_id":"000003"}@@@{"ride_id": "000003","rider_id": "100003","driver_id": "200003","location_id": "300003","amount": 200,"ride_status": "In Progress","start_lat" : 28.640173,"start_lng" : 77.177126,"dest_lat": 28.603112, "dest_lng": 77.201626}
+{ "ride_id":"000004"}@@@{"ride_id": "000004","rider_id": "100004","driver_id": "200004","location_id": "300001","amount": 100,"ride_status": "In Progress","start_lat" : 12.990707,"start_lng" : 77.570870,"dest_lat": 12.887725, "dest_lng": 77.560973}
+
+{ "ride_id":"000001"}@@@{"ride_id": "000001","rider_id": "100001","driver_id": "200001","location_id": "300001","amount": 350,"ride_status": "Completed","start_lat" : 12.990707,"start_lng" : 77.570870,"dest_lat": 12.887725, "dest_lng": 77.560973}
+{ "ride_id":"000002"}@@@{"ride_id": "000002","rider_id": "100002","driver_id": "200002","location_id": "300002","amount": 400,"ride_status": "Completed","start_lat" : 19.108072,"start_lng" : 72.853497,"dest_lat": 19.115333, "dest_lng": 72.848341}
+{ "ride_id":"000003"}@@@{"ride_id": "000003","rider_id": "100003","driver_id": "200003","location_id": "300003","amount": 200,"ride_status": "Completed","start_lat" : 28.640173,"start_lng" : 77.177126,"dest_lat": 28.603112, "dest_lng": 77.201626}
+{ "ride_id":"000004"}@@@{"ride_id": "000004","rider_id": "100004","driver_id": "200004","location_id": "300001","amount": 100,"ride_status": "Completed","start_lat" : 12.990707,"start_lng" : 77.570870,"dest_lat": 12.887725, "dest_lng": 77.560973}
+
+
+{ "ride_id":"000005"}@@@{"ride_id": "000005","rider_id": "100001","driver_id": "200001","location_id": "300001","amount": 250,"ride_status": "Booked","start_lat" : 12.990707,"start_lng" : 77.570870,"dest_lat": 12.887725, "dest_lng": 77.560973}
+{ "ride_id":"000006"}@@@{"ride_id": "000006","rider_id": "100002","driver_id": "200002","location_id": "300002","amount": 150,"ride_status": "Booked","start_lat" : 19.108072,"start_lng" : 72.853497,"dest_lat": 19.115333, "dest_lng": 72.848341}
+{ "ride_id":"000007"}@@@{"ride_id": "000007","rider_id": "100003","driver_id": "200003","location_id": "300003","amount": 700,"ride_status": "Booked","start_lat" : 28.640173,"start_lng" : 77.177126,"dest_lat": 28.603112, "dest_lng": 77.201626}
+{ "ride_id":"000008"}@@@{"ride_id": "000008","rider_id": "100004","driver_id": "200004","location_id": "300001","amount": 800,"ride_status": "Booked","start_lat" : 12.990707,"start_lng" : 77.570870,"dest_lat": 12.887725, "dest_lng": 77.560973}
+
+{ "ride_id":"000009"}@@@{"ride_id": "000009","rider_id": "100001","driver_id": "200001","location_id": "300001","amount": 250,"ride_status": "In Progress","start_lat" : 12.990707,"start_lng" : 77.570870,"dest_lat": 12.887725, "dest_lng": 77.560973}
+{ "ride_id":"000010"}@@@{"ride_id": "000010","rider_id": "100002","driver_id": "200002","location_id": "300002","amount": 350,"ride_status": "In Progress","start_lat" : 19.108072,"start_lng" : 72.853497,"dest_lat": 19.115333, "dest_lng": 72.848341}
+{ "ride_id":"000011"}@@@{"ride_id": "000011","rider_id": "100003","driver_id": "200003","location_id": "300003","amount": 400,"ride_status": "In Progress","start_lat" : 28.640173,"start_lng" : 77.177126,"dest_lat": 28.603112, "dest_lng": 77.201626}
+{ "ride_id":"000012"}@@@{"ride_id": "000012","rider_id": "100004","driver_id": "200004","location_id": "300001","amount": 300,"ride_status": "In Progress","start_lat" : 12.990707,"start_lng" : 77.570870,"dest_lat": 12.887725, "dest_lng": 77.560973}
+
+{ "ride_id":"000013"}@@@{"ride_id": "000013","rider_id": "100001","driver_id": "200001","location_id": "300001","amount": 250,"ride_status": "Cancelled","start_lat" : 12.990707,"start_lng" : 77.570870,"dest_lat": 12.887725, "dest_lng": 77.560973}
+{ "ride_id":"000014"}@@@{"ride_id": "000014","rider_id": "100002","driver_id": "200002","location_id": "300002","amount": 350,"ride_status": "Cancelled","start_lat" : 19.108072,"start_lng" : 72.853497,"dest_lat": 19.115333, "dest_lng": 72.848341}
+
+
+# Kafka producer for rides data
+bin/kafka-console-producer.sh --topic rides --bootstrap-server [::1]:9092 --property "parse.key=true" --property "key.separator=@@@"
+
+# Command to create consumer group for Kafka
+bin/kafka-console-consumer.sh --bootstrap-server [::1]:9092 --topic rides --group rides-flink-consumer
+
+# Kafka Command to list groups
+bin/kafka-consumer-groups.sh --bootstrap-server [::1]:9092 --describe --group rides-flink-consumer

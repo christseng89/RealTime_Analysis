@@ -1,0 +1,8 @@
+# Example user data
+{"rider_id":"100001"}@@@{"name":"XYZ", "membership_status": "member", "last_updated_at":"2024-01-13 11:00:00","rider_id":"100001"}
+{"rider_id":"100002"}@@@{"name":"ZYX", "membership_status": "member", "last_updated_at":"2024-01-13 11:00:00","rider_id":"100002"}
+{"rider_id":"100003"}@@@{"name":"YYY", "membership_status": "not a member", "last_updated_at":"2024-01-13 13:00:00","rider_id":"100003"}
+{"rider_id":"100004"}@@@{"name":"ZZZ", "membership_status": "not a member", "last_updated_at":"2024-01-13 13:00:00","rider_id":"100004"}
+
+# Kafka producer for users data
+bin/kafka-console-producer.sh --topic riders --bootstrap-server [::1]:9092 --property "parse.key=true" --property "key.separator=@@@"

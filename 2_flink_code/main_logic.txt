@@ -1,0 +1,37 @@
+# Pre- requisite for watermark to be proper. 
+SET 'table.exec.source.idle-timeout' = '2';
+
+# Rides Enrichment query
+INSERT INTO RidesEnriched
+SELECT 
+ride.rider_id,
+r.name as rider_name,
+ride.driver_id,
+d.name as driver_name,
+d.vehicle_type,
+ride.ride_id,
+ride.amount,
+ride.request_time,
+r.membership_status,
+l.city,
+l.country,
+ride.ride_status,
+ride.start_lat,
+ride.start_lng,
+ride.dest_lat,
+ride.dest_lng
+
+from Rides ride
+
+LEFT JOIN Drivers
+FOR SYSTEM_TIME AS OF ride.request_time AS d
+On ride.driver_id = d.driver_id
+
+LEFT JOIN Riders
+FOR SYSTEM_TIME AS OF ride.request_time AS r
+On ride.rider_id = r.rider_id
+
+LEFT JOIN Location
+FOR SYSTEM_TIME AS OF ride.processing_time as l
+On ride.location_id = l.location_id
+

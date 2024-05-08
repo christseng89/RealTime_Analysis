@@ -1,0 +1,2 @@
+# Consume flink output
+bin/kafka-console-consumer.sh --bootstrap-server [::1]:9092 --topic rides_enriched --property print.key=true

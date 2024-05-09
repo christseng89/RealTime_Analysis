@@ -1,44 +1,54 @@
-#Download and extract kafka 
-wget https://archive.apache.org/dist/kafka/3.6.1/kafka_2.12-3.6.1.tgz
-tar xzvf kafka_2.12-3.6.1.tgz
+### 8. Apache Kafka Setup: Hands On
+https://www.confluent.io/blog/set-up-and-run-kafka-on-windows-linux-wsl-2/
 
+# Install openjdk 17
+sudo apt install openjdk-17-jdk -y
+
+# Download Kafka 3.5.0
+wget https://archive.apache.org/dist/kafka/3.5.2/kafka_2.12-3.5.2.tgz
+tar -xzf kafka_2.12-3.5.2.tgz
+cd kafka_2.12-3.5.2
+ls -al
+
+# Global replace 9093 to 9095 (Zookeeper port)
 
 # Reset advertised listeners and log directory location
-vi config/kraft/server.properties
-advertised.listeners=PLAINTEXT://[::1]:9092
-Change log/dirs
+hostname -I
+    localhost
 
-#Formatting kraft location
+// VSC edit config/kraft/server.properties
+advertised.listeners=PLAINTEXT://localhost:9092
+
+# Start the Kafka cluster
 KAFKA_CLUSTER_ID="$(bin/kafka-storage.sh random-uuid)"
-bin/kafka-storage.sh format -t $KAFKA_CLUSTER_ID -c config/kraft/server.properties
+echo $KAFKA_CLUSTER_ID 
+    J26q4gCZRLCCH9Ev_xEIRQ
 
-#Start Kafka
+bin/kafka-storage.sh format -t $KAFKA_CLUSTER_ID -c config/kraft/server.properties
+bin/kafka-server-start.sh config/kraft/server.properties 
+
+# Cntrl + C to stop the server
 bin/kafka-server-start.sh -daemon config/kraft/server.properties
 
-
-# Create Rides topic
-bin/kafka-topics.sh --create --topic rides --partitions 3 --replication-factor 1 --bootstrap-server [::1]:9092
-
-# Create riders Topic 
-bin/kafka-topics.sh --create --topic riders --partitions 3 --replication-factor 1 --bootstrap-server [::1]:9092
-
-# Create Drivers Topic
-bin/kafka-topics.sh --create --topic drivers --partitions 3 --replication-factor 1 --bootstrap-server [::1]:9092
-
-# Create a topic for Enriched Rides
-bin/kafka-topics.sh --create --topic rides_enriched --partitions 3 --replication-factor 1 --bootstrap-server [::1]:9092
+# Create Rides/Riders/Drivers/Enriched Rides topic
+bin/kafka-topics.sh --create --topic rides --partitions 3 --replication-factor 1 --bootstrap-server localhost:9092
+bin/kafka-topics.sh --create --topic riders --partitions 3 --replication-factor 1 --bootstrap-server localhost:9092
+bin/kafka-topics.sh --create --topic drivers --partitions 3 --replication-factor 1 --bootstrap-server localhost:9092
+bin/kafka-topics.sh --create --topic rides_enriched --partitions 3 --replication-factor 1 --bootstrap-server localhost:9092
 
 # List all topics
-bin/kafka-topics.sh --bootstrap-server [::1]:9092 --list
+bin/kafka-topics.sh --bootstrap-server localhost:9092 --list
 
 # Produce data to rides topic
-bin/kafka-console-producer.sh --topic rides --bootstrap-server [::1]:9092 --property "parse.key=true" --property "key.separator=@@@"
+
+### 9. Data Production and Consumption from Apache Kafka: Hands On
+# Produce data to rides topic
+bin/kafka-console-producer.sh --topic rides --bootstrap-server localhost:9092 --property "parse.key=true" --property "key.separator=@@@"
+    { "ride_id":"000001"}@@@{"ride_id": "000001","rider_id": "100001","driver_id": "200001","location_id": "300001","amount": 350,"ride_status": "In Progress","start_lat" : 12.99070744,"start_lng" : 77.57087025,"dest_lat": 12.88772573, "dest_lng": 77.56097347}
 
 # Consume data from rides topic
-bin/kafka-console-consumer.sh --topic rides --bootstrap-server [::1]:9092 --property "print.key=true"
-
-# Sample payload for ride
-{ "ride_id":"000001"}@@@{"ride_id": "000001","rider_id": "100001","driver_id": "200001","location_id": "300001","amount": 350,"ride_status": "In Progress","start_lat" : 12.99070744,"start_lng" : 77.57087025,"dest_lat": 12.88772573, "dest_lng": 77.56097347}
+cd kafka_2.12-3.5.2
+bin/kafka-console-consumer.sh --topic rides --bootstrap-server localhost:9092 --property "print.key=true"
 
 # Delete a topic 
-bin/kafka-topics.sh --delete --topic rides --bootstrap-server [::1]:9092
+// bin/kafka-topics.sh --delete --topic rides --bootstrap-server localhost:9092

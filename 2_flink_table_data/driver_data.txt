@@ -5,4 +5,4 @@
 {"driver_id":"200004"}@@@{"name":"DCBA", "vehicle_type": "Sedan", "last_updated_at":"2024-01-13 13:00:00","driver_id":"200004"}
 
 # Kafka producer for users data
-bin/kafka-console-producer.sh --topic drivers --bootstrap-server [::1]:9092 --property "parse.key=true" --property "key.separator=@@@"
+bin/kafka-console-producer.sh --topic drivers --bootstrap-server localhost:9092 --property "parse.key=true" --property "key.separator=@@@"

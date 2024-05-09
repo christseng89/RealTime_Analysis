@@ -30,10 +30,10 @@
 
 
 # Kafka producer for rides data
-bin/kafka-console-producer.sh --topic rides --bootstrap-server [::1]:9092 --property "parse.key=true" --property "key.separator=@@@"
+bin/kafka-console-producer.sh --topic rides --bootstrap-server localhost:9092 --property "parse.key=true" --property "key.separator=@@@"
 
 # Command to create consumer group for Kafka
-bin/kafka-console-consumer.sh --bootstrap-server [::1]:9092 --topic rides --group rides-flink-consumer
+bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic rides --group rides-flink-consumer
 
 # Kafka Command to list groups
-bin/kafka-consumer-groups.sh --bootstrap-server [::1]:9092 --describe --group rides-flink-consumer
+bin/kafka-consumer-groups.sh --bootstrap-server localhost:9092 --describe --group rides-flink-consumer

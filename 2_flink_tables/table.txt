@@ -15,7 +15,7 @@ CREATE TABLE RideTest (
 ) WITH (
   'connector' = 'kafka',
   'topic' = 'rides',
-  'properties.bootstrap.servers' = '[::1]:9092',
+  'properties.bootstrap.servers' = 'localhost:9092',
   'properties.group.id' = 'test',
   'scan.startup.mode' = 'latest-offset',
   'format' = 'json'
@@ -40,7 +40,7 @@ CREATE TABLE Rides (
 ) WITH (
   'connector' = 'kafka',
   'topic' = 'rides',
-  'properties.bootstrap.servers' = '[::1]:9092',
+  'properties.bootstrap.servers' = 'localhost:9092',
   'properties.group.id' = 'rides-flink-consumer',
   'scan.startup.mode' = 'group-offsets',
   'format' = 'json'
@@ -58,7 +58,7 @@ CREATE TABLE Riders (
 ) WITH (
   'connector' = 'upsert-kafka',
   'topic' = 'riders',
-  'properties.bootstrap.servers' = '[::1]:9092',
+  'properties.bootstrap.servers' = 'localhost:9092',
   'properties.group.id' = 'testGroup',
   'value.format' = 'json',
   'key.format' = 'json'
@@ -75,7 +75,7 @@ CREATE TABLE Drivers (
 ) WITH (
   'connector' = 'upsert-kafka',
   'topic' = 'drivers',
-  'properties.bootstrap.servers' = '[::1]:9092',
+  'properties.bootstrap.servers' = 'localhost:9092',
   'properties.group.id' = 'testGroup',
   'value.format' = 'json',
   'key.format' = 'json'
@@ -120,7 +120,7 @@ CREATE TABLE RidesEnriched (
   ) WITH (
   'connector' = 'upsert-kafka',
   'topic' = 'rides_enriched',
-  'properties.bootstrap.servers' = '[::1]:9092',
+  'properties.bootstrap.servers' = 'localhost:9092',
   'properties.group.id' = 'testGroup',
   'value.format' = 'json',
   'key.format' = 'json'

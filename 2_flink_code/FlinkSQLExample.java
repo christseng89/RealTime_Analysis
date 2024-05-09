@@ -28,7 +28,7 @@ public class FlinkSQLExample {
                         ") WITH (\n" +
                         "  'connector' = 'kafka',\n" +
                         "  'topic' = 'rides',\n" +
-                        "  'properties.bootstrap.servers' = '[::1]:9092',\n" +
+                        "  'properties.bootstrap.servers' = 'localhost:9092',\n" +
                         "  'properties.group.id' = 'test',\n" +
                         "  'scan.startup.mode' = 'latest-offset',\n" +
                         "  'format' = 'json'\n" +

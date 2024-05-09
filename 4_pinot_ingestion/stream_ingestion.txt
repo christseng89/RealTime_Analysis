@@ -1,8 +1,8 @@
 # Create Kafka Topic
-bin/kafka-topics.sh --create --topic users --partitions 3 --replication-factor 1 --bootstrap-server [::1]:9092
+bin/kafka-topics.sh --create --topic users --partitions 3 --replication-factor 1 --bootstrap-server localhost:9092
 
 # Console Producer
-bin/kafka-console-producer.sh --topic users --bootstrap-server [::1]:9092
+bin/kafka-console-producer.sh --topic users --bootstrap-server localhost:9092
 
 # Test data
 {"name":"XYZ", "followers": 1, "last_updated_at":"2024-01-13 11:00:00","user_id":"100001"}

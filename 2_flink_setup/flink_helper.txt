@@ -15,6 +15,11 @@ wget https://repo.maven.apache.org/maven2/org/apache/flink/flink-sql-connector-k
 wget https://repo.maven.apache.org/maven2/org/apache/flink/flink-connector-jdbc/3.1.0-1.17/flink-connector-jdbc-3.1.0-1.17.jar
 wget https://repo.maven.apache.org/maven2/mysql/mysql-connector-java/8.0.27/mysql-connector-java-8.0.27.jar
 
+ls *.jar -l
+    -rwxrwxrwx 1 christseng christseng  264302 Apr 13  2023 flink-connector-jdbc-3.1.0-1.17.jar
+    -rwxrwxrwx 1 christseng christseng 5563764 Nov 10 16:25 flink-sql-connector-kafka-1.17.2.jar
+    -rwxrwxrwx 1 christseng christseng 2475087 Sep 29  2021 mysql-connector-java-8.0.27.jar
+
 # Start flink cluster
 bin/start-cluster.sh
     Starting cluster.

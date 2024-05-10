@@ -29,7 +29,7 @@ bin/kafka-server-start.sh -daemon config/kraft/server.properties
 // Check Kafka cluster status
 ps -ef | grep kafka
     christs+   14844       1 28 15:35 pts/2    00:00:06 /usr/lib/jvm/java-17-oracle/bin/java -Xmx1G -Xms1G -server -XX:+UseG1GC -XX:MaxGCPauseMillis=20 -XX:InitiatingHeapOccupancyPercent=35 -XX:+ExplicitGCInvokesConcurrent -XX:MaxInlineLevel=15 -Djava.awt.headless=true -Xlog:gc*:file=/mnt/d/development/Real_Time_Analysis/kafka_2.12-3.5.2/bin/../logs/kafkaServer-gc.log:time,tags ...
-    
+
 # Create Rides/Riders/Drivers/Enriched Rides topic
 bin/kafka-topics.sh --create --topic rides --partitions 3 --replication-factor 1 --bootstrap-server [::1]:9092
 bin/kafka-topics.sh --create --topic riders --partitions 3 --replication-factor 1 --bootstrap-server [::1]:9092
@@ -58,3 +58,6 @@ bin/kafka-console-consumer.sh --topic rides --bootstrap-server [::1]:9092 --prop
 
 # Stop Kafka cluster
 bin/kafka-server-stop.sh
+
+### IntelliJ IDEA Setup *** Important ***
+Refer to IntelliJ Run Edit Configuration 1 and 2.

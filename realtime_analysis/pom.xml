@@ -8,7 +8,6 @@
   <artifactId>realtime-analytics-example</artifactId>
   <version>1.0-SNAPSHOT</version>
 
-
   <dependencies>
     <dependency>
       <groupId>org.apache.flink</groupId>
@@ -57,25 +56,9 @@
   </dependencies>
 
   <properties>
-    <maven.compiler.source>11</maven.compiler.source>
-    <maven.compiler.target>11</maven.compiler.target>
+    <maven.compiler.source>17</maven.compiler.source>
+    <maven.compiler.target>17</maven.compiler.target>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
-
-<!--  <build>-->
-<!--    <plugins>-->
-<!--      <plugin>-->
-<!--        <groupId>org.apache.maven.plugins</groupId>-->
-<!--        <artifactId>maven-surefire-plugin</artifactId>-->
-<!--        <version>3.0.0</version>-->
-<!--        <configuration>-->
-<!--          <argLine>-->
-<!--            &#45;&#45;add-opens=java.base/java.lang=ALL-UNNAMED-->
-<!--            &#45;&#45;add-opens=java.base/java.util=ALL-UNNAMED-->
-<!--          </argLine>-->
-<!--        </configuration>-->
-<!--      </plugin>-->
-<!--    </plugins>-->
-<!--  </build>-->
 
 </project>

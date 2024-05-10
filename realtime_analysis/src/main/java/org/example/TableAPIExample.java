@@ -8,9 +8,9 @@ import org.apache.flink.types.Row;
 
 public class TableAPIExample {
   public static void main(String[] args) throws Exception {
-    StreamExecutionEnvironment env =
+    final StreamExecutionEnvironment executionEnv =
         StreamExecutionEnvironment.getExecutionEnvironment();
-    StreamTableEnvironment tableEnv = StreamTableEnvironment.create(env);
+    StreamTableEnvironment tableEnv = StreamTableEnvironment.create(executionEnv);
 
     tableEnv.executeSql(
         "CREATE TABLE RideTest (\n"
@@ -35,9 +35,9 @@ public class TableAPIExample {
         + "  'format' = 'json'\n"
         + ");");
 
-    Table outputTable = tableEnv.sqlQuery("select * from RideTest");
-    DataStream<Row> outputStream = tableEnv.toDataStream(outputTable);
-    outputStream.print();
-    env.execute();
+    Table table = tableEnv.sqlQuery("select * from RideTest");
+    DataStream<Row> dataStream = tableEnv.toDataStream(table);
+    dataStream.print();
+    executionEnv.execute();
   }
 }

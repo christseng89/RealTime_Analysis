@@ -13,42 +13,48 @@ ls -al
 # Global replace 9093 to 9095 (Zookeeper port)
 
 # Reset advertised listeners and log directory location
-hostname -I
-    localhost
-
 // VSC edit config/kraft/server.properties
-advertised.listeners=PLAINTEXT://localhost:9092
+advertised.listeners=PLAINTEXT://[::1]:9092
 
-# Start the Kafka cluster
+# Start the Kafka cluster from here ...
 KAFKA_CLUSTER_ID="$(bin/kafka-storage.sh random-uuid)"
 echo $KAFKA_CLUSTER_ID 
     J26q4gCZRLCCH9Ev_xEIRQ
 
 bin/kafka-storage.sh format -t $KAFKA_CLUSTER_ID -c config/kraft/server.properties
 bin/kafka-server-start.sh config/kraft/server.properties 
+// Control + C to stop the server
 
-# Cntrl + C to stop the server
 bin/kafka-server-start.sh -daemon config/kraft/server.properties
-
+// Check Kafka cluster status
+ps -ef | grep kafka
+    christs+   14844       1 28 15:35 pts/2    00:00:06 /usr/lib/jvm/java-17-oracle/bin/java -Xmx1G -Xms1G -server -XX:+UseG1GC -XX:MaxGCPauseMillis=20 -XX:InitiatingHeapOccupancyPercent=35 -XX:+ExplicitGCInvokesConcurrent -XX:MaxInlineLevel=15 -Djava.awt.headless=true -Xlog:gc*:file=/mnt/d/development/Real_Time_Analysis/kafka_2.12-3.5.2/bin/../logs/kafkaServer-gc.log:time,tags ...
+    
 # Create Rides/Riders/Drivers/Enriched Rides topic
-bin/kafka-topics.sh --create --topic rides --partitions 3 --replication-factor 1 --bootstrap-server localhost:9092
-bin/kafka-topics.sh --create --topic riders --partitions 3 --replication-factor 1 --bootstrap-server localhost:9092
-bin/kafka-topics.sh --create --topic drivers --partitions 3 --replication-factor 1 --bootstrap-server localhost:9092
-bin/kafka-topics.sh --create --topic rides_enriched --partitions 3 --replication-factor 1 --bootstrap-server localhost:9092
+bin/kafka-topics.sh --create --topic rides --partitions 3 --replication-factor 1 --bootstrap-server [::1]:9092
+bin/kafka-topics.sh --create --topic riders --partitions 3 --replication-factor 1 --bootstrap-server [::1]:9092
+bin/kafka-topics.sh --create --topic drivers --partitions 3 --replication-factor 1 --bootstrap-server [::1]:9092
+bin/kafka-topics.sh --create --topic rides_enriched --partitions 3 --replication-factor 1 --bootstrap-server [::1]:9092
 
 # List all topics
-bin/kafka-topics.sh --bootstrap-server localhost:9092 --list
+bin/kafka-topics.sh --bootstrap-server [::1]:9092 --list
 
 # Produce data to rides topic
 
 ### 9. Data Production and Consumption from Apache Kafka: Hands On
 # Produce data to rides topic
-bin/kafka-console-producer.sh --topic rides --bootstrap-server localhost:9092 --property "parse.key=true" --property "key.separator=@@@"
+bin/kafka-console-producer.sh --topic rides --bootstrap-server [::1]:9092 --property "parse.key=true" --property "key.separator=@@@"
     { "ride_id":"000001"}@@@{"ride_id": "000001","rider_id": "100001","driver_id": "200001","location_id": "300001","amount": 350,"ride_status": "In Progress","start_lat" : 12.99070744,"start_lng" : 77.57087025,"dest_lat": 12.88772573, "dest_lng": 77.56097347}
 
 # Consume data from rides topic
 cd kafka_2.12-3.5.2
-bin/kafka-console-consumer.sh --topic rides --bootstrap-server localhost:9092 --property "print.key=true"
+bin/kafka-console-consumer.sh --topic rides --bootstrap-server [::1]:9092 --property "print.key=true"
+
+### Install end here ...
 
 # Delete a topic 
-// bin/kafka-topics.sh --delete --topic rides --bootstrap-server localhost:9092
+// bin/kafka-topics.sh --delete --topic rides --bootstrap-server [::1]:9092
+
+
+# Stop Kafka cluster
+bin/kafka-server-stop.sh

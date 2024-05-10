@@ -1,32 +1,35 @@
+https://nightlies.apache.org/flink/flink-docs-master/docs/try-flink/local_installation/
+
 # Flink download
+cd ..
 wget https://dlcdn.apache.org/flink/flink-1.17.2/flink-1.17.2-bin-scala_2.12.tgz
-tar xzf flink-1.17.2-bin-scala_2.12.tgz
+tar -xzf flink-1.17.2-bin-scala_2.12.tgz
 
 # Rest Host
-vi conf/flink-conf.yaml
+cd flink-1.17.2
+nano conf/flink-conf.yaml
 rest.bind-address: 0.0.0.0
 
-# Flink 1.17.2 get connectors
-# Flink SQL connector
+# Flink 1.17.2 get connectors SQL / JDBC / MySql connector
 wget https://repo.maven.apache.org/maven2/org/apache/flink/flink-sql-connector-kafka/1.17.2/flink-sql-connector-kafka-1.17.2.jar
-
-# flink jdbc connector
 wget https://repo.maven.apache.org/maven2/org/apache/flink/flink-connector-jdbc/3.1.0-1.17/flink-connector-jdbc-3.1.0-1.17.jar
-
-# mysql connector java
 wget https://repo.maven.apache.org/maven2/mysql/mysql-connector-java/8.0.27/mysql-connector-java-8.0.27.jar
 
 # Start flink cluster
 bin/start-cluster.sh
+    Starting cluster.
+    Starting standalonesession daemon on host Chris-SP8.
+    Starting taskexecutor daemon on host Chris-SP8.
 
-bin/flink run --detached -c org.example.RideEnrichApplicationCluster '<location>/realtime_analytics/target/realtime-analytics-example-1.0-SNAPSHOT.jar'
+bin/flink run --detached -c org.example.RideEnrichApplicationCluster '../realtime_analysis/target/realtime-analytics-example-1.0-SNAPSHOT.jar'
+bin/flink run --detached -c org.example.RideEnrichApplication '../realtime_analysis/target/realtime-analytics-example-1.0-SNAPSHOT.jar'
 
 # Stop flink cluster
 bin/stop-cluster.sh
 
 
 # Flink ui
-Flink ui: localhost:8081
+Flink ui: [::1]:8081
 
 
 

@@ -39,4 +39,4 @@ superset run -p 8088 --with-threads --reload --debugger
 locahost:8088
 
 # Link for pinot connection in superset
-pinot://localhost:8099/query?server=http://localhost:9000/
+pinot://[::1]:8099/query?server=http://[::1]:9000/

@@ -29,5 +29,5 @@ select count(1) from rides_enriched where request_time >toDateTime(now()-60*60*1
 sudo apt install jq
 
 # API call to run query
- curl -H "Content-Type: application/json" -X POST -d '{"sql":"select count(1) from rides_enriched where request_time >toDateTime(now()-60*60*1000,'"'"'yyyy-MM-dd HH:mm:ss Z'"'"') and ride_status='"'"'Completed'"'"' and driver_id='"'"'200001'"'"'"}' http://localhost:8099/query/sql | jq
+ curl -H "Content-Type: application/json" -X POST -d '{"sql":"select count(1) from rides_enriched where request_time >toDateTime(now()-60*60*1000,'"'"'yyyy-MM-dd HH:mm:ss Z'"'"') and ride_status='"'"'Completed'"'"' and driver_id='"'"'200001'"'"'"}' http://[::1]:8099/query/sql | jq
 

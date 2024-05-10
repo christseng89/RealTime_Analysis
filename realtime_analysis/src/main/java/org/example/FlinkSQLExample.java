@@ -8,37 +8,37 @@ import org.apache.flink.types.Row;
 
 public class FlinkSQLExample {
   public static void main(String[] args) throws Exception {
-    StreamExecutionEnvironment env =
-        StreamExecutionEnvironment.getExecutionEnvironment();
-    StreamTableEnvironment tableEnv = StreamTableEnvironment.create(env);
+    StreamExecutionEnvironment executionEnv = StreamExecutionEnvironment.getExecutionEnvironment();
+    StreamTableEnvironment tableEnv = StreamTableEnvironment.create(executionEnv);
 
     tableEnv.executeSql(
-        "CREATE TABLE RideTest (\n"
-        + "  `ride_id` STRING,\n"
-        + "  `rider_id` STRING,\n"
-        + "  `driver_id` STRING,\n"
-        + "  `location_id` STRING,\n"
-        + "  `amount` FLOAT,\n"
-        + "  `ride_status` STRING,\n"
-        + "  `start_lat` FLOAT,\n"
-        + "  `start_lng` FLOAT,\n"
-        + "  `dest_lat` FLOAT,\n"
-        + "  `dest_lng` FLOAT,\n"
-        + "  `request_time` TIMESTAMP(3) METADATA FROM 'timestamp',\n"
-        + "  `processing_time` as PROCTIME()\n"
-        + ") WITH (\n"
-        + "  'connector' = 'kafka',\n"
-        + "  'topic' = 'rides',\n"
-        + "  'properties.bootstrap.servers' = '[::1]:9092',\n"
-        + "  'properties.group.id' = 'test',\n"
-        + "  'scan.startup.mode' = 'latest-offset',\n"
-        + "  'format' = 'json'\n"
-        + ");");
+      "CREATE TABLE RideTest (\n" +
+        "  `ride_id` STRING,\n" +
+        "  `rider_id` STRING,\n" +
+        "  `driver_id` STRING,\n" +
+        "  `location_id` STRING,\n" +
+        "  `amount` FLOAT,\n" +
+        "  `ride_status` STRING,\n" +
+        "  `start_lat` FLOAT,\n" +
+        "  `start_lng` FLOAT,\n" +
+        "  `dest_lat` FLOAT,\n" +
+        "  `dest_lng` FLOAT,\n" +
+        "  `request_time` TIMESTAMP(3) METADATA FROM 'timestamp',\n" +
+        "  `processing_time` as PROCTIME()\n" +
+        ") WITH (\n" +
+        "  'connector' = 'kafka',\n" +
+        "  'topic' = 'rides',\n" +
+        "  'properties.bootstrap.servers' = '[::1]:9092',\n" +
+        "  'properties.group.id' = 'test',\n" +
+        "  'scan.startup.mode' = 'latest-offset',\n" +
+        "  'format' = 'json'\n" +
+        ");"
+    );
 
-    Table outputTable = tableEnv.sqlQuery(
-        "select ride_id,amount,ride_status,lower(ride_status) from RideTest");
-    DataStream<Row> outputStream = tableEnv.toDataStream(outputTable);
-    outputStream.print();
-    env.execute();
+    Table table = tableEnv.sqlQuery("select ride_id,amount,ride_status,lower(ride_status) from RideTest");
+    DataStream<Row> dataStream = tableEnv.toDataStream(table);
+    dataStream.print();
+    executionEnv.execute();
+
   }
 }

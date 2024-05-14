@@ -1,16 +1,25 @@
 # Install mysql
-sudo apt install mysql-server
+sudo apt install mysql-server -y
 
 #Start mysql
 sudo systemctl start mysql.service
+sudo systemctl status mysql.service
+    ● mysql.service - MySQL Community Server
+        Loaded: loaded (/lib/systemd/system/mysql.service; enabled; vendor preset: enabled)
+        Active: active (running) since Sat 2024-05-11 20:02:36 CST; 13s ago
+        Process: 385511 ExecStartPre=/usr/share/mysql/mysql-systemd-start pre (code=exited, status=0/SUCCESS)
+    Main PID: 385519 (mysqld)
+        Status: "Server is operational"
+        Tasks: 38 (limit: 14351)
+        Memory: 371.1M
+        CGroup: /system.slice/mysql.service
+                └─385519 /usr/sbin/mysqld
 
 #Start the client
 sudo mysql
 
-#Create database 
+#Create and use database 
 create database analytics;
-
-#use analytics DB
 use analytics;
 
 #Grant access in mysql
@@ -25,10 +34,20 @@ CREATE TABLE Location (
     PRIMARY KEY (location_id)
 ); 
 
-
-
-
 # Insert location data into location table in mysql
 insert into Location (location_id,city,country) values ('300001','Bengaluru','India');
 insert into Location (location_id,city,country) values ('300002','Mumbai','India');
 insert into Location (location_id,city,country) values ('300003','New Delhi','India');
+
+# Query Location table
+select * from Location;
+    +-------------+-----------+---------+
+    | location_id | city      | country |
+    +-------------+-----------+---------+
+    | 300001      | Bengaluru | India   |
+    | 300002      | Mumbai    | India   |
+    | 300003      | New Delhi | India   |
+    +-------------+-----------+---------+
+    3 rows in set (0.01 sec)
+
+exit;

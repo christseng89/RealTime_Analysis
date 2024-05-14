@@ -6,7 +6,7 @@ import org.apache.flink.table.api.Table;
 import org.apache.flink.table.api.bridge.java.StreamTableEnvironment;
 import org.apache.flink.types.Row;
 
-public class FlinkSQLExample {
+public class TestRideExample2 {
   public static void main(String[] args) throws Exception {
     StreamExecutionEnvironment executionEnv = StreamExecutionEnvironment.getExecutionEnvironment();
     StreamTableEnvironment tableEnv = StreamTableEnvironment.create(executionEnv);
@@ -35,7 +35,10 @@ public class FlinkSQLExample {
         ");"
     );
 
-    Table table = tableEnv.sqlQuery("select ride_id,amount,ride_status,lower(ride_status) from RideTest");
+    System.out.println("RideTest table created");
+    System.out.println("Query RideTest table...");
+
+    Table table = tableEnv.sqlQuery("select ride_id,amount,rider_id,driver_id,location_id,ride_status,lower(ride_status) from RideTest");
     DataStream<Row> dataStream = tableEnv.toDataStream(table);
     dataStream.print();
     executionEnv.execute();

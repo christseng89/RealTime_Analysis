@@ -6,36 +6,33 @@ import org.apache.flink.table.api.Table;
 import org.apache.flink.table.api.bridge.java.StreamTableEnvironment;
 import org.apache.flink.types.Row;
 
-public class TableAPIExample {
+public class TestRiderExample {
   public static void main(String[] args) throws Exception {
     final StreamExecutionEnvironment executionEnv =
-        StreamExecutionEnvironment.getExecutionEnvironment();
+      StreamExecutionEnvironment.getExecutionEnvironment();
     StreamTableEnvironment tableEnv = StreamTableEnvironment.create(executionEnv);
 
     tableEnv.executeSql(
-        "CREATE TABLE RideTest (\n"
-        + "  `ride_id` STRING,\n"
+      "CREATE TABLE RiderTest (\n"
         + "  `rider_id` STRING,\n"
-        + "  `driver_id` STRING,\n"
-        + "  `location_id` STRING,\n"
-        + "  `amount` FLOAT,\n"
-        + "  `ride_status` STRING,\n"
-        + "  `start_lat` FLOAT,\n"
-        + "  `start_lng` FLOAT,\n"
-        + "  `dest_lat` FLOAT,\n"
-        + "  `dest_lng` FLOAT,\n"
+        + "  `name` STRING,\n"
+        + "  `membership_status` STRING,\n"
+        + "  `last_updated_at`  TIMESTAMP(3),\n"
         + "  `request_time` TIMESTAMP(3) METADATA FROM 'timestamp',\n"
         + "  `processing_time` as PROCTIME()\n"
         + ") WITH (\n"
         + "  'connector' = 'kafka',\n"
-        + "  'topic' = 'rides',\n"
+        + "  'topic' = 'riders',\n"
         + "  'properties.bootstrap.servers' = '[::1]:9092',\n"
         + "  'properties.group.id' = 'test',\n"
         + "  'scan.startup.mode' = 'latest-offset',\n"
         + "  'format' = 'json'\n"
         + ");");
 
-    Table table = tableEnv.sqlQuery("select * from RideTest");
+    System.out.println("RiderTest table created");
+    System.out.println("Query RiderTest table...");
+
+    Table table = tableEnv.sqlQuery("select * from RiderTest");
     DataStream<Row> dataStream = tableEnv.toDataStream(table);
     dataStream.print();
     executionEnv.execute();

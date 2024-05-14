@@ -2,20 +2,24 @@ package org.example;
 
 import org.apache.flink.configuration.CheckpointingOptions;
 import org.apache.flink.configuration.Configuration;
+import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.CheckpointConfig;
 import org.apache.flink.streaming.api.environment.ExecutionCheckpointingOptions;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
+import org.apache.flink.table.api.Table;
 import org.apache.flink.table.api.TableConfig;
 import org.apache.flink.table.api.bridge.java.StreamTableEnvironment;
+import org.apache.flink.types.Row;
 
-public class RideEnrichApplication {
+public class RideEnrichExample {
   public static void main(String[] args) throws Exception {
-    StreamExecutionEnvironment env =
+    StreamExecutionEnvironment executionEnv =
         StreamExecutionEnvironment.getExecutionEnvironment();
-    StreamTableEnvironment tableEnv = StreamTableEnvironment.create(env);
+    StreamTableEnvironment tableEnv =
+        StreamTableEnvironment.create(executionEnv);
 
-    env.enableCheckpointing(1000);
-    env.getCheckpointConfig().setExternalizedCheckpointCleanup(
+    executionEnv.enableCheckpointing(1000);
+    executionEnv.getCheckpointConfig().setExternalizedCheckpointCleanup(
         CheckpointConfig.ExternalizedCheckpointCleanup.RETAIN_ON_CANCELLATION);
     Configuration config = new Configuration();
     config.set(
@@ -23,8 +27,9 @@ public class RideEnrichApplication {
         true);
     config.set(CheckpointingOptions.CHECKPOINT_STORAGE, "filesystem");
     config.set(CheckpointingOptions.CHECKPOINTS_DIRECTORY,
-               "file:///<location>Flink\\Checkpoint\\Rides");
-    env.configure(config);
+               "file:///mnt/d/development/Real_Time_Analysis/FlinkData/Rides");
+
+    executionEnv.configure(config);
 
     TableConfig tableConfig = tableEnv.getConfig();
     tableConfig.set("table.exec.source.idle-timeout", "1s");
@@ -51,8 +56,10 @@ public class RideEnrichApplication {
         + "  'properties.bootstrap.servers' = '[::1]:9092',\n"
         + "  'properties.group.id' = 'rides-flink-consumer',\n"
         + "  'scan.startup.mode' = 'group-offsets',\n"
+          // Due to group-offset, group need to manually created in Kafka
         + "  'format' = 'json'\n"
         + ");");
+    System.out.println("Rides table created");
 
     tableEnv.executeSql(
         "CREATE TABLE Riders (\n"
@@ -71,6 +78,7 @@ public class RideEnrichApplication {
         + "  'value.format' = 'json',\n"
         + "  'key.format' = 'json'\n"
         + ");");
+    System.out.println("Riders table created");
 
     tableEnv.executeSql(
         "CREATE TABLE Drivers (\n"
@@ -89,6 +97,7 @@ public class RideEnrichApplication {
         + "  'value.format' = 'json',\n"
         + "  'key.format' = 'json'\n"
         + ");");
+    System.out.println("Drivers table created");
 
     tableEnv.executeSql("CREATE TABLE Location (\n"
                         + "  location_id STRING,\n"
@@ -97,11 +106,13 @@ public class RideEnrichApplication {
                         + "  PRIMARY KEY (location_id) NOT ENFORCED\n"
                         + ") WITH (\n"
                         + "   'connector' = 'jdbc',\n"
+                        + "   'driver' = 'com.mysql.cj.jdbc.Driver',\n"
                         + "   'url' = 'jdbc:mysql://[::1]:3306/analytics',\n"
                         + "   'table-name' = 'Location',\n"
                         + "   'username' = 'analyticsuser',\n"
                         + "   'password' = 'password'\n"
                         + ");");
+    System.out.println("Location table created");
 
     tableEnv.executeSql("CREATE TABLE RidesEnriched (\n"
                         + "  `rider_id` STRING,\n"
@@ -129,6 +140,7 @@ public class RideEnrichApplication {
                         + "  'value.format' = 'json',\n"
                         + "  'key.format' = 'json'\n"
                         + ");");
+    System.out.println("RidesEnriched table created");
 
     tableEnv.executeSql("INSERT INTO RidesEnriched\n"
                         + "SELECT \n"
@@ -162,5 +174,6 @@ public class RideEnrichApplication {
                         + "LEFT JOIN Location\n"
                         + "FOR SYSTEM_TIME AS OF ride.processing_time as l\n"
                         + "On ride.location_id = l.location_id");
+    System.out.println("RidesEnriched table insert completed");
   }
 }

@@ -1,5 +1,16 @@
 # WSL Kafka and Flink Running Instructions
 
+## Java 11 (WSL)
+
+source ~/.bashrc
+echo $JAVA_HOME
+    /usr/bin/java
+
+java --version
+    openjdk 11.0.22 2024-01-16
+    OpenJDK Runtime Environment (build 11.0.22+7-post-Ubuntu-0ubuntu222.04.1)
+    OpenJDK 64-Bit Server VM (build 11.0.22+7-post-Ubuntu-0ubuntu222.04.1, mixed mode, sharing)
+
 ## Start up Kafka server (WSL)
 
 cd kafka_2.12-3.5.2
@@ -26,15 +37,30 @@ bin/kafka-console-producer.sh --topic rides --bootstrap-server [::1]:9092 --prop
 
 ## Start up Flink server (WSL)
 
-cd flink-1.17.2
-./bin/start-cluster.sh
+echo $FLINK_HOME
+    /home/christseng/flink/flink-1.17.2
+
+flink --version
+    Version: 1.17.2, Commit ID: c0027e5
+
+$FLINK_HOME/bin/start-cluster.sh
     Starting cluster.
     Starting standalonesession daemon on host Chris-SP8.
     Starting taskexecutor daemon on host Chris-SP8.
 
-./bin/sql-client.sh
+$FLINK_HOME/bin/sql-client.sh
 ps aux | grep flink
-    christs+  586603 50.0 23.6 9174280 2900328 ?     Ssl  17:21  15:33 /usr/bin/java --add-opens java.base/java.lang=ALL-UNNAMED -Dfile.encoding=UTF-8 -classpath /mnt/d/development/Real_Time_Analysis/realtime_analysis/target/classes:/mnt/c/Users/Chris Tseng/.m2/repository/org/apache/flink/flink-table-api-java-bridge/1.17.2/flink-table-api-java-bridge-1.17.2.jar:/mnt/c/Users/Chris Tseng/...
+    christs+  586603 50.0 23.6 9174280 2900328 ?     Ssl  17:21  15:33 /usr/bin/java --add-opens java.base/java.lang=ALL-UNNAMED -Dfile.encoding=UTF-8 -classpath /mnt/d/development/Real_Time_Analysis/realtime_analysis/target/classes:/
+
+flink run $FLINK_HOME/examples/streaming/WordCount.jar
+tail $FLINK_HOME/log/flink-*-taskexecutor-*.out
+    (nymph,1)
+    (in,3)
+    (thy,1)
+    (orisons,1)
+    (be,4)
+    (all,2)
+    (my,1)
 
 ## MySQL Server (WSL)
 

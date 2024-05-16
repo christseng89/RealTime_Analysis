@@ -1,4 +1,10 @@
-https://nightlies.apache.org/flink/flink-docs-master/docs/try-flink/local_installation/
+https://nightlies.apache.org/flink/flink-docs-master/docs/deployment/java_compatibility/#java-17
+// 'Experimental' support for Java 17 was added in 1.18.0. (FLINK-15736)
+
+https://nightlies.apache.org/flink/flink-docs-stable/docs/try-flink/local_installation/
+
+update-java-alternatives --list
+sudo update-java-alternatives --set /usr/lib/jvm/java-1.11.0-openjdk-amd64
 
 # Flink download
 cd ..
@@ -6,11 +12,15 @@ wget https://dlcdn.apache.org/flink/flink-1.17.2/flink-1.17.2-bin-scala_2.12.tgz
 tar -xzf flink-1.17.2-bin-scala_2.12.tgz
 
 # Rest Host
+https://nightlies.apache.org/flink/flink-docs-release-1.19/docs/deployment/config/#rest-bind-port
 cd flink-1.17.2
 nano conf/flink-conf.yaml
+rest.port: 8181
+rest.bind-port: 8181
 rest.bind-address: 0.0.0.0
 
 # Flink 1.17.2 get connectors SQL / JDBC / MySql connector
+cd lib
 wget https://repo.maven.apache.org/maven2/org/apache/flink/flink-sql-connector-kafka/1.17.2/flink-sql-connector-kafka-1.17.2.jar
 wget https://repo.maven.apache.org/maven2/org/apache/flink/flink-connector-jdbc/3.1.0-1.17/flink-connector-jdbc-3.1.0-1.17.jar
 wget https://repo.maven.apache.org/maven2/mysql/mysql-connector-java/8.0.27/mysql-connector-java-8.0.27.jar
@@ -21,10 +31,13 @@ ls *.jar -l
     -rwxrwxrwx 1 christseng christseng 2475087 Sep 29  2021 mysql-connector-java-8.0.27.jar
 
 # Start flink cluster
+cd ..
 bin/start-cluster.sh
     Starting cluster.
     Starting standalonesession daemon on host Chris-SP8.
     Starting taskexecutor daemon on host Chris-SP8.
+
+bin/sql-client.sh
 
 bin/flink run --detached -c org.example.RideEnrichApplicationCluster '../realtime_analysis/target/realtime-analytics-example-1.0-SNAPSHOT.jar'
 bin/flink run --detached -c org.example.RideEnrichApplication '../realtime_analysis/target/realtime-analytics-example-1.0-SNAPSHOT.jar'

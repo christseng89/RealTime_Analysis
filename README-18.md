@@ -70,12 +70,6 @@ bin/kafka-topics.sh --delete --bootstrap-server [::1]:9092 --topic drivers
 bin/kafka-topics.sh --delete --bootstrap-server [::1]:9092 --topic rides_enriched
 bin/kafka-topics.sh --bootstrap-server [::1]:9092 --list
 
-bin/kafka-consumer-groups.sh --bootstrap-server [::]:9092 --delete --group rides-flink-consumer
-bin/kafka-consumer-groups.sh --bootstrap-server [::]:9092 --delete --group drivers-flink-consumer
-bin/kafka-consumer-groups.sh --bootstrap-server [::]:9092 --delete --group riders-flink-consumer
-bin/kafka-consumer-groups.sh --bootstrap-server [::]:9092 --delete --group rides_enriched-flink-consumer
-bin/kafka-consumer-groups.sh --bootstrap-server [::]:9092 --list
-
 ### 2.2 Create the consumer topics and group 'rides-flink-consumer'
 
 bin/kafka-topics.sh --create --topic rides --partitions 3 --replication-factor 1 --bootstrap-server [::1]:9092
@@ -88,53 +82,7 @@ bin/kafka-topics.sh --bootstrap-server [::1]:9092 --list
     rides
     rides_enriched
 
-bin/kafka-console-consumer.sh --bootstrap-server [::1]:9092 --topic rides --group rides-flink-consumer
-bin/kafka-console-consumer.sh --bootstrap-server [::1]:9092 --topic riders --group riders-flink-consumer
-bin/kafka-console-consumer.sh --bootstrap-server [::1]:9092 --topic drivers --group drivers-flink-consumer
-bin/kafka-console-consumer.sh --bootstrap-server [::1]:9092 --topic rides_enriched --group rides_enriched-flink-consumer
-bin/kafka-consumer-groups.sh --bootstrap-server [::]:9092 --list
-    rides-flink-consumer
-    riders-flink-consumer
-    drivers-flink-consumer
-    rides_enriched-flink-consumer
-
-bin/kafka-consumer-groups.sh --bootstrap-server [::1]:9092 --describe --group rides-flink-consumer
-    GROUP                TOPIC           PARTITION  CURRENT-OFFSET  LOG-END-OFFSET  LAG             CONSUMER-ID  
-    rides-flink-consumer rides           0          0               0               0               -               -
-    rides-flink-consumer rides           1          0               0               0               -               -
-    rides-flink-consumer rides           2          0               0               0               -               -
-
-bin/kafka-consumer-groups.sh --bootstrap-server [::1]:9092 --describe --group riders-flink-consumer
-bin/kafka-consumer-groups.sh --bootstrap-server [::1]:9092 --describe --group drivers-flink-consumer
-// ???
-bin/kafka-console-consumer.sh --bootstrap-server [::1]:9092 --topic drivers --group testGroup
-
-bin/kafka-console-consumer.sh --bootstrap-server [::1]:9092 --topic riders --group testGroup
-
-bin/kafka-console-consumer.sh --bootstrap-server [::1]:9092 --topic rides_enriched --group testGroup
-
-bin/kafka-consumer-groups.sh --bootstrap-server [::1]:9092 --describe --group testGrou
-    GROUP           TOPIC           PARTITION  CURRENT-OFFSET  LOG-END-OFFSET  LAG
-    testGroup       drivers         1          2               2               0
-    testGroup       riders          1          1               1               0
-    testGroup       rides_enriched  1          0               0               0
-
-### ??3 Test Query Kafka Topics 'rides' then 2.1 and 2.2 again
-
-bin/kafka-console-consumer.sh --bootstrap-server [::1]:9092 --topic rides --group rides-flink-consumer
-
-cd $KAFKA_HOME
-bin/kafka-console-producer.sh --topic rides --bootstrap-server [::1]:9092 --property "parse.key=true" --property "key.separator=@@@"
-
-{ "ride_id":"000001"}@@@{"ride_id": "000001","rider_id": "100001","driver_id": "200001","location_id": "300001","amount": 350,"ride_status": "Booked","start_lat" : 12.990707,"start_lng" : 77.570870,"dest_lat": 12.887725, "dest_lng": 77.560973}
-
-### 4 First Run the RideEnrichExample in IntelliJ 
-
-// bin/kafka-console-consumer.sh --bootstrap-server [::1]:9092 --topic rides_enriched --property print.key=true
-
-// IntelliJ - Run the RideEnrichExample
-
-### 5 Input Data (2_flink_table_data) for Riders -> Drivers -> Rides
+### 3 Input Data (2_flink_table_data) for Riders -> Drivers -> Rides
 
 bin/kafka-console-producer.sh --topic riders --bootstrap-server [::1]:9092 --property "parse.key=true" --property "key.separator=@@@"
 
@@ -142,8 +90,10 @@ bin/kafka-console-producer.sh --topic drivers --bootstrap-server [::1]:9092 --pr
 
 bin/kafka-console-producer.sh --topic rides --bootstrap-server [::1]:9092 --property "parse.key=true" --property "key.separator=@@@"
 
-// Run the RideEnrichExample from the IDE 
-
-### 7 Query the rides_enriched topic again (not working)
+### 4 Run the RideEnrichExample from the IDE then Query the rides_enriched topic again (not working)
 
 bin/kafka-console-consumer.sh --bootstrap-server [::1]:9092 --topic rides_enriched --property print.key=true
+// Not working ...
+
+<https://nightlies.apache.org/flink/flink-docs-master/docs/connectors/table/kafka/>
+<https://nightlies.apache.org/flink/flink-docs-master/docs/connectors/table/upsert-kafka/>

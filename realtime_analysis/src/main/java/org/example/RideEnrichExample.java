@@ -10,12 +10,12 @@ import org.apache.flink.table.api.bridge.java.StreamTableEnvironment;
 
 public class RideEnrichExample {
   public static void main(String[] args) throws Exception {
-    StreamExecutionEnvironment env =
+    StreamExecutionEnvironment executionEnv =
         StreamExecutionEnvironment.getExecutionEnvironment();
-    StreamTableEnvironment tableEnv = StreamTableEnvironment.create(env);
+    StreamTableEnvironment tableEnv = StreamTableEnvironment.create(executionEnv);
 
-    env.enableCheckpointing(1000);
-    env.getCheckpointConfig().setExternalizedCheckpointCleanup(
+    executionEnv.enableCheckpointing(1000);
+    executionEnv.getCheckpointConfig().setExternalizedCheckpointCleanup(
         CheckpointConfig.ExternalizedCheckpointCleanup.RETAIN_ON_CANCELLATION);
     Configuration config = new Configuration();
     config.set(
@@ -24,7 +24,7 @@ public class RideEnrichExample {
     config.set(CheckpointingOptions.CHECKPOINT_STORAGE, "filesystem");
     config.set(CheckpointingOptions.CHECKPOINTS_DIRECTORY,
                "file:/home/christseng/FlinkData/Rides");
-    env.configure(config);
+    executionEnv.configure(config);
 
     TableConfig tableConfig = tableEnv.getConfig();
     tableConfig.set("table.exec.source.idle-timeout", "1s");
@@ -58,8 +58,7 @@ public class RideEnrichExample {
         + ");");
     System.out.println("\nRidesEnriched table (upsert) created ...");
 
-    tableEnv.executeSql(
-        "CREATE TABLE Rides (\n"
+    tableEnv.executeSql("CREATE TABLE Rides (\n"
         + "  `ride_id` STRING,\n"
         + "  `rider_id` STRING,\n"
         + "  `driver_id` STRING,\n"

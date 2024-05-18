@@ -118,6 +118,7 @@ public class RideEnrichExample {
         + ");");
     System.out.println("Drivers table (upsert) created ...");
 
+    // Lookup Join with JDBC
     tableEnv.executeSql("CREATE TABLE Location (\n"
         + "  location_id STRING,\n"
         + "  city STRING,\n"
@@ -158,14 +159,17 @@ public class RideEnrichExample {
         + "FROM Rides ride\n"
         + "\n"
         + "LEFT JOIN Drivers\n"
+      // Temporal join with Event Time
         + "FOR SYSTEM_TIME AS OF ride.request_time AS d\n"
         + "On ride.driver_id = d.driver_id\n"
         + "\n"
         + "LEFT JOIN Riders\n"
+      // Temporal join with Event Time
         + "FOR SYSTEM_TIME AS OF ride.request_time AS r\n"
         + "On ride.rider_id = r.rider_id\n"
         + "\n"
         + "LEFT JOIN Location\n"
+      // Lookup join with Processing Time
         + "FOR SYSTEM_TIME AS OF ride.processing_time as l\n"
         + "On ride.location_id = l.location_id");
     System.out.println("RidesEnriched table (upsert) inserted ...");

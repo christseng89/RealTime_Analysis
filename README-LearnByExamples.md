@@ -39,4 +39,4 @@ nc -zv localhost 9000
 flink run -c ex1_readingData target/flink-examples-1.0-SNAPSHOT.jar \
     --host localhost \
     --port 9000 \
-    --output ./flinkOutputs/outputFromSocket.csv
+    --output flinkOutputs/outputFromSocket.csv

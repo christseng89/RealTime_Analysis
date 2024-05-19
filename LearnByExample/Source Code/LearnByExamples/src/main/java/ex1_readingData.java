@@ -9,6 +9,7 @@ import java.util.Scanner;
 import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.api.java.utils.ParameterTool;
+import org.apache.flink.configuration.Configuration; // Add this import
 import org.apache.flink.core.fs.FileSystem;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
@@ -120,6 +121,23 @@ public class ex1_readingData {
 
     public CsvSinkFunction(String outputPath) {
       this.outputPath = outputPath;
+    }
+
+    @Override
+    public void open(Configuration parameters) throws Exception {
+      super.open(parameters);
+      File outputFile = new File(outputPath);
+      File parentDir = outputFile.getParentFile();
+      if (parentDir != null && !parentDir.exists()) {
+        if (!parentDir.mkdirs()) {
+          throw new IOException("Failed to create directories for output path: " + outputPath);
+        }
+      }
+      if (outputFile.exists()) {
+        if (!outputFile.delete()) {
+          throw new IOException("Failed to delete existing output file: " + outputPath);
+        }
+      }
     }
 
     @Override

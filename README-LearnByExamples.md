@@ -18,12 +18,16 @@ tail $FLINK_HOME/log/flink-*-taskexecutor-*.out
     (Swetha,,MachineLearning        BigData )
     ...
 
-// Test socket
+// Test socket steps
+// 1. Start Flink Logs
 source ~/.bashrc
 tail -f $FLINK_HOME/log/flink-*-taskexecutor-*.out
+
+// 2. Port 9000 input
 nc -lk 9000
 
     Input some text here ...
+
 
 nc -zv localhost 9000
 flink run -c ex1_readingData target/flink-examples-1.0-SNAPSHOT.jar \

@@ -4,9 +4,14 @@ import org.apache.flink.api.java.utils.ParameterTool;
 import org.apache.flink.core.fs.FileSystem;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
+import org.apache.flink.streaming.api.functions.source.SourceFunction;
+import org.apache.flink.streaming.api.functions.source.SourceFunction.SourceContext;
 
-import java.io.IOException;
+import java.io.File;
+import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Scanner;
+import java.io.IOException;
 
 public class ex1_readingData {
 
@@ -14,41 +19,44 @@ public class ex1_readingData {
         // Checking input parameters
         final ParameterTool params = ParameterTool.fromArgs(args);
 
-        final StreamExecutionEnvironment env =
-          StreamExecutionEnvironment.getExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         DataStream<String> dataStream = null;
 
         // make parameters available in the web interface
         env.getConfig().setGlobalJobParameters(params);
+        String sourceType = "Text File";
 
-        try {
-            // Validate and initialize data stream
-            if (params.has("input")) {
-                dataStream = env.readTextFile(params.get("input"));
-            } else if (params.has("host") && params.has("port")) {
-                // Check socket connectivity
-                String host = params.get("host");
-                int port = Integer.parseInt(params.get("port"));
-                if (!isPortAvailable(host, port)) {
-                    System.err.println("Error: Unable to connect to the specified host and port.");
-                    System.exit(1);
-                    return;
-                }
-                dataStream = env.socketTextStream(host, port);
-            } else {
-                System.out.println("Use --host and --port to specify socket");
-                System.out.println("Use --input to specify file input");
+        if (params.has("input")) {
+            String inputFilePath = params.get("input");
+            if (!new File(inputFilePath).exists()) {
+                System.err.println("Error: The specified input file does not exist.");
                 System.exit(1);
                 return;
             }
-        } catch (Exception e) {
-            System.err.println("Error: Unable to initialize data stream.");
-            e.printStackTrace();
+            dataStream = env.readTextFile(inputFilePath);
+        } else if (params.has("host") && params.has("port")) {
+            sourceType = "Socket";
+            String host = params.get("host");
+            int port = Integer.parseInt(params.get("port"));
+            if (!isPortAvailable(host, port)) {
+                System.err.println("Error: Unable to connect to the specified host and port.");
+                System.exit(1);
+                return;
+            }
+
+            dataStream = env.addSource(new SocketSourceFunction(host, port));
+        } else {
+            System.out.println("Use --host and --port to specify socket");
+            System.out.println("Use --input to specify file input");
             System.exit(1);
             return;
         }
 
-        // Validate output parameter
+        if (dataStream == null) {
+            System.exit(1);
+            return;
+        }
+
         if (!params.has("output")) {
             System.out.println("Use --output to specify the output file path");
             System.exit(1);
@@ -65,12 +73,10 @@ public class ex1_readingData {
             }
         });
 
-        // Print the tuples and write to CSV
         tupleStream.print();
         tupleStream.writeAsCsv(params.get("output"), FileSystem.WriteMode.OVERWRITE, "\n", ",");
 
-        // Execute the Flink job
-        env.execute("Read and Write");
+        env.execute("Read and Write from " + sourceType);
     }
 
     private static boolean isPortAvailable(String host, int port) {
@@ -78,6 +84,38 @@ public class ex1_readingData {
             return true;
         } catch (IOException e) {
             return false;
+        }
+    }
+
+    private static class SocketSourceFunction implements SourceFunction<String> {
+        private final String host;
+        private final int port;
+        private volatile boolean isRunning = true;
+
+        public SocketSourceFunction(String host, int port) {
+            this.host = host;
+            this.port = port;
+        }
+
+        @Override
+        public void run(SourceContext<String> ctx) throws Exception {
+            try (ServerSocket serverSocket = new ServerSocket(port);
+                 Socket socket = serverSocket.accept();
+                 Scanner scanner = new Scanner(socket.getInputStream())) {
+                while (isRunning && scanner.hasNextLine()) {
+                    String line = scanner.nextLine();
+                    if ("STOP".equals(line.trim())) {
+                        isRunning = false;
+                    } else {
+                        ctx.collect(line);
+                    }
+                }
+            }
+        }
+
+        @Override
+        public void cancel() {
+            isRunning = false;
         }
     }
 }

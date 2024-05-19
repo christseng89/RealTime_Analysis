@@ -9,8 +9,7 @@ import java.util.Scanner;
 import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.api.java.utils.ParameterTool;
-import org.apache.flink.configuration.Configuration; // Add this import
-import org.apache.flink.core.fs.FileSystem;
+import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.source.SourceFunction;
@@ -63,6 +62,7 @@ public class ex1_readingData {
     }
 
     // Convert each string to a tuple (for demonstration, we'll split by space and use the first part as key)
+    System.out.println("Reading from " + sourceType);
     DataStream<Tuple2<String, String>> tupleStream = dataStream.map(new MapFunction<String, Tuple2<String, String>>() {
       @Override
       public Tuple2<String, String> map(String value) throws Exception {
@@ -78,6 +78,7 @@ public class ex1_readingData {
     tupleStream.addSink(new CsvSinkFunction(params.get("output")));
 
     // Execute the job
+    System.out.println("Writing to CSV file: " + params.get("output"));
     env.execute("Read and Write from " + sourceType);
   }
 
@@ -135,7 +136,7 @@ public class ex1_readingData {
       }
       if (outputFile.exists()) {
         if (!outputFile.delete()) {
-          throw new IOException("Failed to delete existing output file: " + outputPath);
+//          throw new IOException("Failed to delete existing output file: " + outputPath);
         }
       }
     }
@@ -144,7 +145,7 @@ public class ex1_readingData {
     public void invoke(Tuple2<String, String> value, Context context) throws Exception {
       // Writing the accumulated data to the CSV file
       try (PrintWriter writer = new PrintWriter(new java.io.FileWriter(outputPath, true))) {
-        writer.println(value.f0 + "," + value.f1);
+        writer.println(value.f0 + value.f1);
       } catch (IOException e) {
         System.err.println("Error writing to CSV file: " + e.getMessage());
       }

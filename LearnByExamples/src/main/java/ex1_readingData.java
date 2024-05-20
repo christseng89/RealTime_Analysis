@@ -26,9 +26,10 @@ public class ex1_readingData {
 
     // make parameters available in the web interface
     env.getConfig().setGlobalJobParameters(params);
-    String sourceType = "Text File";
+    String sourceType = "Unknown File";
 
     if (params.has("input")) {
+      sourceType = "Text File";
       String inputFilePath = params.get("input");
       if (!new File(inputFilePath).exists()) {
         System.err.println("Error: The specified input file does not exist.");

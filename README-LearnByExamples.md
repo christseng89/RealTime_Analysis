@@ -88,3 +88,16 @@ flink run -c ex5_keys target/flink-examples-1.0-SNAPSHOT.jar \
     (Java,1)
     (InterviewPrep,1)
     ...
+
+### Example #6
+
+flink run -c ex6_keysSum target/flink-examples-1.0-SNAPSHOT.jar \
+    --input ./flinkData/specialties.txt
+
+    ...
+    (MachineLearning,2)
+    (GMAT,1)
+    (Statistics,2)
+    (GMAT,2)
+    (Finance,2)
+    (GMAT,3)

@@ -134,10 +134,14 @@ flink run -c ex8_reduce target/flink-examples-1.0-SNAPSHOT.jar \
 
 - Build-in Windows
   - Tumbling Windows
+    将数据流划分为大小相等的、不重叠的时间区间。例如，每 10 秒计算一次总和。
   - Sliding Windows
+    将数据流划分为大小相等的、可以重叠的时间区间。例如，每 5 秒计算一次过去 10 秒的平均值。
   - Count Windows
   - Session Windows (Time interval between two events)
+    根据事件之间的间隔动态地划分窗口。适用于会话分析，当用户活动有空闲期时，窗口会自动结束。
   - Global Windows
+    一个永不关闭的窗口，常用于需要手动触发的场景。
 
 - Custom Windows
   - Window Assigner
@@ -174,7 +178,31 @@ flink run -c FlinkWindowExample2 target/flink-examples-1.0-SNAPSHOT.jar \
     --port 9000
 
 // #2 nc input
-cat data.txt
+ReactJS, India, 1488705752
+ReactJS, US, 1488705753
+JQuery, India, 1488705755
+ReactJS, US, 1488705743
+Hadoop, US, 1488705744
+ReactJS, India, 1488705747
+
+DataStructures, US, 1488705750
+ReactJS, India, 1488705693
+DataStructures, UK, 1488705694
+JQuery, US, 1488705705
+DataStructures, India, 1488705707
+
+// #2 task manager output
+(1488705752,ReactJS,1)
+(1488705753,ReactJS,1)
+(1488705755,JQuery,1)
+(1488705743,ReactJS,1)
+(1488705744,Hadoop,1)
+(1488705747,ReactJS,1)
+(1488705750,DataStructures,1)
+(1488705693,ReactJS,1)
+(1488705694,DataStructures,1)
+(1488705705,JQuery,1)
+(1488705707,DataStructures,1)
 
 flink run -c ex9_windowAll target/flink-examples-1.0-SNAPSHOT.jar \
     --input ./flinkData/signups.txt

@@ -101,3 +101,22 @@ flink run -c ex6_keysSum target/flink-examples-1.0-SNAPSHOT.jar \
     (GMAT,2)
     (Finance,2)
     (GMAT,3)
+
+### Example #7
+
+nc -zv localhost 9000
+flink run -c ex7_NumberAggregations target/flink-examples-1.0-SNAPSHOT.jar \
+    --host localhost \
+    --port 9000
+
+// Socket input data
+    exampleData1 10.5
+    exampleData1 10.52
+    exampleData1 10.6
+    exampleData1 12  
+    exampleData1 5
+
+// Flink Output
+    ...
+    (exampleData1,10.5)
+    (exampleData1,5.0)

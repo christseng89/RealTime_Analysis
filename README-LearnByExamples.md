@@ -120,3 +120,12 @@ flink run -c ex7_NumberAggregations target/flink-examples-1.0-SNAPSHOT.jar \
     ...
     (exampleData1,10.5)
     (exampleData1,5.0)
+
+### Example #8
+
+flink run -c ex8_reduce target/flink-examples-1.0-SNAPSHOT.jar \
+    --input ./flinkData/courses.txt
+
+    (MachineLearning,2.5)
+    (WebProgramming,7.5)
+    (ComputerScience,14.0)

@@ -129,3 +129,22 @@ flink run -c ex8_reduce target/flink-examples-1.0-SNAPSHOT.jar \
     (MachineLearning,2.5)
     (WebProgramming,7.5)
     (ComputerScience,14.0)
+
+### 19. Windows Transformation
+
+- Build-in Windows
+  - Tumbling Windows
+  - Sliding Windows
+  - Count Windows
+  - Session Windows (Time interval between two events)
+  - Global Windows
+
+- Custom Windows
+  - Window Assigner
+  - Trigger
+  - Evictor
+  - Process Window Function
+  - Window Function
+  - Process All Window Function
+  - All Window Function
+  - Process Window Function

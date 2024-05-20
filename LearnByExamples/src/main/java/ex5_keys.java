@@ -30,7 +30,7 @@ public class ex5_keys {
 
         outStream.print();
 
-        env.execute("Find Specialties");
+        env.execute("ex5_keys - Find Specialties");
     }
 
     public static class ExtractSpecialties implements MapFunction<String, String> {

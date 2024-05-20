@@ -57,3 +57,23 @@ flink run -c ex4_flatMap target/flink-examples-1.0-SNAPSHOT.jar \
     Java
     InterviewPrep
     ...
+
+### 13. Stateless and Stateful Transformations
+
+- Stateless
+  - filter
+  - map
+  - flatMap
+  - keyBy
+- Stateful
+  - reduce
+  - sum
+  - min
+  - max
+- Accumulate data
+  - Entire data
+  - Windowed data
+  - Keyed data
+  - Aggregated data
+  - Reduced data
+  - Processed data

@@ -46,3 +46,14 @@ nc -zv localhost 9000
 flink run -c ex3_Map target/flink-examples-1.0-SNAPSHOT.jar \
     --host localhost \
     --port 9000
+
+### Example #4
+
+flink run -c ex4_flatMap target/flink-examples-1.0-SNAPSHOT.jar \
+    --input ./flinkData/specialties.txt
+
+    WebProgramming
+    ComputerScience
+    Java
+    InterviewPrep
+    ...

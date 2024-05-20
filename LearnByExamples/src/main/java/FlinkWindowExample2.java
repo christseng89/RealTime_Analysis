@@ -7,7 +7,7 @@ import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.windowing.assigners.SlidingProcessingTimeWindows;
 import org.apache.flink.streaming.api.windowing.time.Time;
 
-public class FlinkWindowExample {
+public class FlinkWindowExample2 {
   public static void main(String[] args) throws Exception {
     final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
 
@@ -43,7 +43,7 @@ public class FlinkWindowExample {
       System.exit(0);
     }));
 
-    env.execute("FlinkWindowExample");
+    env.execute("FlinkWindowExample2 - sliding window");
   }
 
   private static boolean isSocketAvailable(String host, int port) {

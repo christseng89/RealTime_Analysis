@@ -4,10 +4,11 @@ import org.apache.flink.api.common.typeinfo.Types;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
-import org.apache.flink.streaming.api.windowing.assigners.SlidingProcessingTimeWindows;
+import org.apache.flink.streaming.api.windowing.assigners.TumblingProcessingTimeWindows;
+//import org.apache.flink.streaming.api.windowing.assigners.SlidingProcessingTimeWindows;
 import org.apache.flink.streaming.api.windowing.time.Time;
 
-public class FlinkWindowExample {
+public class FlinkWindowExample1 {
   public static void main(String[] args) throws Exception {
     final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
 
@@ -33,7 +34,7 @@ public class FlinkWindowExample {
 
     dataStream
       .keyBy(value -> value.f0)
-      .window(SlidingProcessingTimeWindows.of(Time.seconds(10), Time.seconds(5)))
+      .window(TumblingProcessingTimeWindows.of(Time.seconds(10)))
       .sum(1)
       .print();
 
@@ -43,7 +44,7 @@ public class FlinkWindowExample {
       System.exit(0);
     }));
 
-    env.execute("FlinkWindowExample");
+    env.execute("FlinkWindowExample1 - thumbling window");
   }
 
   private static boolean isSocketAvailable(String host, int port) {

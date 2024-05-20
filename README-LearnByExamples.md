@@ -77,3 +77,14 @@ flink run -c ex4_flatMap target/flink-examples-1.0-SNAPSHOT.jar \
   - Aggregated data
   - Reduced data
   - Processed data
+
+### Example #5
+
+flink run -c ex5_keys target/flink-examples-1.0-SNAPSHOT.jar \
+    --input ./flinkData/specialties.txt
+
+    (WebProgramming,1)
+    (ComputerScience,1)
+    (Java,1)
+    (InterviewPrep,1)
+    ...

@@ -38,12 +38,6 @@ public class FlinkWindowExample1 {
       .sum(1)
       .print();
 
-    // Register a shutdown hook to handle job cancellation
-    Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-      System.out.println("Job has been cancelled. Exiting program.");
-      System.exit(0);
-    }));
-
     env.execute("FlinkWindowExample1 - thumbling window");
   }
 

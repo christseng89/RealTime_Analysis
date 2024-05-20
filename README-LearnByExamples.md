@@ -174,7 +174,7 @@ flink run -c FlinkWindowExample2 target/flink-examples-1.0-SNAPSHOT.jar \
     --port 9000
 
 // #2 nc input
-cat data.txt | nc localhost 9000
+cat data.txt
 
 flink run -c ex9_windowAll target/flink-examples-1.0-SNAPSHOT.jar \
     --input ./flinkData/signups.txt

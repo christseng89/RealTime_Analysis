@@ -148,3 +148,29 @@ flink run -c ex8_reduce target/flink-examples-1.0-SNAPSHOT.jar \
   - Process All Window Function
   - All Window Function
   - Process Window Function
+
+### Example #9
+
+flink run -c FlinkWindowExample target/flink-examples-1.0-SNAPSHOT.jar \
+    --host localhost \
+    --port 9000
+
+// nc input
+example1
+example2
+example1
+example3
+example2
+
+// task manager output
+(example2,2)
+(example1,2)
+(example3,1)
+
+flink run -c ex9_windowAll target/flink-examples-1.0-SNAPSHOT.jar \
+    --input ./flinkData/signups.txt
+
+flink run -c ex9_windowAll target/flink-examples-1.0-SNAPSHOT.jar \
+    --host localhost \
+    --port 9000
+

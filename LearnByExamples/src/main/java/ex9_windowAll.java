@@ -31,7 +31,7 @@ public class ex9_windowAll {
 
         outStream.print();
 
-        env.execute("Tumbling and Sliding Window");
+        env.execute("ex9_windowAll - Tumbling and Sliding Window");
     }
 
     public static class parseRow implements MapFunction<String, Tuple2<String,Integer>> {

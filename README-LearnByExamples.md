@@ -204,9 +204,23 @@ DataStructures, India, 1488705707
 (1488705705,JQuery,1)
 (1488705707,DataStructures,1)
 
-flink run -c ex9_windowAll target/flink-examples-1.0-SNAPSHOT.jar \
-    --input ./flinkData/signups.txt
+#### Example #9 - WindowAll Tumbling (no keyed stream)
 
 flink run -c ex9_windowAll target/flink-examples-1.0-SNAPSHOT.jar \
     --host localhost \
     --port 9000
+
+// nc input from signups.txt
+
+// flink output
+(US,27)
+
+#### Example #10 - Windows Sliding (keyed stream)
+
+flink run -c ex10_windows target/flink-examples-1.0-SNAPSHOT.jar \
+    --host localhost \
+    --port 9000
+
+// nc input from signups.txt
+
+// flink output

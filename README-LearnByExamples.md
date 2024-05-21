@@ -224,3 +224,6 @@ flink run -c ex10_windows target/flink-examples-1.0-SNAPSHOT.jar \
 // nc input from signups.txt
 
 // flink output
+(US,10)
+(UK,4)
+(India,13)

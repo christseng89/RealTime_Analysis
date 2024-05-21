@@ -1,6 +1,5 @@
 package org.example;
 
-import org.apache.flink.api.common.JobID;
 import org.apache.flink.api.common.JobExecutionResult;
 import org.apache.flink.core.execution.JobClient;
 import org.apache.flink.streaming.api.datastream.DataStream;
@@ -8,6 +7,8 @@ import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.table.api.Table;
 import org.apache.flink.table.api.bridge.java.StreamTableEnvironment;
 import org.apache.flink.types.Row;
+
+import java.util.concurrent.CancellationException;
 
 public class TestRideExample {
   public static void main(String[] args) throws Exception {
@@ -50,8 +51,10 @@ public class TestRideExample {
     // Add a shutdown hook to gracefully shut down the job
     Runtime.getRuntime().addShutdownHook(new Thread(() -> {
       try {
-        System.out.println("Shutdown hook triggered, cancelling the job...");
+        System.out.println("Shutdown hook triggered, waiting for the job to complete...");
         jobClient.cancel().get();
+      } catch (CancellationException ce) {
+        System.out.println("Job canceled, waiting for completion...");
       } catch (Exception e) {
         e.printStackTrace();
       }

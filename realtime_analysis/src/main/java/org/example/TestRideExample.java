@@ -1,5 +1,8 @@
 package org.example;
 
+import org.apache.flink.api.common.JobID;
+import org.apache.flink.api.common.JobExecutionResult;
+import org.apache.flink.core.execution.JobClient;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.table.api.Table;
@@ -8,8 +11,7 @@ import org.apache.flink.types.Row;
 
 public class TestRideExample {
   public static void main(String[] args) throws Exception {
-    final StreamExecutionEnvironment executionEnv =
-      StreamExecutionEnvironment.getExecutionEnvironment();
+    final StreamExecutionEnvironment executionEnv = StreamExecutionEnvironment.getExecutionEnvironment();
     StreamTableEnvironment tableEnv = StreamTableEnvironment.create(executionEnv);
 
     tableEnv.executeSql(
@@ -41,6 +43,22 @@ public class TestRideExample {
     Table table = tableEnv.sqlQuery("select * from RideTest");
     DataStream<Row> dataStream = tableEnv.toDataStream(table);
     dataStream.print();
-    executionEnv.execute("TestRideExample");
+
+    // Submit the job and obtain a JobClient for control
+    JobClient jobClient = executionEnv.executeAsync("TestRideExample");
+
+    // Add a shutdown hook to gracefully shut down the job
+    Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+      try {
+        System.out.println("Shutdown hook triggered, cancelling the job...");
+        jobClient.cancel().get();
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+    }));
+
+    // Wait for the job to finish
+    JobExecutionResult result = jobClient.getJobExecutionResult().get();
+    System.out.println("Execution result: " + result);
   }
 }

@@ -39,7 +39,7 @@
         </dependency>
         <dependency>
             <groupId>org.apache.flink</groupId>
-            <artifactId>flink-table-planner_2.12</artifactId>
+            <artifactId>flink-table-planner_${scala.binary.version}</artifactId>
             <version>${flink.version}</version>
             <scope>test</scope>
         </dependency>
@@ -78,6 +78,16 @@
                             <goal>shade</goal>
                         </goals>
                         <configuration>
+                          <source>11</source>
+                          <target>11</target>
+                          <fork>true</fork>
+                          <executable>${JAVA_HOME}/bin/javac</executable>
+                          <compilerArgs>
+                            <arg>--add-opens</arg>
+                            <arg>java.base/java.lang=ALL-UNNAMED</arg>
+                            <arg>--add-opens</arg>
+                            <arg>java.base/java.util=ALL-UNNAMED</arg>
+                          </compilerArgs>
                             <createDependencyReducedPom>false</createDependencyReducedPom>
                             <artifactSet>
                                 <includes>

@@ -1,10 +1,14 @@
 package org.example;
 
+import org.apache.flink.api.common.JobExecutionResult;
+import org.apache.flink.core.execution.JobClient;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.table.api.Table;
 import org.apache.flink.table.api.bridge.java.StreamTableEnvironment;
 import org.apache.flink.types.Row;
+
+import java.util.concurrent.CancellationException;
 
 public class TestDriverExample {
   public static void main(String[] args) throws Exception {
@@ -35,6 +39,25 @@ public class TestDriverExample {
     Table table = tableEnv.sqlQuery("select * from DriverTest");
     DataStream<Row> dataStream = tableEnv.toDataStream(table);
     dataStream.print();
-    executionEnv.execute();
+
+    // Submit the job and obtain a JobClient for control
+    JobClient jobClient = executionEnv.executeAsync("TestDriverExample");
+
+    // Add a shutdown hook to gracefully shut down the job
+    Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+      try {
+        System.out.println("Shutdown hook triggered, waiting for the job to complete...");
+        jobClient.cancel().get();
+      } catch (CancellationException ce) {
+        System.out.println("Job canceled, waiting for completion...");
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+    }));
+
+    // Wait for the job to finish
+    JobExecutionResult result = jobClient.getJobExecutionResult().get();
+    System.out.println("Execution result: " + result);
   }
 }
+

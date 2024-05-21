@@ -120,9 +120,11 @@ kafka-topics.sh --bootstrap-server [::1]:9092 --list
 
 ### 3 Input Data (2_flink_table_data) for Riders -> Drivers -> Rides
 
+flink run -c org.example.TestRideExample target/realtime-analytics-example-1.0-SNAPSHOT.jar
+
+kafka-console-producer.sh --bootstrap-server [::1]:9092 --property "parse.key=true" --property "key.separator=@@@" --topic rides
 kafka-console-producer.sh --bootstrap-server [::1]:9092 --property "parse.key=true" --property "key.separator=@@@" --topic riders
 kafka-console-producer.sh --bootstrap-server [::1]:9092 --property "parse.key=true" --property "key.separator=@@@" --topic drivers
-kafka-console-producer.sh --bootstrap-server [::1]:9092 --property "parse.key=true" --property "key.separator=@@@" --topic rides
 
 ### 4 Run the RideEnrichExample from the IDE then Query the rides_enriched topic again (not working)
 

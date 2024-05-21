@@ -41,6 +41,6 @@ public class TestRideExample {
     Table table = tableEnv.sqlQuery("select * from RideTest");
     DataStream<Row> dataStream = tableEnv.toDataStream(table);
     dataStream.print();
-    executionEnv.execute();
+    executionEnv.execute("TestRideExample");
   }
 }

@@ -42,7 +42,7 @@ public class ex13_countWindowEvaluate {
 
         outStream.print();
 
-        env.execute("Count Window");
+        env.execute("ex13_countWindowEvaluate - Count Window");
     }
 
     public static class parseRow implements MapFunction<String, courseCount> {

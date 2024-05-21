@@ -23,7 +23,7 @@ public class TestRiderExample {
         + ") WITH (\n"
         + "  'connector' = 'kafka',\n"
         + "  'topic' = 'riders',\n"
-        + "  'properties.bootstrap.servers' = '[::1]:9092',\n"
+        + "  'properties.bootstrap.servers' = 'localhost:9092',\n"  // Updated here
         + "  'properties.group.id' = 'test',\n"
         + "  'scan.startup.mode' = 'latest-offset',\n"
         + "  'format' = 'json'\n"
@@ -32,9 +32,9 @@ public class TestRiderExample {
     System.out.println("RiderTest table created");
     System.out.println("Query RiderTest table...");
 
-    Table table = tableEnv.sqlQuery("select * from RiderTest");
+    Table table = tableEnv.sqlQuery("SELECT * FROM RiderTest");
     DataStream<Row> dataStream = tableEnv.toDataStream(table);
     dataStream.print();
-    executionEnv.execute();
+    executionEnv.execute("TestRiderExample");
   }
 }

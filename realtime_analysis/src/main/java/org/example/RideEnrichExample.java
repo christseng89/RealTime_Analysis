@@ -2,11 +2,14 @@ package org.example;
 
 import org.apache.flink.configuration.CheckpointingOptions;
 import org.apache.flink.configuration.Configuration;
+import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.CheckpointConfig;
 import org.apache.flink.streaming.api.environment.ExecutionCheckpointingOptions;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
+import org.apache.flink.table.api.Table;
 import org.apache.flink.table.api.TableConfig;
 import org.apache.flink.table.api.bridge.java.StreamTableEnvironment;
+import org.apache.flink.types.Row;
 
 public class RideEnrichExample {
   public static void main(String[] args) throws Exception {
@@ -76,11 +79,16 @@ public class RideEnrichExample {
         + "  'connector' = 'kafka',\n"
         + "  'topic' = 'rides',\n"
         + "  'properties.bootstrap.servers' = '[::1]:9092',\n"
-        + "  'properties.group.id' = 'testGroup',\n"
-        + "  'scan.startup.mode' = 'earliest-offset',\n"
+        + "  'properties.group.id' = 'rides-flink-consumer',\n"
+        + "  'scan.startup.mode' = 'group-offsets',\n"
         + "  'format' = 'json'\n"
         + ");");
     System.out.println("\nRides table (kafka) created ...");
+
+    Table table = tableEnv.sqlQuery("select * from Rides");
+    DataStream<Row> dataStream = tableEnv.toDataStream(table);
+    dataStream.print();
+    executionEnv.execute("Query Rides table");
 
     tableEnv.executeSql("CREATE TABLE Riders (\n"
         + "  `rider_id` STRING,\n"
@@ -99,6 +107,11 @@ public class RideEnrichExample {
         + "  'key.format' = 'json'\n"
         + ");");
     System.out.println("Riders table (upsert) created ...");
+
+    table = tableEnv.sqlQuery("select * from Riders");
+    dataStream = tableEnv.toDataStream(table);
+    dataStream.print();
+    executionEnv.execute("Query Riders table");
 
     tableEnv.executeSql("CREATE TABLE Drivers (\n"
         + "  `driver_id` STRING,\n"
@@ -130,8 +143,8 @@ public class RideEnrichExample {
         +
         "   'url' = 'jdbc:mysql://localhost:3306/analytics',\n"
         + "   'table-name' = 'Location',\n"
-        + "   'username' = 'analyticsuser',\n"
-        + "   'password' = 'password'\n"
+        + "   'username' = 'root',\n"
+        + "   'password' = 'passWord'\n"
         + ");");
     System.out.println("Location table (jdbc) created ...");
 
@@ -173,5 +186,8 @@ public class RideEnrichExample {
         + "FOR SYSTEM_TIME AS OF ride.processing_time as l\n"
         + "On ride.location_id = l.location_id");
     System.out.println("RidesEnriched table (upsert) inserted ...");
+
+//    dataStream.print();
+//    executionEnv.execute("RideEnrichExample");
   }
 }

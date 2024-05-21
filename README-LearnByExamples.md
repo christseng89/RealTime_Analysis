@@ -227,3 +227,19 @@ flink run -c ex10_windows target/flink-examples-1.0-SNAPSHOT.jar \
 (US,10)
 (UK,4)
 (India,13)
+
+#### Example #11 - Windows Sliding Count (keyed stream)
+
+flink run -c ex11_countWindow target/flink-examples-1.0-SNAPSHOT.jar \
+    --host localhost \
+    --port 9000
+
+// nc input from courses.txt
+// flink output
+3: 1
+10: 1
+15: 1
+8: 1
+2: 1
+12: 1
+12: 2

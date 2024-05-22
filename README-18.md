@@ -43,35 +43,16 @@ start-cluster.sh
     Starting standalonesession daemon on host Chris-SP8.
     Starting taskexecutor daemon on host Chris-SP8.
 
-sql-client.sh
-ps aux | grep flink
-    christs+  586603 50.0 23.6 9174280 2900328 ?     Ssl  17:21  15:33 /usr/bin/java --add-opens java.base/java.lang=ALL-UNNAMED -Dfile.encoding=UTF-8 -classpath /mnt/d/development/Real_Time_Analysis/realtime_analysis/target/classes:/
-
-flink run $FLINK_HOME/examples/streaming/WordCount.jar
-tail $FLINK_HOME/log/flink-*-taskexecutor-*.out
-tail $FLINK_HOME/log/flink-*-taskexecutor-*.out
-    (nymph,1)
-    (in,3)
-    (thy,1)
-    (orisons,1)
-    (be,4)
-    (all,2)
-    (my,1)
-
-flink run $FLINK_HOME/examples/streaming/TopSpeedWindowing.jar
-tail $FLINK_HOME/log/flink-*-taskexecutor-*.out
-    (1,55,8591.666666666666,1715942690283)
-    (1,55,8591.666666666666,1715942690283)
-    (1,55,8591.666666666666,1715942690283)
-    ...
-
 <http://localhost:8081>
 
-### 1.1 Check Port 9000
+tail -f $FLINK_HOME/log/flink-*-taskexecutor-*.out
 
-// Check Port 9000
-nc -zv localhost 9000
+### 1.1 Test Flink Examples (Optional)
 
+flink run $FLINK_HOME/examples/streaming/WordCount.jar
+flink run $FLINK_HOME/examples/streaming/TopSpeedWindowing.jar
+
+// Test Socket Port 9000
 nc -lk 9000
 nc -zv localhost 9000
     Connection to localhost (127.0.0.1) 9000 port [tcp/*] succeeded!
@@ -80,11 +61,24 @@ flink run $FLINK_HOME/examples/streaming/SocketWindowWordCount.jar --port 9000
     Starting Socket Window WordCount
     Use nc -lk 9000 to send data to the socket
 
-nc -lk 9000
+// nc input
     Hello World
     Test 123
 
-tail $FLINK_HOME/log/flink-*-taskexecutor-*.out
+### 1.2 Flink Log
+
+    (nymph,1)
+    (in,3)
+    (thy,1)
+    (orisons,1)
+    (be,4)
+    ...
+
+    (1,55,8591.666666666666,1715942690283)
+    (1,55,8591.666666666666,1715942690283)
+    (1,55,8591.666666666666,1715942690283)
+    ...
+    
     Hello : 1
     World : 1
     Test : 1
@@ -98,7 +92,7 @@ kafka-storage.sh format -t $KAFKA_CLUSTER_ID -c $KAFKA_HOME/config/kraft/server.
 kafka-server-start.sh -daemon $KAFKA_HOME/config/kraft/server.properties
 ps -ef | grep kafka
 
-### 2.1 Delete the consumer topics and groups (Rerun)
+### 2.1 Delete the consumer topics and groups (Optional)
 
 kafka-topics.sh --delete --bootstrap-server [::1]:9092 --topic rides
 kafka-topics.sh --delete --bootstrap-server [::1]:9092 --topic riders

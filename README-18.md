@@ -123,7 +123,7 @@ flink run -c org.example.TestRideExample target/realtime-analytics-example-1.0-S
     Job has been submitted with JobID 92afb06a98b6853a6b9c8a0d53870c3f
 
 // Flink run real data (riders, drivers, rides)...
-flink run -c org.example.RideEnrichSimple target/realtime-analytics-example-1.0-SNAPSHOT.jar
+flink run -c org.example.RideEnrichExample target/realtime-analytics-example-1.0-SNAPSHOT.jar
 
 kafka-console-producer.sh --bootstrap-server [::1]:9092 --property "parse.key=true" --property "key.separator=@@@" --topic drivers
 kafka-console-producer.sh --bootstrap-server [::1]:9092 --property "parse.key=true" --property "key.separator=@@@" --topic riders

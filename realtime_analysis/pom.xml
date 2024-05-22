@@ -11,6 +11,7 @@
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
         <flink.version>1.17.2</flink.version>
+        <mysql.version>8.0.28</mysql.version>
         <scala.binary.version>2.12</scala.binary.version>
         <kafka.clients.version>3.5.2</kafka.clients.version> <!-- Updated version -->
     </properties>
@@ -49,6 +50,12 @@
             <version>${flink.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.apache.flink</groupId>
+            <artifactId>flink-connector-jdbc</artifactId>
+            <version>3.1.2-1.17</version>
+        </dependency>
+
         <!-- Kafka dependency -->
         <dependency>
             <groupId>org.apache.kafka</groupId>
@@ -60,7 +67,7 @@
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <version>8.0.27</version>
+            <version>${mysql.version}</version>
         </dependency>
     </dependencies>
 
@@ -95,6 +102,7 @@
                                     <include>org.apache.flink:flink-table-api-java-bridge</include>
                                     <include>org.apache.flink:flink-table-api-java</include>
                                     <include>org.apache.flink:flink-connector-kafka</include>
+                                    <include>org.apache.flink:flink-connector-jdbc</include>
                                     <include>org.apache.flink:flink-json</include>
                                     <include>org.apache.kafka:kafka-clients</include>
                                     <include>mysql:mysql-connector-java</include>

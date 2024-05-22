@@ -58,33 +58,42 @@ public class RideEnrichSimple {
       + ");");
     System.out.println("\nRides table (kafka) created ...");
 
-    tableEnv.executeSql("CREATE TABLE RidesEnriched (\n"
-      + "  `rider_id` STRING,\n"
-      // + "  `rider_name` STRING,\n"
-      + "  `driver_id` STRING,\n"
-      // + "  `driver_name` STRING,\n"
-      // + "  `vehicle_type` STRING,\n"
-      + "  `ride_id` STRING,\n"
-      + "  `amount` FLOAT,\n"
-      + "  `request_time`  TIMESTAMP_LTZ(3),\n"
-      // + "  `membership_status` STRING,\n"
-      + "  `city` STRING,\n"
-      + "  `country` STRING,\n"
-      + "  `ride_status` STRING,\n"
-      + "  `start_lat` FLOAT,\n"
-      + "  `start_lng` FLOAT,\n"
-      + "  `dest_lat` FLOAT,\n"
-      + "  `dest_lng` FLOAT,\n"
-      + "  PRIMARY KEY(`ride_id`) NOT ENFORCED\n"
-      + "  ) WITH (\n"
-      + "  'connector' = 'upsert-kafka',\n"
-      + "  'topic' = 'rides_enriched',\n"
-      + "  'properties.bootstrap.servers' = '[::1]:9092',\n"
-      + "  'properties.group.id' = 'testGroup',\n"
-      + "  'value.format' = 'json',\n"
-      + "  'key.format' = 'json'\n"
-      + ");");
-    System.out.println("\nRidesEnriched table (upsert) created ...");
+    tableEnv.executeSql("CREATE TABLE Drivers (\n"
+        + "  `driver_id` STRING,\n"
+        + "  `name` STRING,\n"
+        + "  `vehicle_type` STRING,\n"
+        + "  `last_updated_at`  TIMESTAMP(3),\n"
+        + "  `request_time` TIMESTAMP(3) METADATA FROM 'timestamp',\n"
+        + "  `processing_time` as PROCTIME()\n"
+        + ") WITH (\n"
+        + "  'connector' = 'kafka',\n"
+        + "  'topic' = 'drivers',\n"
+        + "  'properties.bootstrap.servers' = '[::1]:9092',\n"
+        + "  'properties.group.id' = 'test',\n"
+        + "  'scan.startup.mode' = 'latest-offset',\n"
+        + "  'format' = 'json'\n"
+        + ");");
+    System.out.println("\nDrivers table (kafka) created");
+    Thread.sleep(5000);
+
+    tableEnv.executeSql("CREATE TABLE Riders (\n"
+        + "  `rider_id` STRING,\n"
+        + "  `name` STRING,\n"
+        + "  `membership_status` STRING,\n"
+        + "  `last_updated_at`  TIMESTAMP(3),\n"
+        + "  `request_time` TIMESTAMP(3) METADATA FROM 'timestamp',\n"
+        + "  `processing_time` as PROCTIME()\n"
+        + ") WITH (\n"
+        + "  'connector' = 'kafka',\n"
+        + "  'topic' = 'riders',\n"
+        + "  'properties.bootstrap.servers' = 'localhost:9092',\n"  // Updated here
+        + "  'properties.group.id' = 'test',\n"
+        + "  'scan.startup.mode' = 'latest-offset',\n"
+        + "  'format' = 'json'\n"
+        + ");");
+
+    System.out.println("Riders table (kafka) created");
+    Thread.sleep(5000);
 
     // Lookup Join with JDBC
     tableEnv.executeSql("CREATE TABLE Location (\n"
@@ -102,20 +111,49 @@ public class RideEnrichSimple {
       + "   'password' = 'passWord'\n"
       + ");");
     System.out.println("Location table (jdbc) created ...");
+    Thread.sleep(5000);
 
-    Thread.sleep(10000);
-    System.out.println("\nRidesEnriched table (upsert) inserting ...");
+    tableEnv.executeSql("CREATE TABLE RidesEnriched (\n"
+      + "  `rider_id` STRING,\n"
+      + "  `rider_name` STRING,\n"
+      + "  `driver_id` STRING,\n"
+      + "  `driver_name` STRING,\n"
+      + "  `vehicle_type` STRING,\n"
+      + "  `ride_id` STRING,\n"
+      + "  `amount` FLOAT,\n"
+      + "  `request_time`  TIMESTAMP_LTZ(3),\n"
+      + "  `membership_status` STRING,\n"
+      + "  `city` STRING,\n"
+      + "  `country` STRING,\n"
+      + "  `ride_status` STRING,\n"
+      + "  `start_lat` FLOAT,\n"
+      + "  `start_lng` FLOAT,\n"
+      + "  `dest_lat` FLOAT,\n"
+      + "  `dest_lng` FLOAT,\n"
+      + "  PRIMARY KEY(`ride_id`) NOT ENFORCED\n"
+      + "  ) WITH (\n"
+      + "  'connector' = 'upsert-kafka',\n"
+      + "  'topic' = 'rides_enriched',\n"
+      + "  'properties.bootstrap.servers' = '[::1]:9092',\n"
+      + "  'properties.group.id' = 'testGroup',\n"
+      + "  'value.format' = 'json',\n"
+      + "  'key.format' = 'json'\n"
+      + ");");
+    System.out.println("\nRidesEnriched sink table (upsert) created ...");
+    Thread.sleep(5000);
+
+    System.out.println("\nRidesEnriched sink table (upsert) inserting ...");
     tableEnv.executeSql("INSERT INTO RidesEnriched\n"
       + "SELECT \n"
       + "ride.rider_id,\n"
-      // + "r.name as rider_name,\n"
+       + "r.name as rider_name,\n"
       + "ride.driver_id,\n"
-      // + "d.name as driver_name,\n"
-      // + "d.vehicle_type,\n"
+       + "d.name as driver_name,\n"
+       + "d.vehicle_type,\n"
       + "ride.ride_id,\n"
       + "ride.amount,\n"
       + "ride.request_time,\n"
-      // + "r.membership_status,\n"
+       + "r.membership_status,\n"
       + "l.city,\n"
       + "l.country,\n"
       + "ride.ride_status,\n"
@@ -126,24 +164,20 @@ public class RideEnrichSimple {
       + "\n"
       + "FROM Rides ride\n"
       + "\n"
-      // + "LEFT JOIN Drivers\n"
-      // // Temporal join with Event Time
-      // + "FOR SYSTEM_TIME AS OF ride.request_time AS d\n"
-      // + "On ride.driver_id = d.driver_id\n"
-      // + "\n"
-      // + "LEFT JOIN Riders\n"
-      // // Temporal join with Event Time
-      // + "FOR SYSTEM_TIME AS OF ride.request_time AS r\n"
-      // + "On ride.rider_id = r.rider_id\n"
-      // + "\n"
+       + "LEFT JOIN Drivers AS d\n"
+       + "On ride.driver_id = d.driver_id\n"
+       + "\n"
+       + "LEFT JOIN Riders as r\n"
+       + "On ride.rider_id = r.rider_id\n"
+       + "\n"
       + "LEFT JOIN Location\n"
       // Lookup join with Processing Time
       + "FOR SYSTEM_TIME AS OF ride.processing_time as l\n"
-      + "On ride.location_id = l.location_id");
-    System.out.println("RidesEnriched table (upsert) inserted ...");
+      + "On ride.location_id = l.location_id\n"
+      + "WHERE r.name IS NOT null AND d.name IS NOT null");
+    System.out.println("RidesEnriched sink table (upsert) inserted ...");
 
-    System.out.println("\nQuery RidesEnriched table ...");
-
+    System.out.println("\nQuery RidesEnriched sink table ...");
     Table table = tableEnv.sqlQuery("select * from RidesEnriched");
     DataStream<Row> changelogStream = tableEnv.toChangelogStream(table);
     changelogStream.print();

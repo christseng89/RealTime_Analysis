@@ -102,7 +102,6 @@ kafka-topics.sh --delete --bootstrap-server [::1]:9092 --topic riders
 kafka-topics.sh --delete --bootstrap-server [::1]:9092 --topic drivers
 kafka-topics.sh --delete --bootstrap-server [::1]:9092 --topic rides_enriched
 
-
 ### 2.2 Create the consumer topics and group 'rides-flink-consumer'
 
 kafka-topics.sh --create --partitions 3 --replication-factor 1 --bootstrap-server [::1]:9092 --topic rides
@@ -117,24 +116,18 @@ kafka-topics.sh --bootstrap-server [::1]:9092 --list
 
 ### 3 Input Data (2_flink_table_data) for Riders -> Drivers -> Rides
 
-flink run -c org.example.RideEnrichSimple target/realtime-analytics-example-1.0-SNAPSHOT.jar
-
+// Test flink run ...
 flink run -c org.example.TestRideExample target/realtime-analytics-example-1.0-SNAPSHOT.jar
     RideTest table created
     Query RideTest table...
     Job has been submitted with JobID 92afb06a98b6853a6b9c8a0d53870c3f
 
-kafka-console-producer.sh --bootstrap-server [::1]:9092 --property "parse.key=true" --property "key.separator=@@@" --topic riders
-// Pass Riders info ...
+// Flink run real data (riders, drivers, rides)...
+flink run -c org.example.RideEnrichSimple target/realtime-analytics-example-1.0-SNAPSHOT.jar
 
 kafka-console-producer.sh --bootstrap-server [::1]:9092 --property "parse.key=true" --property "key.separator=@@@" --topic drivers
-// Pass Drivers info ...
-
+kafka-console-producer.sh --bootstrap-server [::1]:9092 --property "parse.key=true" --property "key.separator=@@@" --topic riders
 kafka-console-producer.sh --bootstrap-server [::1]:9092 --property "parse.key=true" --property "key.separator=@@@" --topic rides
-
-flink run -c org.example.RideEnrichExample target/realtime-analytics-example-1.0-SNAPSHOT.jar
-
-// Pass Rides info ...
 
 ### 4 Run the RideEnrichExample from the IDE then Query the rides_enriched topic again (not working)
 

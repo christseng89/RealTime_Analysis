@@ -145,3 +145,8 @@ users Table
     "enablePreload": false
   },
   ...
+
+### Pinot Swagger REST API
+
+// Schema => Add a new schema => POST => rides_enriched_schema
+// Table => Adds a table => POST => rides_enriched_table

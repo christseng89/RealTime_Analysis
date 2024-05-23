@@ -1,5 +1,5 @@
 # Create Kafka Topic
-bin/kafka-topics.sh --create --topic users --partitions 3 --replication-factor 1 --bootstrap-server [::1]:9092
+bin/kafka-topics.sh --create --partitions 3 --replication-factor 1 --bootstrap-server [::1]:9092 --topic users
 
 # Console Producer
 bin/kafka-console-producer.sh --topic users --bootstrap-server [::1]:9092

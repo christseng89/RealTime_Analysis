@@ -53,3 +53,75 @@ pinot-admin.sh StartServer -zkAddress [::1]:2191 -dataDir ~/PinotData/data/pinot
 ### Pinot ui
 
 <http://localhost:9000/#/>
+
+## Test Pinot
+
+### Start Kafka Server
+
+KAFKA_CLUSTER_ID="$($KAFKA_HOME/bin/kafka-storage.sh random-uuid)"
+kafka-storage.sh format -t $KAFKA_CLUSTER_ID -c $KAFKA_HOME/config/kraft/server.properties
+
+kafka-server-start.sh -daemon $KAFKA_HOME/config/kraft/server.properties
+
+kafka-topics.sh --create --partitions 3 --replication-factor 1 --bootstrap-server [::1]:9092 --topic users
+kafka-console-producer.sh --bootstrap-server [::1]:9092 --topic users
+
+{"name":"XYZ", "followers": 1, "last_updated_at":"2024-01-13 11:00:00","user_id":"100001"}
+{"name":"ZYX", "followers": 2, "last_updated_at":"2024-01-13 11:00:00","user_id":"100002"}
+{"name":"YYY", "followers": 3, "last_updated_at":"2024-01-13 13:00:00","user_id":"100003"}
+{"name":"ZZZ", "followers": 4, "last_updated_at":"2024-02-14 13:00:00","user_id":"100004"}
+
+### Pinot UI (localhost:9000)
+
+#### Add Schema
+
+Tables => Add Schema
+
+Schema Name: users
+Column
+    - name / Dimension
+    - followers / Metric
+    - last_updated_at / DateTime / STRING / SIMPLE_DATE_FORMAT:yyyy-MM-dd HH:mm:ss
+    - user_id / Dimension
+=> Save
+
+#### Add Realtime Table
+
+Table Name: users
+stream.kafka.broker.list: [::1]:9092
+stream.kafka.topic.name: users
+=> Save
+
+### Query Console
+
+Tables => users
+
+SELECT sum(followers) FROM users
+=> sum(followers) / 10
+
+### Upsert Data
+
+Schema
+{
+  ...  
+  "primaryKeyColumns": [
+    "user_id"
+  ]
+}
+
+Table
+
+  "quota": {},
+  "routing": {
+    "instanceSelectorType": "strictReplicaGroup"
+  },
+  ...
+  "upsertConfig": {
+    "mode": "FULL",
+    "hashFunction": "NONE",
+    "defaultPartialUpsertStrategy": "OVERWRITE",
+    "enableSnapshot": false,
+    "metadataTTL": 0,
+    "enablePreload": false
+  },
+  "ingestionConfig": ...

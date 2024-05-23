@@ -150,3 +150,24 @@ users Table
 
 // Schema => Add a new schema => POST => rides_enriched_schema
 // Table => Adds a table => POST => rides_enriched_table
+
+### Start Flink Server
+
+start-cluster.sh
+
+### Create Kafka Topics
+
+kafka-topics.sh --create --partitions 3 --replication-factor 1 --bootstrap-server [::1]:9092 --topic rides
+kafka-topics.sh --create --partitions 3 --replication-factor 1 --bootstrap-server [::1]:9092 --topic riders
+kafka-topics.sh --create --partitions 3 --replication-factor 1 --bootstrap-server [::1]:9092 --topic drivers
+kafka-topics.sh --create --partitions 3 --replication-factor 1 --bootstrap-server [::1]:9092 --topic rides_enriched
+kafka-topics.sh --bootstrap-server [::1]:9092 --list
+
+### Flink run
+
+cd realtime_analysis/
+flink run -c org.example.RideEnrichExample target/realtime-analytics-example-1.0-SNAPSHOT.jar
+
+kafka-console-producer.sh --bootstrap-server [::1]:9092 --property "parse.key=true" --property "key.separator=@@@" --topic riders
+kafka-console-producer.sh --bootstrap-server [::1]:9092 --property "parse.key=true" --property "key.separator=@@@" --topic drivers
+kafka-console-producer.sh --bootstrap-server [::1]:9092 --property "parse.key=true" --property "key.separator=@@@" --topic rides

@@ -3,8 +3,7 @@
   "tableType": "REALTIME",
   "tenants": {
     "broker": "DefaultTenant",
-    "server": "DefaultTenant",
-    "tagOverrideConfig": {}
+    "server": "DefaultTenant"
   },
   "segmentsConfig": {
     "schemaName": "users",
@@ -45,7 +44,8 @@
       "stream.kafka.decoder.class.name": "org.apache.pinot.plugin.stream.kafka.KafkaJSONMessageDecoder",
       "realtime.segment.flush.threshold.rows": "0",
       "realtime.segment.flush.threshold.time": "24h",
-      "realtime.segment.flush.threshold.segment.size": "100M"
+      "realtime.segment.flush.threshold.segment.size": "100M",
+      "realtime.segment.upsert.enable": "true"
     }
   },
   "metadata": {},
@@ -60,12 +60,19 @@
   "task": null,
   "routing": {
     "segmentPrunerTypes": null,
-    "instanceSelectorType": null
+    "instanceSelectorType": "strictReplicaGroup"
   },
   "query": {
     "timeoutMs": null
   },
   "fieldConfigList": null,
-  "upsertConfig": null,
+  "upsertConfig": {
+    "mode": "FULL",
+    "hashFunction": "NONE",
+    "defaultPartialUpsertStrategy": "OVERWRITE",
+    "enableSnapshot": false,
+    "metadataTTL": 0,
+    "enablePreload": false
+  },
   "tierConfigs": null
 }

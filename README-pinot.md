@@ -66,10 +66,10 @@ kafka-server-start.sh -daemon $KAFKA_HOME/config/kraft/server.properties
 kafka-topics.sh --create --partitions 3 --replication-factor 1 --bootstrap-server [::1]:9092 --topic users
 kafka-console-producer.sh --bootstrap-server [::1]:9092 --topic users
 
-{"name":"XYZ", "followers": 1, "last_updated_at":"2024-01-13 11:00:00","user_id":"100001"}
-{"name":"ZYX", "followers": 2, "last_updated_at":"2024-01-13 11:00:00","user_id":"100002"}
-{"name":"YYY", "followers": 3, "last_updated_at":"2024-01-13 13:00:00","user_id":"100003"}
-{"name":"ZZZ", "followers": 4, "last_updated_at":"2024-02-14 13:00:00","user_id":"100004"}
+{"name":"XYZ", "followers": 1, "last_updated_at":"2024-01-13 12:00:00","user_id":"100001"}
+{"name":"ZYX", "followers": 2, "last_updated_at":"2024-01-13 12:00:00","user_id":"100002"}
+{"name":"YYY", "followers": 3, "last_updated_at":"2024-01-13 14:00:00","user_id":"100003"}
+{"name":"ZZZ", "followers": 4, "last_updated_at":"2024-02-14 14:00:00","user_id":"100004"}
 
 ### Pinot UI (localhost:9000)
 
@@ -101,7 +101,7 @@ SELECT sum(followers) FROM users
 
 ### Upsert Data
 
-Schema
+users Schema
 {
   ...  
   "primaryKeyColumns": [
@@ -109,19 +109,39 @@ Schema
   ]
 }
 
-Table
+users Table
 
-  "quota": {},
+  ...
+  "tenants": {
+    "broker": "DefaultTenant",
+    "server": "DefaultTenant" //here...
+  },
+  ...
+      "streamConfigs": {
+      "streamType": "kafka",
+      "stream.kafka.topic.name": "users",
+      "stream.kafka.broker.list": "[::1]:9092",
+      "stream.kafka.consumer.type": "lowlevel",
+      "stream.kafka.consumer.prop.auto.offset.reset": "smallest",
+      "stream.kafka.consumer.factory.class.name": "org.apache.pinot.plugin.stream.kafka20.KafkaConsumerFactory",
+      "stream.kafka.decoder.class.name": "org.apache.pinot.plugin.stream.kafka.KafkaJSONMessageDecoder",
+      "realtime.segment.flush.threshold.rows": "0",
+      "realtime.segment.flush.threshold.time": "24h",
+      "realtime.segment.flush.threshold.segment.size": "100M",
+      "realtime.segment.upsert.enable": "true" // here...
+    },  
+  ...
   "routing": {
-    "instanceSelectorType": "strictReplicaGroup"
+    "segmentPrunerTypes": null,
+    "instanceSelectorType": "strictReplicaGroup" // here...
   },
   ...
   "upsertConfig": {
-    "mode": "FULL",
+    "mode": "FULL", // here...
     "hashFunction": "NONE",
     "defaultPartialUpsertStrategy": "OVERWRITE",
     "enableSnapshot": false,
     "metadataTTL": 0,
     "enablePreload": false
   },
-  "ingestionConfig": ...
+  ...

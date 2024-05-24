@@ -185,6 +185,54 @@ kafka-console-producer.sh --bootstrap-server [::1]:9092 --property "parse.key=tr
 kafka-console-producer.sh --bootstrap-server [::1]:9092 --property "parse.key=true" --property "key.separator=@@@" --topic riders
 kafka-console-producer.sh --bootstrap-server [::1]:9092 --property "parse.key=true" --property "key.separator=@@@" --topic rides
 
+### Pinot Query Console
+
+Query Console => Tables => rides_enriched => SQL Editor
+
+// Find total rides completed in last 1 hour
+select count(1) from rides_enriched where request_time >toDateTime(now()-60*60*1000,'yyyy-MM-dd HH:mm:ss Z') and ride_status='Completed'
+
+// Find The breakdown of ride status in past 1 hour
+select count(1),ride_status from rides_enriched where request_time >toDateTime(now()-60*60*1000,'yyyy-MM-dd HH:mm:ss Z') group by ride_status
+
+// Find total revenue from rides in past 1 hour
+select sum(amount) from rides_enriched where request_time >toDateTime(now()-60*60*1000,'yyyy-MM-dd HH:mm:ss Z') and ride_status!='Cancelled'
+
+// Find all Cancelled rides in last 1 hour
+select count(1) from rides_enriched where request_time >toDateTime(now()-60*60*1000,'yyyy-MM-dd HH:mm:ss Z') and ride_status='Cancelled'
+
+// Find a total rides taken by members and non members in last 1 hour
+select count(1),membership_status from rides_enriched where request_time >toDateTime(now()-60*60*1000,'yyyy-MM-dd HH:mm:ss Z')  and ride_status!='Cancelled' group by membership_status
+
+// Find total rides and the total revenue at a city level in last 1 hour
+select count(1),sum(amount),city from rides_enriched where request_time >toDateTime(now()-60*60*1000,'yyyy-MM-dd HH:mm:ss Z') and ride_status!='Cancelled' group by city  
+
+// Find average revenue per user in last 1 hour
+select avg(amount) from rides_enriched where request_time >toDateTime(now()-60*60*1000,'yyyy-MM-dd HH:mm:ss Z')  and ride_status!='Cancelled'
+
+// Get total revenue for all rides with dest_lat and dest_lng within 1 Km from a given lat/long
+select sum(amount),count(1) from rides_enriched where ride_status!='Cancelled' and st_distance(location_dest,toSphericalGeography(stPoint(77.562292,12.888906))) < 1000
+
+// Get total rides and revenue completed by a single driver
+select count(1), sum(amount) from rides_enriched where request_time >toDateTime(now()-60*60*1000,'yyyy-MM-dd HH:mm:ss Z') and ride_status='Completed' and driver_id='200001'
+
+### Pinot Query via Swagger REST API
+
+sudo apt install jq
+
+curl -H "Content-Type: application/json" -X POST -d '{"sql":"select count(1) from rides_enriched where request_time >toDateTime(now()-60*60*1000,'"'"'yyyy-MM-dd HH:mm:ss Z'"'"') and ride_status='"'"'Completed'"'"' and driver_id='"'"'200001'"'"'"}' http://[::1]:8099/query/sql | jq
+
+curl -H "Content-Type: application/json" -X POST -d '{"sql":"select count(1), sum(amount) from rides_enriched where ride_status='"'"'Completed'"'"' and driver_id='"'"'200001'"'"'"}' http://[::1]:8099/query/sql | jq
+
+  ...
+    "rows": [
+      [
+        1,
+        350
+      ]
+    ]
+  ...
+
 ### Stop Pinot <https://docs.pinot.apache.org/operators/cli>
 
 pinot-admin.sh ShowClusterInfo -clusterName PinotCluster -zkAddress localhost:2181

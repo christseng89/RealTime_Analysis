@@ -63,6 +63,11 @@ kafka-storage.sh format -t $KAFKA_CLUSTER_ID -c $KAFKA_HOME/config/kraft/server.
 
 kafka-server-start.sh -daemon $KAFKA_HOME/config/kraft/server.properties
 
+kafka-topics.sh --bootstrap-server [::1]:9092 --list
+  rides_enriched
+  users
+// users and rides_enriched topics will be automatically created by the Pinot Realtime Table
+
 kafka-topics.sh --create --partitions 3 --replication-factor 1 --bootstrap-server [::1]:9092 --topic users
 kafka-console-producer.sh --bootstrap-server [::1]:9092 --topic users
 
@@ -167,7 +172,20 @@ kafka-topics.sh --bootstrap-server [::1]:9092 --list
 
 cd realtime_analysis/
 flink run -c org.example.RideEnrichExample target/realtime-analytics-example-1.0-SNAPSHOT.jar
+  ...
+  RidesEnriched sink table (upsert) created ...
+  RidesEnriched sink table (upsert) inserting ...
+  Job has been submitted with JobID 2d68721c81377952394616446ca54d9d
+  RidesEnriched sink table (upsert) inserted ...
 
-kafka-console-producer.sh --bootstrap-server [::1]:9092 --property "parse.key=true" --property "key.separator=@@@" --topic riders
+  Query RidesEnriched sink table ...
+  Job has been submitted with JobID 1fc7bb2e4f1f78f3babe1348dd670d6a
+
 kafka-console-producer.sh --bootstrap-server [::1]:9092 --property "parse.key=true" --property "key.separator=@@@" --topic drivers
+kafka-console-producer.sh --bootstrap-server [::1]:9092 --property "parse.key=true" --property "key.separator=@@@" --topic riders
 kafka-console-producer.sh --bootstrap-server [::1]:9092 --property "parse.key=true" --property "key.separator=@@@" --topic rides
+
+### Stop Pinot <https://docs.pinot.apache.org/operators/cli>
+
+pinot-admin.sh ShowClusterInfo -clusterName PinotCluster -zkAddress localhost:2181
+pinot-admin.sh StopProcess -controller -broker -server

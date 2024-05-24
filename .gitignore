@@ -12,3 +12,5 @@ apache-pinot-1.0.0-bin.tar.gz
 /flinkData
 /flinkOutputs
 /*log*
+superset/
+venv/

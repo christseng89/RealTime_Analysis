@@ -163,26 +163,59 @@ select sum(amount) from rides_enriched ride_status!='Cancelled'
 // Find average revenue per user in last 1 hour
 select avg(amount) from rides_enriched ride_status!='Cancelled'
 
-deactivate
-stop-cluster.sh
-kafka-server-stop.sh
-zookeeper-server-stop.sh
-pinot-admin.sh StopProcess -controller -broker -server
-
 ### Restart Superset after Installation
 
 source ~/.bashrc
+// Start Kafka
+KAFKA_CLUSTER_ID="$($KAFKA_HOME/bin/kafka-storage.sh random-uuid)"
+kafka-storage.sh format -t $KAFKA_CLUSTER_ID -c $KAFKA_HOME/config/kraft/server.properties
+
+kafka-server-start.sh -daemon $KAFKA_HOME/config/kraft/server.properties
+
+kafka-topics.sh --create --partitions 3 --replication-factor 1 --bootstrap-server [::1]:9092 --topic rides
+kafka-topics.sh --create --partitions 3 --replication-factor 1 --bootstrap-server [::1]:9092 --topic riders
+kafka-topics.sh --create --partitions 3 --replication-factor 1 --bootstrap-server [::1]:9092 --topic drivers
+kafka-topics.sh --create --partitions 3 --replication-factor 1 --bootstrap-server [::1]:9092 --topic rides_enriched
+kafka-topics.sh --bootstrap-server [::1]:9092 --list
+
+// Start Flink
+start-cluster.sh
+<http://localhost:8081>
+
+// Start Pinot Zookeeper / Controller / Broker / Server
+pinot-admin.sh StartZookeeper -zkPort 2191 -dataDir ~/PinotData/PinotAdmin/zkData> ./zookeeper-console.log 2>&1 &
+
+export JAVA_OPTS="-Xms32M -Xmx300M -XX:+UseG1GC -XX:MaxGCPauseMillis=200 -Xloggc:gc-pinot-controller.log"
+pinot-admin.sh StartController -zkAddress [::1]:2191 -controllerPort 9000 -dataDir ~/PinotData/data/PinotController > ./controller-console.log 2>&1 &
+
+export JAVA_OPTS="-Xms32M -Xmx300M -XX:+UseG1GC -XX:MaxGCPauseMillis=200  -Xloggc:gc-pinot-broker.log"
+pinot-admin.sh StartBroker -zkAddress [::1]:2191 > ./broker-console.log 2>&1 &
+
+export JAVA_OPTS="-Xms32M -Xmx300M -XX:+UseG1GC -XX:MaxGCPauseMillis=200 -Xloggc:gc-pinot-server.log"
+pinot-admin.sh StartServer -zkAddress [::1]:2191 -dataDir ~/PinotData/data/pinotServerData -segmentDir ~/PinotData/data/pinotSegments > ./server-console.log 2>&1 &
+  
+<http://localhost:9000/#/>
+
+// Start Superset Virtual Environment
 source superset/bin/activate
 
 echo $FLASK_APP
     superset
 
 which superset
-    /home/christseng/.local/bin/superset
+    /mnt/d/development/Real_Time_Analysis/superset/bin/superset
 
 export SUPERSET_CONFIG_PATH=/mnt/d/development/Real_Time_Analysis/superset_config.py
 superset run -p 8188 --with-threads --reload --debugger
 <http://localhost:8188/superset/welcome/>
+
+### Stop Superset, Pinot, Flink, Kafka
+
+deactivate
+stop-cluster.sh
+pinot-admin.sh StopProcess -controller -broker -server
+kafka-server-stop.sh
+zookeeper-server-stop.sh
 
 ### Updating Superset Manually
 

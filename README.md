@@ -77,6 +77,10 @@ CREATE TABLE Location (
 insert into Location (location_id,city,country) values ('300001','Bengaluru','India');
 insert into Location (location_id,city,country) values ('300002','Mumbai','India');
 insert into Location (location_id,city,country) values ('300003','New Delhi','India');
+insert into Location (location_id,city,country) values ('200001','Beijing','China');
+insert into Location (location_id,city,country) values ('200002','Nanjing','China');
+insert into Location (location_id,city,country) values ('200003','Shanghai','China');
+insert into Location (location_id,city,country) values ('200004','Tianjing','China');
 
 show tables;
 select * from Location;

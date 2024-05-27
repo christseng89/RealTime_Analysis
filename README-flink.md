@@ -47,12 +47,12 @@ flink --version
 
 ### Start Flink
 
-$FLINK_HOME/bin/start-cluster.sh
+start-cluster.sh
     Starting cluster.
     Starting standalonesession daemon on host Chris-SP8.
     Starting taskexecutor daemon on host Chris-SP8.
 
-$FLINK_HOME/bin/sql-client.sh embedded
+sql-client.sh embedded
     exit;
 
 flink run $FLINK_HOME/examples/streaming/WordCount.jar

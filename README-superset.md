@@ -11,25 +11,69 @@ sudo nano ~/.bashrc
 
 source ~/.bashrc
 
+## Start Pinot
+
+### Start Pinot Zookeeper / Controller / Broker / Server
+
+echo $PINOT_HOME
+    /home/christseng/pinot
+
+pinot-admin.sh StartZookeeper -zkPort 2191 -dataDir ~/PinotData/PinotAdmin/zkData> ./zookeeper-console.log 2>&1 &
+
+export JAVA_OPTS="-Xms32M -Xmx300M -XX:+UseG1GC -XX:MaxGCPauseMillis=200 -Xloggc:gc-pinot-controller.log"
+pinot-admin.sh StartController -zkAddress [::1]:2191 -controllerPort 9000 -dataDir ~/PinotData/data/PinotController > ./controller-console.log 2>&1 &
+
+export JAVA_OPTS="-Xms32M -Xmx300M -XX:+UseG1GC -XX:MaxGCPauseMillis=200  -Xloggc:gc-pinot-broker.log"
+pinot-admin.sh StartBroker -zkAddress [::1]:2191 > ./broker-console.log 2>&1 &
+
+export JAVA_OPTS="-Xms32M -Xmx300M -XX:+UseG1GC -XX:MaxGCPauseMillis=200 -Xloggc:gc-pinot-server.log"
+pinot-admin.sh StartServer -zkAddress [::1]:2191 -dataDir ~/PinotData/data/pinotServerData -segmentDir ~/PinotData/data/pinotSegments > ./server-console.log 2>&1 &
+
+### Pinot ui
+
+<http://localhost:9000/#/>
+
+### Install Python virtual environment
+
 sudo apt install python3.10-venv -y
 
-// One time setup with 2 lines
+// Create superset virtual environment
 python3 -m venv superset
+ls superset -l
+
+/// Activate superset virtual environment
 source superset/bin/activate
 
     (superset) christseng@Chris-SP8:/mnt/d/development/Real_Time_Analysis$
 
+### Install MySQL client connector
+
+sudo apt install mysql-client mysql-client-core-8.0 -y
+sudo apt-get install python3-dev default-libmysqlclient-dev build-essential -y
+
+mysql --version
+export MYSQLCLIENT_CFLAGS=`mysql_config --cflags`
+export MYSQLCLIENT_LDFLAGS=`mysql_config --libs`
+
+echo $MYSQLCLIENT_CFLAGS
+    -I/usr/include/mysql
+
+echo $MYSQLCLIENT_LDFLAGS
+    -L/usr/lib/x86_64-linux-gnu -lmysqlclient -lzstd -lssl -lcrypto -lresolv -lm
+
+pip install mysqlclient
+
+// Connect to MySQL String
+mysql://root:passWord@localhost:3306/analytics
+
 ### Install superset and Pinot connector for superset
 
 echo $FLASK_APP
+    superset
 
 pip install --upgrade pip
+pip install Pillow
 pip install wheel apache-superset
-
-which superset
-    /home/christseng/.local/bin/superset
-echo $FLASK_APP
-    superset
 
 ### Superset Secret Key
 
@@ -42,6 +86,11 @@ export SUPERSET_CONFIG_PATH=/mnt/d/development/Real_Time_Analysis/superset_confi
 cat $SUPERSET_CONFIG_PATH
     SECRET_KEY='ZIrQI7eOM8VIRfIBhk6QW4IXNFLlTd4QNvMhdW3+ZUqByhZ1fUbslEhZ'
 
+### Superset Pinot
+
+pip install pinotdb
+superset db upgrade
+
 ### Initialize Superset
 
 superset fab create-admin
@@ -51,11 +100,14 @@ superset fab create-admin
     Email [admin@fab.org]: xxxx@gmail.com
     Password:
     Repeat for confirmation:
+
     Recognized Database Authentications.
     Admin User admin created.
 
-pip install pinotdb
-superset db upgrade
+ls ~/.superset
+    superset.db
+
+superset load_examples
 superset init
 
 ### Start superset
@@ -63,24 +115,36 @@ superset init
 superset run -p 8188 --with-threads --reload --debugger
 <http://localhost:8188/superset/welcome/>
 
-### Superset with Pinot <https://superset.apache.org/docs/configuration/databases/>
+### Superset with Pinot
 
-Superset Console => + => Data => Connect Database => Apache Pinot =>
+<https://superset.apache.org/docs/configuration/databases/>
+Superset Console => Settings => Database Connections => +DATABASE => Connect Database => Apache Pinot =>
     SQLALCHEMY URI (pinot://localhost:8099/query?server=http://localhost:9000/) =>
     Test Connection => Connect
 
-Superset Console => Datasets => + DATASET => => DATABASE (Apache Pinot) => TABLE (rides_enriched) =>
-CREATE DATASET AND CREATE CHART
+Superset Console => SQL => SQL Lab => DATABASE (Apache Pinot) => SCHEME (default) => TABLE (rides_enriched) => SELECT * from rides_enriched => RUN
 
-Superset Console => Datasets => rides_enriched => SQL => SQL Lab =>
+Superset Console => Datasets => +DATASET => DATABASE (Apache Pinot) => SCHEMA (default) => TABLE (rides_enriched) => CREATE DATASET AND CREATE CHART
+
+Superset Console => Datasets => +DATASET => rides_enriched => SQL => SQL Lab =>
     SELECT * FROM rides_enriched; => RUN
     SELECT count(*) FROM rides_enriched; => RUN
+
+### Superset with MySQL
+
+<https://superset.apache.org/docs/configuration/databases/>
+Superset Console => Settings => Database Connections => +DATABASE => Database Connection => +DATABASE => MySQL =>
+    SQLALCHEMY URI (mysql://root:passWord@localhost:3306/analytics) => CONNECT
+
+Superset Console => SQL => SQL Lab => DATABASE (MySQL) => SCHEME (analytics) => TABLE (Location) => SELECT * from Location => RUN
+
+Superset Console => Datasets => +DATASET => DATABASE (MySQL) => SCHEMA (analytics) => TABLE (Location) => CREATE DATASET AND CREATE CHART
 
 ### Superset Dashboards
 
 Superset Console => Datasets => rides_enriched => SQL => SQL Lab =>
     SQL statements below => RUN => Save (name of the Dataset) => SAVE & EXPLORE
-S
+
 // Find a breakdown at City level for total Rides
 select count(1),city from rides_enriched where ride_status!='Cancelled' group by city
 
@@ -103,3 +167,80 @@ deactivate
 stop-cluster.sh
 kafka-server-stop.sh
 zookeeper-server-stop.sh
+pinot-admin.sh StopProcess -controller -broker -server
+
+### Restart Superset after Installation
+
+source ~/.bashrc
+source superset/bin/activate
+
+echo $FLASK_APP
+    superset
+
+which superset
+    /home/christseng/.local/bin/superset
+
+export SUPERSET_CONFIG_PATH=/mnt/d/development/Real_Time_Analysis/superset_config.py
+superset run -p 8188 --with-threads --reload --debugger
+<http://localhost:8188/superset/welcome/>
+
+### Updating Superset Manually
+
+pip install apache-superset --upgrade
+superset db upgrade
+superset init
+
+<https://www.tutorialspoint.com/>
+
+### Superset Windows 11
+
+mkdir D:\superset
+cd /d D:\superset
+
+// Check Versions
+python --version
+pip --version
+systeminfo | findstr /C:"OS"
+
+    OS Name:                       Microsoft Windows 11 Pro
+    OS Version:                    10.0.26120 N/A Build 26120
+    OS Manufacturer:               Microsoft Corporation
+    OS Configuration:              Standalone Workstation
+    OS Build Type:                 Multiprocessor Free
+    BIOS Version:                  Microsoft Corporation 25.100.143, 12/7/2023
+
+// Upgrade Setuptools & PIP
+pip install --upgrade setuptools pip
+
+// Create Virtual Environment named venv & Activate Virtual Environment
+python -m venv venv
+venv\Scripts\activate
+
+// Install Superset
+pip install setuptools
+pip install apache-superset
+
+// Install DB Drivers - Postgres & MS SQL
+pip install psycopg2
+pip install pymssql
+
+:: Open Scripts folder to do superset related stuff
+cd venv\Scripts
+
+:: Create application database
+python superset db upgrade
+
+:: Create admin user
+set FLASK_APP=superset
+flask fab create-admin
+
+:: Load some data to play with (optional)
+python superset load_examples
+
+:: Create default roles and permissions
+python superset init
+
+:: Start web server on port 8088
+python superset run -p 8088 --with-threads --reload --debugger
+
+https://www.tutorialspoint.com/

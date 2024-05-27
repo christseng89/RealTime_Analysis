@@ -14,3 +14,4 @@ apache-pinot-1.0.0-bin.tar.gz
 /*log*
 superset/
 venv/
+Airflow/docker/logs/

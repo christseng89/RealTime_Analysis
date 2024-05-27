@@ -33,8 +33,45 @@ Operators are atomic units of execution within a DAG. (运算符是DAG中的原�
 - Types: Include Action Operators, Transfer Operators, Sensor Operators, DummyOperator, SubDagOperator, and other specific operators.
 - Custom Operators: Can be created to handle specific needs not covered by built-in operators, providing flexibility to extend Airflow's capabilities.
 
-### Installing Apache Airflow
+### Installing Apache Airflow - via Terminal (Admin)
 
-cd Airflow\docker
+cd D:\development\Real_Time_Analysis\Airflow\docker
 docker-compose up -d
+
+- airflow-webserver Pulling
+- redis [⣿⣿⣿⣶⠀⠀] Pulling
+- airflow-init Pulling
+- airflow-scheduler Pulling
+- postgres [⣿⣿⣿⣿⣿⣿⣿⣿⡀⣿⣿⣿⣿⣿]  65.4MB / 149MB   Pulling
+- airflow-worker Pulling
+- airflow-triggerer [⣿⣿⣿⣿⣿⣿⣿⣿⣿⣄⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿] 230.8MB / 323.5MB Pulling
+  
+[+] Running 8/8
+ ✔ Network docker_default                Created                                                                   0.0s
+ ✔ Container docker-postgres-1           Healthy                                                                   6.6s
+ ✔ Container docker-redis-1              Healthy                                                                   6.6s
+ ✔ Container docker-airflow-init-1       Exited                                                                   24.1s
+ ✔ Container docker-airflow-webserver-1  Started                                                                  24.3s
+ ✔ Container docker-airflow-scheduler-1  Started                                                                  24.2s
+ ✔ Container docker-airflow-triggerer-1  Started                                                                  24.3s
+ ✔ Container docker-airflow-worker-1     Started                                                                  24.3s
+
+docker-compose ps
+
+NAME                         IMAGE                  COMMAND                  SERVICE             STATUS               PORTS
+docker-airflow-scheduler-1   apache/airflow:2.4.2   "/usr/bin/dumb-init …"   airflow-scheduler   (healthy)            8080/tcp
+docker-airflow-triggerer-1   apache/airflow:2.4.2   "/usr/bin/dumb-init …"   airflow-triggerer   (healthy)            8080/tcp
+docker-airflow-webserver-1   apache/airflow:2.4.2   "/usr/bin/dumb-init …"   airflow-webserver   (health: starting)   0.0.0.0:8080->8080/tcp
+docker-airflow-worker-1      apache/airflow:2.4.2   "/usr/bin/dumb-init …"   airflow-worker      (health: starting)   8080/tcp
+docker-postgres-1            postgres:13            "docker-entrypoint.s…"   postgres            (healthy)            5432/tcp
+docker-redis-1               redis:latest           "docker-entrypoint.s…"   redis               (healthy)            6379/tcp
+
 <http://localhost:8080>
+
+### Airflow Summary
+
+- Airflow is an orchestrator, not a processing framework. Process your gigabytes of data outside of Airflow
+  (i.e. You have a Spark cluster, you use an operator to execute a Spark job, and the data is processed in Spark).
+- A DAG is a data pipeline, an Operator is a task.
+- An Executor defines how your tasks are executed, whereas a worker is a process executing your task
+- The Scheduler schedules your tasks, the web server serves the UI, and the database stores the metadata of Airflow.

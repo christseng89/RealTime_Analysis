@@ -141,3 +141,5 @@ docker exec -it docker-airflow-scheduler-1 /bin/bash
 ### 35. Is the API available?
 
 ### 37. Process users
+
+### 40. Store users

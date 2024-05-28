@@ -23,7 +23,7 @@ Operators are atomic units of execution within a DAG. (运算符是DAG中的原�
 - Transfer Operators:
   - S3ToRedshiftTransfer: Transfers data from Amazon S3 to Amazon Redshift.
   - MySqlToGoogleCloudStorageOperator: Transfers data from MySQL to Google Cloud Storage.
-- Sensor Operators:
+- Sensor Operators: Wait for a condition to be met before proceeding.
   - TimeSensor: Waits until a specific time.
   - S3KeySensor: Waits for a file to appear in an S3 bucket.
 
@@ -35,7 +35,7 @@ Operators are atomic units of execution within a DAG. (运算符是DAG中的原�
 
 ### Installing Apache Airflow - via Terminal (Admin)
 
-cd D:\development\Real_Time_Analysis\Airflow\docker
+D: && cd D:\development\Real_Time_Analysis\Airflow\docker
 docker-compose up -d
 
 - airflow-webserver Pulling
@@ -68,6 +68,8 @@ docker-redis-1               redis:latest           "docker-entrypoint.s…"   r
 
 <http://localhost:8080>
 
+airflow/airflow
+
 ### Airflow Summary
 
 - Airflow is an orchestrator, not a processing framework. Process your gigabytes of data outside of Airflow
@@ -75,3 +77,40 @@ docker-redis-1               redis:latest           "docker-entrypoint.s…"   r
 - A DAG is a data pipeline, an Operator is a task.
 - An Executor defines how your tasks are executed, whereas a worker is a process executing your task
 - The Scheduler schedules your tasks, the web server serves the UI, and the database stores the metadata of Airflow.
+
+### Airflow Shutdown
+
+cd D:\development\Real_Time_Analysis\Airflow\docker
+docker-compose down
+
+[+] Running 8/8
+ ✔ Container docker-airflow-triggerer-1  Removed
+ ✔ Container docker-airflow-worker-1     Removed
+ ✔ Container docker-airflow-webserver-1  Removed
+ ✔ Container docker-airflow-scheduler-1  Removed
+ ✔ Container docker-airflow-init-1       Removed
+ ✔ Container docker-postgres-1           Removed
+ ✔ Container docker-redis-1              Removed
+ ✔ Network docker_default                Removed
+
+### 28. DAG Skeleton (Command -> Admin)
+
+pip install apache-airflow
+
+### 30. Providers
+
+// Airflow Core
+
+pip install apache-airflow
+
+// Airflow Providers <https://pypi.org/search/?q=apache-airflow-providers> => pip install apache-airflow-providers-...
+// Airflow Providers Examples
+
+pip install apache-airflow-providers-alibaba
+pip install apache-airflow-providers-amazon
+pip install apache-airflow-providers-apache-pinot
+pip install apache-airflow-providers-apache-kafka
+
+### 31. Create a Table
+
+pip install apache-airflow-providers-postgres

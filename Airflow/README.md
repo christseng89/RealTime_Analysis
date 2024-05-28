@@ -80,7 +80,7 @@ airflow/airflow
 
 ### Airflow Shutdown
 
-cd D:\development\Real_Time_Analysis\Airflow\docker
+D: && cd D:\development\Real_Time_Analysis\Airflow\docker
 docker-compose down
 
 [+] Running 8/8
@@ -114,3 +114,27 @@ pip install apache-airflow-providers-apache-kafka
 ### 31. Create a Table
 
 pip install apache-airflow-providers-postgres
+
+### 32. Create a connection
+
+<http://localhost:8080/connection/list/>
+
+Admin => Connections => + Add a new record
+
+- Connection Id (postgres)
+- Connection Type (Postgres)
+- Host (postgres)
+- Login (airflow)
+- Password (airflow)
+- Port (5432) => Test => Save
+
+### 33. The secret weapon of Airflow
+
+cd Airflow\docker
+docker-compose ps
+docker exec -it docker-airflow-scheduler-1 /bin/bash
+  airflow@9fa7f9847faf:/opt/airflow$
+    airflow -h
+    airflow connections list
+    airflow tasks test user_processing create_table 2023-01-01
+

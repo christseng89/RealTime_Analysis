@@ -138,3 +138,5 @@ docker exec -it docker-airflow-scheduler-1 /bin/bash
     airflow connections list
     airflow tasks test user_processing create_table 2023-01-01
 
+### 35. Is the API available?
+

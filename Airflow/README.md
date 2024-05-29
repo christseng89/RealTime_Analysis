@@ -183,3 +183,7 @@ Dataset Producers:
 
 Dataset Consumers:
   DAGs that are triggered when a dataset is updated by a producer. Instead of relying on a fixed schedule, these DAGs run based on the data dependency.
+
+### 51. Track your Datasets with the new view
+
+Airflow UI => Datasets => /tmp/my_file.txt

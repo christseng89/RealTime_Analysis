@@ -214,3 +214,21 @@ docker-compose.yaml
   environment:
     - AIRFLOW__CORE__EXECUTOR=CeleryExecutor # Overwrite the SequentialExecutor
   ...
+
+### 56. The LocalExecutor
+
+[core]
+executor = CeleryExecutor
+sql_alchemy_conn = postgresql+psycopg2://airflow:airflow@postgres/airflow
+result_backend = db+postgresql://airflow:airflow@postgres/airflow
+
+[celery]
+broker_url = redis://:@redis:6379/0
+result_backend = db+postgresql://airflow:airflow@postgres/airflow
+default_queue = default
+worker_concurrency = 16
+accept_content = ['json']
+task_serializer = 'json'
+result_serializer = 'json'
+
+### 60. Add the DAG parallel_dag.py

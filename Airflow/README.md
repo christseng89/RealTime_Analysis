@@ -172,3 +172,14 @@ docker exec -it docker-postgres-1 /bin/bash
       (1 row)
 
     exit
+
+### Key Concepts of Datasets in Airflow
+
+Dataset Definition:
+  A dataset represents a logical collection of data that can be referenced by DAGs. It can be any data source such as a file, database table, or external data feed.
+
+Dataset Producers:
+  A DAG or task that updates or creates a dataset. When the dataset is updated, it can trigger downstream DAGs that are dependent on this dataset.
+
+Dataset Consumers:
+  DAGs that are triggered when a dataset is updated by a producer. Instead of relying on a fixed schedule, these DAGs run based on the data dependency.

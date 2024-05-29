@@ -200,3 +200,17 @@ Types of Executors in Airflow:
 - *KubernetesExecutor: Executes tasks in parallel using Kubernetes pods. Ideal for containerized environments.
 - DaskExecutor: Executes tasks in parallel using Dask distributed computing. 
   Use for dynamic scaling and integration with the Dask ecosystem.
+
+### 55. The default config
+
+docker cp docker-airflow-scheduler-1:/opt/airflow/airflow.cfg .
+type airflow.cfg
+  ...
+  executor = SequentialExecutor
+  ...
+
+docker-compose.yaml
+  ...
+  environment:
+    - AIRFLOW__CORE__EXECUTOR=CeleryExecutor # Overwrite the SequentialExecutor
+  ...

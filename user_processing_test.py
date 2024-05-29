@@ -70,13 +70,13 @@ with DAG(
         log_response=True
     )
     
-    # Process user data
+    # Process user data with PythonOperator Hook
     process_user = PythonOperator(
         task_id='process_user',
         python_callable=_process_user
     )
     
-    # Store user data in Postgres
+    # Store user data in Postgres with PythonOperator Hook
     store_user = PythonOperator(
         task_id="store_user",
         python_callable=_store_user

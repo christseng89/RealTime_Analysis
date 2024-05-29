@@ -249,3 +249,22 @@ docker-compose down && docker-compose --profile flower up -d
  ✔ Container docker-airflow-triggerer-1  Started
 
 <http://localhost:5555>
+
+### 62. Remove DAG examples
+
+docker-compose.yaml
+...
+---
+# version: "3"
+...
+  AIRFLOW__CORE__LOAD_EXAMPLES: "false"
+...
+
+docker-compose down
+docker ps -a | grep airflow
+  f593291920b2   apache/airflow:2.4.2        "/usr/bin/dumb-init …"  0.0.0.0:5555->5555/tcp, 8080/tcp   docker-flower-1
+
+docker rm f593291920b2 -f
+  f593291920b2
+
+docker-compose up -d

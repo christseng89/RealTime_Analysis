@@ -1,5 +1,6 @@
-from airflow import DAG, Datasetupdate_dataset
+from airflow import DAG, Dataset
 from airflow.decorators import task
+
 from datetime import datetime
 import os
 
@@ -10,7 +11,8 @@ with DAG(
     dag_id='producer2', 
     schedule_interval='@daily',
     start_date=datetime(2023, 1, 1), 
-    catchup=False) as dag:
+    catchup=False
+) as dag:
     
     @task(outlets=[my_file_1])  # Define the task with the dataset as an outlet
     def update_dataset1():
@@ -31,4 +33,3 @@ with DAG(
             f.write('producer update 2\n')
     
     update_dataset1() >> update_dataset2()
-    

@@ -140,6 +140,35 @@ docker exec -it docker-airflow-scheduler-1 /bin/bash
 
 ### 35. Is the API available?
 
+Go to the Airflow UI (on your machine localhost:80880) and create the following connection:
+
+- Name: user_api
+- Connection type: HTTP
+- Host: <https://randomuser.me/>
+
 ### 37. Process users
 
 ### 40. Store users
+
+### 42. Your DAG in action
+
+D: && cd D:\development\Real_Time_Analysis\Airflow\docker
+docker-compose ps
+docker exec -it docker-airflow-worker-1 /bin/bash
+  airflow@a751312e07d9:/opt/airflow$
+    ls /tmp -l
+    cat /tmp/processed_user.csv
+      Roberta,Ramos,Brazil,silverpanda702,young,roberta.ramos@example.com
+    exit
+
+docker exec -it docker-postgres-1 /bin/bash
+  root@8257b384ab82:/#
+    psql -U airflow
+    SELECT * FROM users;
+
+      firstname | lastname | country |    username    | password |           email
+      -----------+----------+---------+----------------+----------+---------------------------
+      Roberta   | Ramos    | Brazil  | silverpanda702 | young    | roberta.ramos@example.com
+      (1 row)
+
+    exit

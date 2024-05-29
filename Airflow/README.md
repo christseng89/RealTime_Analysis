@@ -187,3 +187,18 @@ Dataset Consumers:
 ### 51. Track your Datasets with the new view
 
 Airflow UI => Datasets => /tmp/my_file.txt
+
+### 54. What's an executor?
+
+Executors are a critical component of Airflow, determining how and where tasks are executed. By choosing the appropriate executor, you can optimize Airflow for different environments and workloads, from single-machine setups to large, distributed systems.
+
+Types of Executors in Airflow:
+
+- SequentialExecutor: Executes tasks sequentially in a single process. Useful for debugging and testing.
+- *LocalExecutor: Executes tasks in parallel using multiple processes on a single machine. Ideal for small-scale deployments.
+- *CeleryExecutor: Executes tasks in parallel using multiple worker nodes. Suitable for large-scale deployments.
+- *KubernetesExecutor: Executes tasks in parallel using Kubernetes pods. Ideal for containerized environments.
+- DaskExecutor: Executes tasks in parallel using Dask distributed computing. Suitable for distributed data processing.
+- MesosExecutor: Executes tasks in parallel using Apache Mesos. Ideal for distributed systems.
+- SSHExecutor: Executes tasks on remote machines using SSH. Useful for distributed environments.
+- DebugExecutor: Executes tasks in the same process for debugging purposes. Useful for testing and development.

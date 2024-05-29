@@ -30,6 +30,7 @@ def _process_user(ti):
         'email': user['email'] })
     processed_user.to_csv('/tmp/processed_user.csv', index=None, header=False)  
 
+# Dag definition with start date, schedule interval and catchup
 with DAG(
     dag_id="user_processing",
     start_date=datetime(2023, 1, 1),
@@ -37,6 +38,7 @@ with DAG(
     catchup=False
 ) as dag:
     
+    # Create Connection via Airflow UI and then create table in Postgres
     create_table = PostgresOperator(
         task_id='create_table',
         postgres_conn_id='postgres',
@@ -50,13 +52,15 @@ with DAG(
                 email TEXT NOT NULL
             );
         ''')
-        
+    
+    # Create Connection HTTP and use sensor to check if the API is available    
     is_api_available = HttpSensor(
         task_id='is_api_available',
         http_conn_id='user_api',
         endpoint='api/'
     )
     
+    # Extract user data from API
     extract_user = SimpleHttpOperator(
         task_id='extract_user',
         http_conn_id='user_api',
@@ -66,14 +70,17 @@ with DAG(
         log_response=True
     )
     
+    # Process user data
     process_user = PythonOperator(
         task_id='process_user',
         python_callable=_process_user
     )
     
+    # Store user data in Postgres
     store_user = PythonOperator(
         task_id="store_user",
         python_callable=_store_user
     )
     
+    # Define the order of the tasks
     create_table >> is_api_available >> extract_user >> process_user >> store_user

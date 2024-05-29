@@ -198,7 +198,5 @@ Types of Executors in Airflow:
 - *LocalExecutor: Executes tasks in parallel using multiple processes on a single machine. Ideal for small-scale deployments.
 - *CeleryExecutor: Executes tasks in parallel using multiple worker nodes. Suitable for large-scale deployments.
 - *KubernetesExecutor: Executes tasks in parallel using Kubernetes pods. Ideal for containerized environments.
-- DaskExecutor: Executes tasks in parallel using Dask distributed computing. Suitable for distributed data processing.
-- MesosExecutor: Executes tasks in parallel using Apache Mesos. Ideal for distributed systems.
-- SSHExecutor: Executes tasks on remote machines using SSH. Useful for distributed environments.
-- DebugExecutor: Executes tasks in the same process for debugging purposes. Useful for testing and development.
+- DaskExecutor: Executes tasks in parallel using Dask distributed computing. 
+  Use for dynamic scaling and integration with the Dask ecosystem.

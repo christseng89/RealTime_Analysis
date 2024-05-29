@@ -232,3 +232,20 @@ task_serializer = 'json'
 result_serializer = 'json'
 
 ### 60. Add the DAG parallel_dag.py
+
+### 61. Monitor your tasks with Flower
+
+docker-compose down && docker-compose --profile flower up -d
+
+[+] Running 9/9
+ ✔ Network docker_default                Created
+ ✔ Container docker-redis-1              Healthy
+ ✔ Container docker-postgres-1           Healthy
+ ✔ Container docker-airflow-init-1       Exited
+ ✔ Container docker-airflow-worker-1     Started
+ ✔ Container docker-flower-1             Started ***
+ ✔ Container docker-airflow-webserver-1  Started
+ ✔ Container docker-airflow-scheduler-1  Started
+ ✔ Container docker-airflow-triggerer-1  Started
+
+<http://localhost:5555>

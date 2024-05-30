@@ -356,3 +356,12 @@ Airflow Concurrency Parameters Summary:
 3. max_active_runs_per_dag / AIRFLOW__CORE__MAX_ACTIVE_RUNS_PER_DAG:
    - Limits the number of active DAG runs per DAG.
    - Default: 16 active DAG runs per DAG.
+
+### Assignment 2: [Practice] Group tasks with SubDAGs
+
+// Edit docker-compose.yaml
+
+  ---
+  version: "3" # Edit here ...
+  x-airflow-common: &airflow-common
+  ...

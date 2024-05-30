@@ -1,4 +1,3 @@
-# subdag_transforms.py
 from airflow.utils.task_group import TaskGroup
 from airflow.operators.bash import BashOperator
 
@@ -20,5 +19,4 @@ def transform_tasks():
             bash_command='sleep 10'
         )
 
-        # transform_a >> transform_b >> transform_c
-        return transforms
+    return transforms

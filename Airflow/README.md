@@ -260,16 +260,48 @@ docker-compose.yaml
   AIRFLOW__CORE__LOAD_EXAMPLES: "false"
 ...
 
-docker-compose down
-docker ps -a | grep airflow
-  f593291920b2   apache/airflow:2.4.2        "/usr/bin/dumb-init …"  0.0.0.0:5555->5555/tcp, 8080/tcp   docker-flower-1
-
-docker rm f593291920b2 -f
-  f593291920b2
-
-docker-compose up -d
+docker-compose --profile flower down && docker-compose --profile flower up -d
 
 ### 63. Running tasks on Celery Workers
 
 docker-compose down && docker-compose --profile flower up -d
 <http://localhost:5555>
+
+### 65. Add a new Celery Worker
+
+// Edit docker-compose.yaml
+
+  ...
+        condition: service_completed_successfully
+
+  airflow-worker-1:
+    <<: *airflow-common
+    command: celery worker
+    healthcheck:
+      test:
+        - "CMD-SHELL"
+        - 'celery --app airflow.executors.celery_executor.app inspect ping -d "celery@$${HOSTNAME}"'
+      interval: 10s
+      timeout: 10s
+      retries: 5
+    environment:
+      <<: *airflow-common-env
+      # Required to handle warm shutdown of the celery workers properly
+      # See https://airflow.apache.org/docs/docker-stack/entrypoint.html#signal-propagation
+      DUMB_INIT_SETSID: "0"
+    restart: always
+    depends_on:
+      <<: *airflow-common-depends-on
+      airflow-init:
+        condition: service_completed_successfully
+
+  airflow-worker-2:
+    <<: *airflow-common
+  ...
+
+docker-compose --profile flower down && docker-compose --profile flower up -d
+
+...
+ ✔ Container docker-airflow-worker-2-1   Created
+ ✔ Container docker-airflow-worker-1-1   Created
+...

@@ -243,7 +243,7 @@ docker-compose down && docker-compose --profile flower up -d
  ✔ Container docker-postgres-1           Healthy
  ✔ Container docker-airflow-init-1       Exited
  ✔ Container docker-airflow-worker-1     Started
- ✔ Container docker-flower-1             Started ***
+ ✔ Container docker-flower-1             Started *
  ✔ Container docker-airflow-webserver-1  Started
  ✔ Container docker-airflow-scheduler-1  Started
  ✔ Container docker-airflow-triggerer-1  Started
@@ -338,3 +338,21 @@ from airflow.operators.bash_operator import BashOperator
 docker-compose --profile flower down && docker-compose --profile flower up -d
 
 <http://localhost:5555>
+
+### 68. Concurrency parameters
+
+Airflow Concurrency Parameters Summary:
+
+1. parallelism / AIRFLOW__CORE__PARALLELISM:
+   - Defines the maximum number of task instances that can run per scheduler.
+   - Default: 32 tasks.
+   - Total tasks = Number of schedulers × 32.
+   - Depends on available resources and number of schedulers.
+
+2. max_active_tasks_per_dag / AIRFLOW__CORE__MAX_ACTIVE_TASKS_PER_DAG:
+   - Sets the maximum number of concurrent task instances in each DAG.
+   - Default: 16 tasks per DAG.
+
+3. max_active_runs_per_dag / AIRFLOW__CORE__MAX_ACTIVE_RUNS_PER_DAG:
+   - Limits the number of active DAG runs per DAG.
+   - Default: 16 active DAG runs per DAG.

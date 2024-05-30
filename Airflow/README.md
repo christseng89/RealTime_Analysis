@@ -254,8 +254,8 @@ docker-compose down && docker-compose --profile flower up -d
 
 docker-compose.yaml
 ...
----
-# version: "3"
+//---
+//# version: "3"
 ...
   AIRFLOW__CORE__LOAD_EXAMPLES: "false"
 ...
@@ -268,3 +268,8 @@ docker rm f593291920b2 -f
   f593291920b2
 
 docker-compose up -d
+
+### 63. Running tasks on Celery Workers
+
+docker-compose down && docker-compose --profile flower up -d
+<http://localhost:5555>

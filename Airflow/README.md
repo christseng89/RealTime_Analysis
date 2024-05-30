@@ -305,3 +305,20 @@ docker-compose --profile flower down && docker-compose --profile flower up -d
  ✔ Container docker-airflow-worker-2-1   Created
  ✔ Container docker-airflow-worker-1-1   Created
 ...
+
+<http://localhost:5555>
+
+### 66. Create a queue to better distribute tasks
+
+// Edit docker-compose.yaml
+
+  ...
+  airflow-worker-2:
+    <<: *airflow-common
+    command: celery worker -q high_cpu
+    healthcheck:
+  ...
+
+docker-compose --profile flower down && docker-compose --profile flower up -d
+
+<http://localhost:5555>

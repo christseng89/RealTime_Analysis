@@ -322,3 +322,19 @@ docker-compose --profile flower down && docker-compose --profile flower up -d
 docker-compose --profile flower down && docker-compose --profile flower up -d
 
 <http://localhost:5555>
+
+from airflow.operators.bash_operator import BashOperator
+
+### 67. Send a task to a specific queue
+
+  ...
+  transform = BashOperator(
+      task_id='transform',
+      queue='high_cpu', # Edit here...
+      bash_command='sleep 10'
+  )
+  ...
+
+docker-compose --profile flower down && docker-compose --profile flower up -d
+
+<http://localhost:5555>

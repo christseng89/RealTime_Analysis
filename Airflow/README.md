@@ -365,3 +365,29 @@ Airflow Concurrency Parameters Summary:
   version: "3" # Edit here ...
   x-airflow-common: &airflow-common
   ...
+
+### 74. Sharing data between tasks with XComs
+
+XCom (short for "cross-communication") is a feature that allows tasks to exchange small amounts of data, such as messages or status information, during the execution of a DAG (Directed Acyclic Graph). XComs are a powerful way to pass information between tasks in a DAG, making it possible to create more dynamic and flexible workflows.
+
+// Store MetaData ONLY
+
+- PostgresSQL 1G
+- SQLite 2G
+- MySQL 64K
+
+Key Features:
+
+1. Data Exchange:
+   - XComs enable tasks to push and pull data to and from a centralized storage managed by Airflow.
+   - Each XCom is identified by a key and is associated with a specific DAG run and task instance.
+
+2. Push and Pull Operations:
+
+   - Push: Tasks can push data to XCom using the xcom_push method.
+   - Pull: Tasks can retrieve data from XCom using the xcom_pull method.
+
+3. Serialization:
+
+   - XComs can handle various types of data, including strings, numbers, dictionaries, and other serializable objects.
+   - The data is stored in the Airflow metadata database, making it accessible to other tasks within the same DAG run.

@@ -395,3 +395,58 @@ Key Features:
 
    - XComs can handle various types of data, including strings, numbers, dictionaries, and other serializable objects.
    - The data is stored in the Airflow metadata database, making it accessible to other tasks within the same DAG run.
+
+### 81. Running Elasticsearch with Airflow
+
+// Edit docker-compose.yaml
+...
+services:
+  //# Add Elasticsearch to the stack
+  elastic:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.3.3
+    environment:
+      - "xpack.security.enabled=false"
+      - "discovery.type=single-node"
+      - "ES_JAVA_OPTS=-Xms750m -Xmx750m"
+    ports:
+      - 9200:9200
+..
+docker-compose --profile flower down && docker-cmpose --profile flower up -d
+[+] Running 11/11
+ ✔ Network docker_default                Create
+ ✔ Container docker-postgres-1           Health
+ ✔ Container docker-redis-1              Health
+ ✔ Container docker-elastic-1            Started ***
+ ✔ Container docker-airflow-init-1       Exited
+ ✔ Container docker-airflow-scheduler-1  Started
+ ✔ Container docker-airflow-worker-1-1   Started
+ ✔ Container docker-flower-1             Started
+ ✔ Container docker-airflow-webserver-1  Started
+ ✔ Container docker-airflow-triggerer-1  Started
+ ✔ Container docker-airflow-worker-2-1   Started
+
+docker exec -it docker-airflow-scheduler-1 /bin/bash
+  airflow@9fa7f9847faf:/opt/airflow$
+    curl -X GET http://elastic:9200
+
+      ...
+      {
+        "name" : "647f0ff2bd64",
+        "cluster_name" : "docker-cluster",
+        "cluster_uuid" : "R6CTV5pfQK-lMWMKDz_Vzw",
+        "version" : {
+          "number" : "8.3.3",
+          "build_flavor" : "default",
+          "build_type" : "docker",
+          "build_hash" : "801fed82df74dbe537f89b71b098ccaff88d2c56",
+          "build_date" : "2022-07-23T19:30:09.227964828Z",
+          "build_snapshot" : false,
+          "lucene_version" : "9.2.0",
+          "minimum_wire_compatibility_version" : "7.17.0",
+          "minimum_index_compatibility_version" : "7.0.0"
+        },
+        "tagline" : "You Know, for Search"
+      }
+      ...
+      
+    exit

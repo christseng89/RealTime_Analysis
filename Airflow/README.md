@@ -99,6 +99,8 @@ pip install apache-airflow
 
 ### 30. Providers
 
+<https://airflow.apache.org/docs/apache-airflow-providers/installing-from-sources.html>
+
 // Airflow Core
 
 pip install apache-airflow
@@ -110,6 +112,8 @@ pip install apache-airflow-providers-alibaba
 pip install apache-airflow-providers-amazon
 pip install apache-airflow-providers-apache-pinot
 pip install apache-airflow-providers-apache-kafka
+pip install apache-airflow-providers-apache-flink
+pip install apache-airflow-providers-redis
 
 ### 31. Create a Table
 

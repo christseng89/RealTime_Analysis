@@ -455,7 +455,7 @@ docker exec -it docker-airflow-scheduler-1 /bin/bash
 
 Admin => Connections => + Add a new record
 
-- Connection Id (elastic)
+- Connection Id (elastic_default)
 - Connection Type (HTTP)
 - Host (http://elastic:9200)
 - Port (9200) => Save

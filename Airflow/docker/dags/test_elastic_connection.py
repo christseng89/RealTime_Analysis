@@ -4,7 +4,7 @@ from airflow.hooks.http_hook import HttpHook
 from datetime import datetime
 
 def test_elastic_connection():
-    hook = HttpHook(http_conn_id='elastic', method='GET')
+    hook = HttpHook(http_conn_id='elastic_default', method='GET')
     response = hook.run('/')
     print(response.text)
 

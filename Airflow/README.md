@@ -448,5 +448,16 @@ docker exec -it docker-airflow-scheduler-1 /bin/bash
         "tagline" : "You Know, for Search"
       }
       ...
-      
+
     exit
+
+### 83. Create the Elastic connection
+
+Admin => Connections => + Add a new record
+
+- Connection Id (elastic)
+- Connection Type (HTTP)
+- Host (http://elastic:9200)
+- Port (9200) => Save
+
+test_elastic_connection from Airflow UI => success

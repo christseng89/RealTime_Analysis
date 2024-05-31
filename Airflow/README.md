@@ -460,4 +460,5 @@ Admin => Connections => + Add a new record
 - Host (http://elastic:9200)
 - Port (9200) => Save
 
+pip install apache-airflow-providers-http
 test_elastic_connection from Airflow UI => success

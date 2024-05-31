@@ -1,6 +1,7 @@
 from airflow import DAG
 from airflow.operators.python import PythonOperator, BranchPythonOperator
 from airflow.operators.bash import BashOperator
+from airflow.utils.trigger_rule import TriggerRule
  
 from datetime import datetime
  
@@ -32,12 +33,13 @@ with DAG("xcom_dag", start_date=datetime(2022, 1, 1),
  
     t3 = BashOperator(
         task_id='t3',
-        bash_command="echo ''"
+        bash_command="echo 'Task 3 executed'"
     )
     
     t4 = BashOperator(
     task_id='t4',
-    bash_command="echo ''"
+    bash_command="echo 'Task 4 executed'",
+    trigger_rule=TriggerRule.NONE_FAILED_MIN_ONE_SUCCESS
     )
  
  

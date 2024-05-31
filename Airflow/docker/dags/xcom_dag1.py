@@ -1,7 +1,6 @@
 from airflow import DAG
 from airflow.operators.bash import BashOperator
 from airflow.operators.python import PythonOperator
-from airflow.operators.subdag import SubDagOperator
 from airflow.utils.task_group import TaskGroup
 
 from random import uniform
@@ -22,7 +21,7 @@ with DAG('xcom_dag1', schedule_interval='@daily', default_args=default_args, cat
 
     downloading_data = BashOperator(
         task_id='downloading_data',
-        bash_command='sleep 3'
+        bash_command='sleep 10'
     )
 
     with TaskGroup('processing_tasks') as processing_tasks:

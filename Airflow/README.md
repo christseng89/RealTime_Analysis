@@ -462,3 +462,9 @@ Admin => Connections => + Add a new record
 
 pip install apache-airflow-providers-http
 test_elastic_connection from Airflow UI => success
+
+### 84. Create the ElasticHook
+
+pip install elasticsearch
+
+\plugins\hooks\elastic_hook.py

@@ -468,3 +468,28 @@ test_elastic_connection from Airflow UI => success
 pip install elasticsearch
 
 \plugins\hooks\elastic_hook.py
+
+### 85. Add ElasticHook to the Plugin system
+
+docker-compose ps
+docker exec -it docker-airflow-scheduler-1 /bin/bash
+  airflow@9fa7f9847faf:/opt/airflow$
+    airflow plugins
+      No plugins loaded
+    exit
+
+// Edit \plugins\hooks\elastic_hook.py
+...
+class ElasticPlugin(AirflowPlugin):
+    name = "elastic"
+    hooks = [ElasticHook]
+
+docker-compose --profile flower down && docker-compose --profile flower up -d
+
+docker exec -it docker-airflow-scheduler-1 /bin/bash
+airflow@f34f9791b21a:/opt/airflow$ 
+  airflow plugins
+    name    | hooks                    | source
+    ========+==========================+==============================================
+    elastic | elastic_hook.ElasticHook | $PLUGINS_FOLDER/hooks/elastic/elastic_hook.py
+  exit

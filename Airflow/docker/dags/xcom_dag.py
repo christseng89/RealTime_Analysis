@@ -18,8 +18,11 @@ def _branch(ti):
     else:
         return 't2'
  
-with DAG("xcom_dag", start_date=datetime(2022, 1, 1), 
-    schedule_interval='@daily', catchup=False) as dag:
+with DAG(
+    dag_id="xcom_dag", 
+    start_date=datetime(2023, 1, 1), 
+    schedule_interval='@daily', 
+    catchup=False) as dag:
  
     t1 = PythonOperator(
         task_id='t1',

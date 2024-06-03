@@ -5,7 +5,9 @@ from subdags.subdag_downloads import subdag_downloads
 from subdags.subdag_transforms import subdag_transforms
 from datetime import datetime
 
-with DAG('group_dag', start_date=datetime(2023, 1, 1), 
+with DAG(
+    dag_id='group_dag', 
+    start_date=datetime(2023, 1, 1), 
     schedule_interval='@daily', 
     description='Group DAG with subdags',
     catchup=False) as dag:

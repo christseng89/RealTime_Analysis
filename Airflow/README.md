@@ -495,3 +495,24 @@ airflow@f34f9791b21a:/opt/airflow$
   exit
 
 ### 86. Add the DAG elastic_dag.py & Hook in Action
+
+### Revise docker-compose.yaml with container-name
+
+docker-compose --profile flower down && docker-compose --profile flower up -d
+
+[+] Running 11/11
+ ✔ Network docker_default       Created
+ ✔ Container airflow_postgres   Healthy
+ ✔ Container airflow_redis      Healthy
+ ✔ Container airflow_elastic    Started
+ ✔ Container airflow_init       Exited
+ ✔ Container airflow_flower     Started
+ ✔ Container airflow_webserver  Started
+ ✔ Container airflow_worker-2   Started
+ ✔ Container airflow_scheduler  Started
+ ✔ Container airflow_triggerer  Started
+ ✔ Container airflow_worker-1   Started
+
+docker exec -it airflow_scheduler /bin/bash
+  airflow dags list
+  

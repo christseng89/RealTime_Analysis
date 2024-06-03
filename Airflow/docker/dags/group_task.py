@@ -6,7 +6,9 @@ from groups.group_transforms import transform_tasks
 
 from datetime import datetime
 
-with DAG('group_task', start_date=datetime(2023, 1, 1), 
+with DAG(
+    dag_id='group_task', 
+    start_date=datetime(2023, 1, 1), 
     schedule_interval='@daily', 
     description='Group DAG with tasks',
     catchup=False) as dag:

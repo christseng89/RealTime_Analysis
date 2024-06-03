@@ -7,7 +7,7 @@ from random import uniform
 from datetime import datetime
 
 default_args = {
-    'start_date': datetime(2020, 1, 1)
+    'start_date': datetime(2023, 1, 1)
 }
 
 def _training_model():
@@ -17,7 +17,11 @@ def _training_model():
 def _choose_best_model():
     print('choose best model')
 
-with DAG('xcom_dag1', schedule_interval='@daily', default_args=default_args, catchup=False) as dag:
+with DAG(
+    dag_id='xcom_dag1', 
+    schedule_interval='@daily', 
+    default_args=default_args, 
+    catchup=False) as dag:
 
     downloading_data = BashOperator(
         task_id='downloading_data',

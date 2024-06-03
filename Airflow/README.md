@@ -493,3 +493,5 @@ airflow@f34f9791b21a:/opt/airflow$
     ========+==========================+==============================================
     elastic | elastic_hook.ElasticHook | $PLUGINS_FOLDER/hooks/elastic/elastic_hook.py
   exit
+
+### 86. Add the DAG elastic_dag.py & Hook in Action

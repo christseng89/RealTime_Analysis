@@ -536,3 +536,14 @@ docker exec -it airflow_scheduler /bin/bash
 - pre_execute (TaskPreExecuteHook | None) – a function to be called immediately before task execution, receiving a context dictionary; raising an exception will prevent the task from being executed. This is an experimental feature.
 - post_execute (TaskPostExecuteHook | None) – a function to be called immediately after task execution, receiving a context dictionary and task result; raising an exception will prevent the task from succeeding.
 ...
+
+### Task ID Limitations
+
+- Unique: task_id must be unique within Airflow.
+- Length: Task IDs must be less than 250 characters.
+- Characters: Task IDs can only contain alphanumeric characters, dashes, and underscores.
+- Case: Task IDs are case-insensitive.
+- Reserved Words: Avoid using reserved words like "all" and "latest" as task IDs.
+- Best Practices: Use descriptive task IDs that reflect the task's purpose.
+- Naming Conventions: Follow a consistent naming convention for task IDs across your DAGs.
+- Avoid Special Characters: Limit the use of special characters in task IDs to ensure compatibility.

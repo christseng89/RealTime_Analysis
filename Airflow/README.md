@@ -515,4 +515,24 @@ docker-compose --profile flower down && docker-compose --profile flower up -d
 
 docker exec -it airflow_scheduler /bin/bash
   airflow dags list
-  
+  cd dags
+  ls -l
+  exit
+
+### BaseOperator
+
+<https://airflow.apache.org/docs/apache-airflow/stable/_api/airflow/models/baseoperator/index.html>
+<https://github.com/apache/airflow/blob/main/airflow/models/baseoperator.py>
+
+// Parameters
+
+- task_id (str) – a unique, meaningful id for the task
+
+- owner (str) – the owner of the task. Using a meaningful description (e.g. user/person/team/role name) to clarify ownership is recommended.
+- email (str | Iterable[str] | None) – the ‘to’ email address(es) used in email alerts. This can be a single email or multiple ones. Multiple addresses can be specified as a comma or semicolon separated string or by passing a list of strings.
+- email_on_retry (bool) – Indicates whether email alerts should be sent when a task is retried
+- email_on_failure (bool) – Indicates whether email alerts should be sent when a task failed
+...
+- pre_execute (TaskPreExecuteHook | None) – a function to be called immediately before task execution, receiving a context dictionary; raising an exception will prevent the task from being executed. This is an experimental feature.
+- post_execute (TaskPostExecuteHook | None) – a function to be called immediately after task execution, receiving a context dictionary and task result; raising an exception will prevent the task from succeeding.
+...

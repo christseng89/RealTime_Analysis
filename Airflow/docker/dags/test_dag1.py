@@ -8,7 +8,7 @@ def _test_task1(**context):
     print("DS: " + context['ds'])
     print("DAG ID: " + context['dag'].dag_id)
     print("DAG Run ID: " + context['dag_run'].run_id)
-    print("Task ID: " + context['task_instance'].task_id1)
+    print("Task ID: " + context['task_instance'].task_id)
 
 with DAG(
     dag_id='test_dag1',
@@ -18,8 +18,7 @@ with DAG(
 ) as dag:
 
     test_task = PythonOperator(
-        task_id='test_task1',
+        task_id='test_task',
         python_callable=_test_task1,
-        email = ['samfire5200@gmail.com'],
-        email_on_failure=True,
+
     )

@@ -539,11 +539,7 @@ docker exec -it airflow_scheduler /bin/bash
 
 ### Task ID Limitations
 
-- Unique: task_id must be unique within Airflow.
+- Unique: Task ID must be unique within a single Dag.
 - Length: Task IDs must be less than 250 characters.
 - Characters: Task IDs can only contain alphanumeric characters, dashes, and underscores.
-- Case: Task IDs are case-insensitive.
-- Reserved Words: Avoid using reserved words like "all" and "latest" as task IDs.
-- Best Practices: Use descriptive task IDs that reflect the task's purpose.
-- Naming Conventions: Follow a consistent naming convention for task IDs across your DAGs.
-- Avoid Special Characters: Limit the use of special characters in task IDs to ensure compatibility.
+- Start Character: Task IDs should start with an alphanumeric character.

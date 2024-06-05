@@ -3,6 +3,10 @@ from airflow.operators.python import PythonOperator
 
 from datetime import datetime
 
+default_args = {
+    'owner': 'mark, john, luke, matthew',
+}
+
 def _test_task(**context):
     # print(context)
     # print("DS: " + context['ds'])
@@ -12,6 +16,7 @@ def _test_task(**context):
 
 with DAG(
     dag_id='test_dag_v1.0',
+    default_args=default_args,
     start_date=datetime(2023, 1, 1),
     schedule_interval='@daily',
     catchup=False,

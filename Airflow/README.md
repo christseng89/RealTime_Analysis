@@ -544,3 +544,15 @@ docker exec -it airflow_scheduler /bin/bash
 - Characters: Task IDs can only contain alphanumeric characters, dashes, and underscores.
 - Start Character: Task IDs should start with an alphanumeric character.
 - List [] >> List [] is not supported in Dag
+
+### Owner
+
+- Task Ownership and Permissions
+  - The owner field in the tasks’ definitions (test_task_v01 has owner='mark' and test_task_v02 has owner='john') primarily serves as metadata. It doesn’t restrict task execution based on user permissions out of the box.
+  - In standard Airflow setups, task execution is controlled by the scheduler, and any user with access to trigger the DAG can trigger the entire DAG, regardless of the individual task owners.
+
+- Airflow Security Model
+  - Default Behavior: By default, Airflow does not enforce task-level permissions based on the owner attribute.
+  - RBAC (Role-Based Access Control): If RBAC is enabled in Airflow, permissions to trigger DAGs can be managed more granularly.
+
+However, by default, triggering a DAG means all tasks in the DAG are subject to execution.

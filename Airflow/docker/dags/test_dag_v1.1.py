@@ -1,8 +1,10 @@
 from airflow import DAG
 from airflow.operators.python import PythonOperator
-from airflow.utils.dates import days_ago
+from airflow.operators.bash import BashOperator
 
-from datetime import datetime
+# from airflow.utils.dates import days_ago
+
+from datetime import datetime, timedelta
 
 default_args = {
     'owner': 'mark, john, luke, matthew',
@@ -28,7 +30,6 @@ with DAG(
 ) as dag:
 
     # Generate dynamic task IDs
-    test_task_1 = None  # Define test_task_1 variable
     
     for i in range(6):
         task_id = f'test_task_{i}'
@@ -51,4 +52,13 @@ with DAG(
             test_task_5 = test_task                           
         # Assign test_task_1 variable
 
-    test_task_0 >> [test_task_1, test_task_2] >> test_task_5>> [test_task_3, test_task_4] 
+    test_task_bash = BashOperator(
+        task_id='test_task_bach',
+        retries=3,
+        retry_delay=timedelta(seconds=10),
+        retry_exponential_backoff=True, # Useful for API calls
+        bash_command='echo "Hi, BashOperator from Airflow!" && echo "Try times: {{ ti.try_number }}" && sleep 5 && exit 1',
+        # https://airflow.apache.org/docs/apache-airflow/stable/_api/airflow/models/taskinstance/index.html
+    )
+    
+    test_task_0 >> [test_task_1, test_task_2] >> test_task_5>> [test_task_3, test_task_4] >> test_task_bash

@@ -556,3 +556,7 @@ docker exec -it airflow_scheduler /bin/bash
   - RBAC (Role-Based Access Control): If RBAC is enabled in Airflow, permissions to trigger DAGs can be managed more granularly.
 
 However, by default, triggering a DAG means all tasks in the DAG are subject to execution.
+
+### Retry
+
+retries = 3 # Attempt 4 times

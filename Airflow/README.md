@@ -543,3 +543,4 @@ docker exec -it airflow_scheduler /bin/bash
 - Length: Task IDs must be less than 250 characters.
 - Characters: Task IDs can only contain alphanumeric characters, dashes, and underscores.
 - Start Character: Task IDs should start with an alphanumeric character.
+- List [] >> List [] is not supported in Dag

@@ -25,3 +25,7 @@ docker exec -it airflow_scheduler /bin/bash
     airflow dags list
 
 // from logs folder delete all files with the name likes the [original DAG_ID]
+
+### User
+
+airflow users create --username mark --password mark --firstname Mark --lastname User --role User --email mark@example.com

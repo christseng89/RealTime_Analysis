@@ -1,7 +1,13 @@
 from airflow import DAG
 from airflow.operators.python import PythonOperator
+from airflow.utils.dates import days_ago
 
 from datetime import datetime
+
+default_args = {
+    'owner': 'mark, john, luke, matthew',
+    'start_date': datetime(2023, 1, 1),
+}
 
 def _test_task(**context):
     # print(context)
@@ -12,7 +18,11 @@ def _test_task(**context):
 
 with DAG(
     dag_id='test_dag_v1.1',
-    start_date=datetime(2023, 1, 1),
+    # start_date=days_ago(2), 
+    ## Although days_ago() it is working, but not recommended...
+    # start_date=datetime(2023, 1, 1), 
+    ## change the start_date to default_args
+    default_args=default_args,
     schedule_interval='@daily',
     catchup=False,
 ) as dag:

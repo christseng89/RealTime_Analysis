@@ -9,6 +9,9 @@ from datetime import datetime, timedelta
 default_args = {
     'owner': 'mark, john, luke, matthew',
     'start_date': datetime(2023, 1, 1),
+    'email': ['samfire5200@gmail.com', 'samfire5201@gmail.com'],
+    'email_on_failure': True,
+    'email_on_retry': False,
 }
 
 def _test_task(**context):
@@ -55,7 +58,7 @@ with DAG(
     test_task_bash = BashOperator(
         task_id='test_task_bach',
         retries=3,
-        retry_delay=timedelta(seconds=10),
+        retry_delay=timedelta(seconds=5),
         retry_exponential_backoff=True, # Useful for API calls
         bash_command='echo "Hi, BashOperator from Airflow!" && echo "Try times: {{ ti.try_number }}" && sleep 5 && exit 1',
         # https://airflow.apache.org/docs/apache-airflow/stable/_api/airflow/models/taskinstance/index.html

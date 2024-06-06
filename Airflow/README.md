@@ -560,3 +560,42 @@ However, by default, triggering a DAG means all tasks in the DAG are subject to 
 ### Retry
 
 retries = 3 # Attempt 4 times
+
+### Email
+
+<https://www.youtube.com/watch?v=xJrcExbQzKE&ab_channel=SriwWorldofCoding>
+<https://myaccount.google.com/apppasswords>
+
+- App Name (airflow_wsl2) => Create => Copy mhggxiwpjiqz.... => Done
+
+// Edit airflow.cfg
+
+[smtp]
+
+smtp_host = smtp.gmail.com
+smtp_starttls = True
+smtp_ssl = False
+smtp_user = samfire5200@gmail.com
+smtp_password = mhggxiwpjiqz...
+smtp_port = 587
+smtp_mail_from = samfire5200@gmail.com
+
+// Edit docker-compose.yaml
+
+  volumes:
+    ...
+    - ./data:/opt/airflow/data
+    - ./airflow.cfg:/opt/airflow/airflow.cfg # Edit here...
+    ...
+
+// Email settings
+
+- email = '[]'
+- email_on_retry = False/True
+- email_on_failure = False/True
+  
+// Control levels
+
+- airflow.cfg
+- by dag => default_args
+- by task

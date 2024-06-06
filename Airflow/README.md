@@ -599,3 +599,13 @@ smtp_mail_from = samfire5200@gmail.com
 - airflow.cfg
 - by dag => default_args
 - by task
+
+// Add files
+
+- content_template_email.txt
+- subject_template_email.txt
+
+// Edit airflow.cfg
+
+- subject_template = /opt/airflow/includes/subject_template_email.txt
+- html_content_template = /opt/airflow/includes/content_template_email.txt

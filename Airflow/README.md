@@ -629,3 +629,21 @@ smtp_mail_from = samfire5200@gmail.com
         python_callable=_test_task,
         depends_on_past=True, ## Important here...
     )
+
+### 16. Wait for downstream tasks
+
+// test_dag_v2.0.py
+with DAG(
+    ...
+    # dagrun_timeout=timedelta(seconds=60), # Remark here...
+    catchup=True,
+) as dag:
+
+    task_a = BashOperator(
+        owner='mark',
+        task_id='task_a',
+        bash_command='echo "Task A" && sleep 5',
+        wait_for_downstream=True, # Change here...
+
+    )
+...

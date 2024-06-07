@@ -6,7 +6,7 @@ from datetime import datetime, timedelta
 
 default_args = {
     'owner': 'mark, john, luke, matthew',
-    'start_date': datetime(2023, 5, 1),
+    'start_date': datetime(2024, 5, 1),
     'email': ['samfire5200@gmail.com', 'samfire5201@gmail.com'],
     'email_on_failure': True,
     'email_on_retry': False,
@@ -21,7 +21,7 @@ with DAG(
     dag_id='test_dag_v2.0',
     default_args=default_args,
     schedule_interval='@daily',
-    dagrun_timeout=timedelta(seconds=60),
+    # dagrun_timeout=timedelta(seconds=60),
     catchup=True,
 ) as dag:
 
@@ -29,6 +29,7 @@ with DAG(
         owner='mark',
         task_id='task_a',
         bash_command='echo "Task A" && sleep 5',
+        wait_for_downstream=True,
 
     )
 

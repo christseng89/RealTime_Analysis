@@ -29,3 +29,17 @@ docker exec -it airflow_scheduler /bin/bash
 ### User
 
 airflow users create --username mark --password mark --firstname Mark --lastname User --role User --email mark@example.com
+
+### Delete the volume between runs
+
+docker-compose --profile flower down -v
+
+ ✔ Volume docker_postgres-db-volume  Removed
+
+docker-compose --profile flower up -d
+
+[+] Running 12/12
+ ✔ Network docker_default              Created
+ ✔ Volume "docker_postgres-db-volume"  Created ***
+ ✔ Container airflow_elastic           Started
+ ...

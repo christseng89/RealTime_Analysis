@@ -600,7 +600,9 @@ smtp_mail_from = samfire5200@gmail.com
 - by dag => default_args
 - by task
 
-// Add files
+// Add files - Email Templates
+
+<https://github.com/apache/airflow/blob/main/airflow/models/taskinstance.py>
 
 - content_template_email.txt
 - subject_template_email.txt

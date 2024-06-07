@@ -19,7 +19,7 @@ def _test_task(execution_date):
         raise ValueError("Error on the 5th day of the month!")    
 
 with DAG(
-    dag_id='test_dag_v2.1',
+    dag_id='test_dag_v2.2', # # Test all_success trigger_rule
     default_args=default_args,
     schedule_interval='@daily',
     # dagrun_timeout=timedelta(seconds=60),
@@ -48,7 +48,7 @@ with DAG(
         retries=3,
         retry_delay=timedelta(seconds=5),
         retry_exponential_backoff=True, # Useful for API calls
-        bash_command='echo "Hi, BashOperator from Airflow!" && echo "Try times: {{ ti.try_number }}" && sleep 15',
+        bash_command='echo "Hi, BashOperator Process A!" && echo "Try times: {{ ti.try_number }}" && sleep 15',
         pool='process_tasks',
         priority_weight=2 # Lower priority than process_b - 2nd
     
@@ -60,7 +60,7 @@ with DAG(
         retries=3,
         retry_delay=timedelta(seconds=5),
         retry_exponential_backoff=True, # Useful for API calls
-        bash_command='echo "Hi, BashOperator from Airflow!" && echo "Try times: {{ ti.try_number }}" && sleep 15',
+        bash_command='echo "Hi, BashOperator Process B!" && echo "Try times: {{ ti.try_number }}" && sleep 15',
         pool='process_tasks',
         priority_weight=3 # Highest priority - 1st
         
@@ -72,13 +72,45 @@ with DAG(
         retries=3,
         retry_delay=timedelta(seconds=5),
         retry_exponential_backoff=True, # Useful for API calls
-        bash_command='echo "Hi, BashOperator from Airflow!" && echo "Try times: {{ ti.try_number }}" && sleep 15',
+        bash_command='echo "Hi, BashOperator Process C!" && echo "Try times: {{ ti.try_number }}" && sleep 15',
         pool='process_tasks',
         # priority_weight=1 # Lowest priority - 3rd, default = 1
         
     )
 
+    clean_a = BashOperator(
+        owner='john',
+        task_id='clean_a',
+        retries=3,
+        retry_delay=timedelta(seconds=5),
+        retry_exponential_backoff=True, # Useful for API calls
+        bash_command='echo "Hi, Clean A}" && sleep 15',
+        trigger_rule="all_success"
+        
+    )
 
+    clean_b = BashOperator(
+        owner='john',
+        task_id='clean_b',
+        retries=3,
+        retry_delay=timedelta(seconds=5),
+        retry_exponential_backoff=True, # Useful for API calls
+        bash_command='echo "Hi, Clean B}" && sleep 15',
+        trigger_rule="all_success"
+        
+    )
+    
+    clean_c = BashOperator(
+        owner='john',
+        task_id='clean_c',
+        retries=3,
+        retry_delay=timedelta(seconds=5),
+        retry_exponential_backoff=True, # Useful for API calls
+        bash_command='echo "Hi, Clean C}" && sleep 15',
+        trigger_rule="all_success"
+        
+    )
+    
     store = PythonOperator(
         owner='mark',
         task_id='store',
@@ -88,5 +120,7 @@ with DAG(
     )
     
     cross_downstream([extract_a, extract_b], [process_a, process_b, process_c])
-    [process_a, process_b, process_c] >> store
-    
+    process_a >> clean_a
+    process_b >> clean_b
+    process_c >> clean_c
+    [process_a, process_b, process_c] >> store    

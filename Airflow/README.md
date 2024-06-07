@@ -657,3 +657,8 @@ Airflow UI => Admin => Pools => + Add a new record
 - Slots (1) => Save
 - Description (Pool to run Process Tasks sequentially - test_dag_v2.1.py)
 => Save
+
+### 18. Task priority
+
+// test_dag_v2.1.py
+priority_weight = ...

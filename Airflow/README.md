@@ -136,7 +136,7 @@ Admin => Connections => + Add a new record
 
 cd Airflow\docker
 docker-compose ps
-docker exec -it docker-airflow-scheduler-1 /bin/bash
+docker exec -it airflow-scheduler /bin/bash
   airflow@9fa7f9847faf:/opt/airflow$
     airflow -h
     airflow connections list
@@ -144,11 +144,13 @@ docker exec -it docker-airflow-scheduler-1 /bin/bash
 
 ### 35. Is the API available?
 
-Go to the Airflow UI (on your machine localhost:80880) and create the following connection:
+Airflow UI (on your machine localhost:80880) => Admin => Connections => +
+Create the following connection:
 
-- Name: user_api
+- Connection Id: user_api
 - Connection type: HTTP
 - Host: <https://randomuser.me/>
+=> Save
 
 ### 37. Process users
 
@@ -207,7 +209,7 @@ Types of Executors in Airflow:
 
 ### 55. The default config
 
-docker cp docker-airflow-scheduler-1:/opt/airflow/airflow.cfg .
+docker cp airflow-scheduler:/opt/airflow/airflow.cfg .
 type airflow.cfg
   ...
   executor = SequentialExecutor
@@ -425,7 +427,7 @@ docker-compose --profile flower down && docker-cmpose --profile flower up -d
  ✔ Container docker-airflow-triggerer-1  Started
  ✔ Container docker-airflow-worker-2-1   Started
 
-docker exec -it docker-airflow-scheduler-1 /bin/bash
+docker exec -it airflow-scheduler /bin/bash
   airflow@9fa7f9847faf:/opt/airflow$
     curl -X GET http://elastic:9200
 
@@ -472,7 +474,7 @@ pip install elasticsearch
 ### 85. Add ElasticHook to the Plugin system
 
 docker-compose ps
-docker exec -it docker-airflow-scheduler-1 /bin/bash
+docker exec -it airflow-scheduler /bin/bash
   airflow@9fa7f9847faf:/opt/airflow$
     airflow plugins
       No plugins loaded
@@ -486,7 +488,7 @@ class ElasticPlugin(AirflowPlugin):
 
 docker-compose --profile flower down && docker-compose --profile flower up -d
 
-docker exec -it docker-airflow-scheduler-1 /bin/bash
+docker exec -it airflow-scheduler /bin/bash
 airflow@f34f9791b21a:/opt/airflow$ 
   airflow plugins
     name    | hooks                    | source
@@ -611,3 +613,19 @@ smtp_mail_from = samfire5200@gmail.com
 
 - subject_template = /opt/airflow/includes/subject_template_email.txt
 - html_content_template = /opt/airflow/includes/content_template_email.txt
+
+### Make your tasks dependent between DAGRuns
+
+// test_dag_v2.0.py
+...
+    schedule_interval='@daily',
+    dagrun_timeout=timedelta(seconds=60), ## Important here...
+    catchup=True,
+
+...
+    task_c = PythonOperator(
+        owner='mark',
+        task_id='task_c',
+        python_callable=_test_task,
+        depends_on_past=True, ## Important here...
+    )

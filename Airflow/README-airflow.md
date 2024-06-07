@@ -43,3 +43,13 @@ docker-compose --profile flower up -d
  ✔ Volume "docker_postgres-db-volume"  Created ***
  ✔ Container airflow_elastic           Started
  ...
+
+### Connection List
+
+airflow connections list
+
+id | conn_id  | conn_type | description  | host                   | login   | password | port
+===+========  +=========  +==============+========================+=========+========= +======
+1  | postgre  | postgre   | Postgre      | postgre                | airflow | airflow  | 5432
+2  | elastic  | http      | Elastic      | http://                |         | None     | 9200
+3  | user_api | http      | User API     | https://randomuser.me/ |         | None     | None

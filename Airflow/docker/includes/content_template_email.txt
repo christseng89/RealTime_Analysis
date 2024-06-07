@@ -1,2 +1,6 @@
-Try {{try_number}} of {{max_tries + 1}} times
-Execution date: {{ti.execution_date}}
+Try {{try_number}} out of {{max_tries + 1}}<br>
+Execution date: {{ti.execution_date}}<br>
+<br>
+Exception:<br>{{exception_html}}<br>
+Log: <a href="{{ti.log_url}}">Link</a><br>
+Host: {{ti.hostname}}<br>

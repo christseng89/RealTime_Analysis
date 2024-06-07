@@ -647,3 +647,13 @@ with DAG(
 
     )
 ...
+
+### 17. Pool party
+
+// test_dag_v2.1.py
+Airflow UI => Admin => Pools => + Add a new record
+
+- Pool (process_tasks)
+- Slots (1) => Save
+- Description (Pool to run Process Tasks sequentially - test_dag_v2.1.py)
+=> Save

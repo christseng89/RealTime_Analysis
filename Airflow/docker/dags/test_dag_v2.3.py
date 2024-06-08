@@ -31,6 +31,7 @@ with DAG(
         task_id='extract_a',
         bash_command='echo "Task A" && sleep 5',
         wait_for_downstream=True,
+        execution_timeout=timedelta(seconds=15) # Timeout for the task
 
     )
     
@@ -39,7 +40,8 @@ with DAG(
         task_id='extract_b',
         bash_command='echo "Task A" && sleep 5',
         wait_for_downstream=True,
-
+        execution_timeout=timedelta(seconds=15) # Timeout for the task
+        
     )
 
     process_a = BashOperator(

@@ -4,13 +4,14 @@ from airflow.operators.bash import BashOperator
 from airflow.utils.helpers import cross_downstream
 
 from datetime import datetime, timedelta
+import time
 
 default_args = {
-    'owner': 'mark, john, luke, matthew',
+    'owner': 'mark, john',
     'start_date': datetime(2024, 5, 1),
-    # 'email': ['samfire5200@gmail.com', 'samfire5201@gmail.com'],
+    'email': ['samfire5200@gmail.com', 'samfire5201@gmail.com'],
     # 'email_on_retry': False,
-    'email_on_failure': True,
+    # 'email_on_failure': True,
 
 }
 
@@ -19,6 +20,10 @@ def _test_task(execution_date):
     if execution_date.day == 5:
         raise ValueError("Error on the 5th day of the month!")    
 
+def _test_sleep():
+    print("Sleeping for 15 seconds...")
+    time.sleep(15)
+    
 def sla_callback(dag, task_list, blocking_task_list, slas, blocking_tis):
     print(
         "The SLA missed callback arguments are: ",
@@ -36,17 +41,16 @@ with DAG(
     dag_id='test_dag_v3.0', # Test all_failed trigger_rule
     default_args=default_args,
     schedule_interval='*/5 * * * *',
-    # dagrun_timeout=timedelta(seconds=60),
     catchup=False,
-    sla_miss_callback=sla_callback,
+    sla_miss_callback=sla_callback, # SLA missed callback
 ) as dag:
 
-    extract_a = BashOperator(
+    extract_a = PythonOperator(
         owner='mark',
         task_id='extract_a',
-        bash_command='echo "Task A" && sleep 15',
+        python_callable=_test_sleep,
         wait_for_downstream=True,
-        sla=timedelta(seconds=10) 
+        sla=timedelta(seconds=5) 
 
     )
     

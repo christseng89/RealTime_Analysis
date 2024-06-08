@@ -673,3 +673,12 @@ priority_weight = ...
 ### 22. Set expectations to your tasks with SLAs
 
 // test_dag_v3.0.py
+
+### 23. Timeout
+
+// test_dag_v2.3.py for extract_a and extract_b
+
+    ...
+        wait_for_downstream=True,
+        execution_timeout=timedelta(seconds=15) # Timeout for the task
+    ...

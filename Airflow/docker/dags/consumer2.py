@@ -5,10 +5,17 @@ from datetime import datetime
 
 my_file_1 = Dataset('/tmp/my_file_1.txt')
 my_file_2 = Dataset('/tmp/my_file_2.txt')
+default_args = {
+    'owner': 'mark, john',
+    'start_date': datetime(2024, 5, 1),
+    'email': ['samfire5200@gmail.com', 'samfire5201@gmail.com'],
+    'email_on_failure': True,
+    'email_on_retry': False,
+}
 
 with DAG(
     dag_id='consumer2', 
-    start_date=datetime(2023, 1, 1), 
+    default_args=default_args,
     schedule=[my_file_1, my_file_2],
     catchup=False) as dag:
 

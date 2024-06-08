@@ -48,8 +48,8 @@ docker-compose --profile flower up -d
 
 airflow connections list
 
-id | conn_id  | conn_type | description  | host                   | login   | password | port
-===+========  +=========  +==============+========================+=========+========= +======
-1  | postgre  | postgre   | Postgre      | postgre                | airflow | airflow  | 5432
-2  | elastic  | http      | Elastic      | http://                |         | None     | 9200
-3  | user_api | http      | User API     | https://randomuser.me/ |         | None     | None
+id | conn_id          | conn_type | description  | host                   | login   | password | port
+===+================  +=========  +==============+========================+=========+========= +======
+1  | postgres         | postgres  | Postgres     | postgres               | airflow | airflow  | 5432
+2  | elastic_default  | http      | Elastic      | elastic                |         | None     | 9200
+3  | user_api         | http      | User API     | https://randomuser.me/ |         | None     | None

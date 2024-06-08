@@ -190,6 +190,13 @@ Dataset Producers:
 Dataset Consumers:
   DAGs that are triggered when a dataset is updated by a producer. Instead of relying on a fixed schedule, these DAGs run based on the data dependency.
 
+### 50. Create the Consumer DAG
+
+Airflow UI 
+
+// Run producer => consumer
+// Run producer2 => consumer2
+
 ### 51. Track your Datasets with the new view
 
 Airflow UI => Datasets => /tmp/my_file.txt
@@ -459,7 +466,7 @@ Admin => Connections => + Add a new record
 
 - Connection Id (elastic_default)
 - Connection Type (HTTP)
-- Host (http://elastic:9200)
+- Host (elastic)
 - Port (9200) => Save
 
 pip install apache-airflow-providers-http
@@ -662,3 +669,7 @@ Airflow UI => Admin => Pools => + Add a new record
 
 // test_dag_v2.1.py
 priority_weight = ...
+
+### 22. Set expectations to your tasks with SLAs
+
+// test_dag_v3.0.py

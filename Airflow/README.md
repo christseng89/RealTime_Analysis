@@ -692,3 +692,11 @@ priority_weight = ...
 - on_retry_callback             Invoked when the task is up for retry
 - on_execute_callback           Invoked right before the task begins executing.
 - sla_miss_callback             Invoked when a task misses its defined SLA
+
+### 28. Limit the concurrency
+
+- Pools are used to limit the number of tasks that can be run concurrently in a DAG.
+  Pools control concurrency across multiple tasks, potentially spanning multiple DAGs, based on shared resources.
+- Tasks_concurrency is used to limit the number of tasks that can be run concurrently in a specific task.
+  Controls concurrency at the level of individual tasks within a single DAG. (i.e. backward's start_date with Catchup=True)
+  (for example: eLoan accrued and post interests) => tasks_concurrency=1

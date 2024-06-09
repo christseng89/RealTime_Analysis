@@ -50,7 +50,7 @@ with DAG(
     extract_b = BashOperator(
         owner='mark',
         task_id='extract_b',
-        bash_command='echo "Task A" && sleep 5 && exit 1',
+        bash_command='echo "Task B" && sleep 5 && exit 1',
         wait_for_downstream=True,
         execution_timeout=timedelta(seconds=15), # Timeout for the task
         on_success_callback=_extract_on_success,
@@ -99,7 +99,7 @@ with DAG(
         retries=3,
         retry_delay=timedelta(seconds=5),
         retry_exponential_backoff=True, # Useful for API calls
-        bash_command='echo "Hi, Clean A}" && sleep 15',
+        bash_command='echo "Hi, {{ti.task_id}}" && sleep 15',
         trigger_rule="all_failed",
         
     )
@@ -110,7 +110,7 @@ with DAG(
         retries=3,
         retry_delay=timedelta(seconds=5),
         retry_exponential_backoff=True, # Useful for API calls
-        bash_command='echo "Hi, Clean B}" && sleep 15',
+        bash_command='echo "Hi, {{ti.task_id}}" && sleep 15',
         trigger_rule="all_failed"
         
     )
@@ -121,7 +121,7 @@ with DAG(
         retries=3,
         retry_delay=timedelta(seconds=5),
         retry_exponential_backoff=True, # Useful for API calls
-        bash_command='echo "Hi, Clean C}" && sleep 15',
+        bash_command='echo "Hi, {{ti.task_id}}" && sleep 15',
         trigger_rule="all_failed"
         
     )

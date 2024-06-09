@@ -37,7 +37,7 @@ with DAG(
     extract_b = BashOperator(
         owner='mark',
         task_id='extract_b',
-        bash_command='echo "Task A" && sleep 5',
+        bash_command='echo "Task B" && sleep 5',
         wait_for_downstream=True,
 
     )

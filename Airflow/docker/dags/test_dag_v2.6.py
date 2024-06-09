@@ -1,7 +1,7 @@
 from airflow import DAG
 from airflow.operators.python import PythonOperator
 from airflow.operators.bash import BashOperator
-from airflow.utils.helpers import cross_downstream
+from airflow.utils.helpers import cross_downstream, chain
 from airflow.exceptions import AirflowTaskTimeout
 
 from datetime import datetime, timedelta
@@ -19,8 +19,8 @@ def _test_task(ti, execution_date):
     print(f"Xcoms: {xcoms}")
         
     print(f"Execution month-day: {execution_date.month}-{execution_date.day}")
-    if execution_date.day == 5:
-        raise ValueError("Error on the 5th day of the month!")    
+    if execution_date.day == 32:
+        raise ValueError("Error on the 32nd day of the month!")    
 
 def _extract_on_success(context):
         print(f"Task id: {context['task_instance'].task_id} is successful!")
@@ -144,7 +144,9 @@ with DAG(
     )
     
     cross_downstream([extract_a, extract_b], [process_a, process_b, process_c])
-    process_a >> clean_a
-    process_b >> clean_b
-    process_c >> clean_c
-    [process_a, process_b, process_c] >> store    
+    # process_a >> clean_a
+    # process_b >> clean_b
+    # process_c >> clean_c
+    # [process_a, process_b, process_c] >> store  
+    chain([process_a, process_b, process_c], [clean_a, clean_b, clean_c])
+    cross_downstream([process_a, process_b, process_c], store)

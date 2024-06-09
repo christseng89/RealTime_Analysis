@@ -700,3 +700,9 @@ priority_weight = ...
 - Tasks_concurrency is used to limit the number of tasks that can be run concurrently in a specific task.
   Controls concurrency at the level of individual tasks within a single DAG. (i.e. backward's start_date with Catchup=True)
   (for example: eLoan accrued and post interests) => tasks_concurrency=1
+
+### 29. Chain and Cross dependency helpers
+
+cross_downstream([t0 ], [t1, t2])
+cross_downstream([t0, t1, t2], [t3, t4])
+chain(t0, [t1, t2], [t3, t4])

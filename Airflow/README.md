@@ -682,3 +682,13 @@ priority_weight = ...
         wait_for_downstream=True,
         execution_timeout=timedelta(seconds=15) # Timeout for the task
     ...
+
+### Callbacks
+
+<https://airflow.apache.org/docs/apache-airflow/stable/administration-and-deployment/logging-monitoring/callbacks.html#callback-types>
+
+- on_success_callback           Invoked when the task succeeds
+- on_failure_callback           Invoked when the task fails
+- on_retry_callback             Invoked when the task is up for retry
+- on_execute_callback           Invoked right before the task begins executing.
+- sla_miss_callback             Invoked when a task misses its defined SLA

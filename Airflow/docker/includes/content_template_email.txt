@@ -1,4 +1,5 @@
-Try {{try_number}} out of {{max_tries + 1}}<br>
+Try {{try_number}} out of {{max_tries + 1}} times<br>
+Task {{ti.task_id}} in Dag {{ti.dag_id}}<br>  
 Execution date: {{ti.execution_date}}<br>
 <br>
 Exception:<br>{{exception_html}}<br>

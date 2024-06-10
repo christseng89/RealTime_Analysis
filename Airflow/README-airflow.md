@@ -53,3 +53,7 @@ id | conn_id          | conn_type | description  | host                   | logi
 1  | postgres         | postgres  | Postgres     | postgres               | airflow | airflow  | 5432
 2  | elastic_default  | http      | Elastic      | elastic                |         | None     | 9200
 3  | user_api         | http      | User API     | https://randomuser.me/ |         | None     | None
+
+### Docker Compose (WSL2)
+
+curl -LfO <https://airflow.apache.org/docs/apache-airflow/2.4.2/docker-compose.yaml>

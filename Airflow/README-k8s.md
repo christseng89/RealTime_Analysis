@@ -130,3 +130,9 @@ k = KubernetesPodOperator(
 ### Conclusion
 
 By configuring the KubernetesExecutor and KubernetesPodOperator correctly, you can leverage the power of Kubernetes to run and manage your Airflow tasks. Ensure you have the necessary Kubernetes configurations and permissions set up for Airflow to interact with your Kubernetes cluster.
+
+### References
+
+<https://airflow.apache.org/docs/apache-airflow/stable/administration-and-deployment/kubernetes.html>
+<https://airflow.apache.org/docs/apache-airflow-providers-cncf-kubernetes/stable/kubernetes_executor.html>
+<https://airflow.apache.org/docs/apache-airflow-providers-cncf-kubernetes/stable/operators.html#howto-operator-kubernetespodoperator>

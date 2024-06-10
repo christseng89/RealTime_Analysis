@@ -478,6 +478,12 @@ pip install elasticsearch
 
 \plugins\hooks\elastic_hook.py
 
+docker exec -it airflow_scheduler /bin/bash
+  airflow plugins
+    name    | hooks                    | source
+    ========+==========================+==============================================
+    elastic | elastic_hook.ElasticHook | $PLUGINS_FOLDER/hooks/elastic/elastic_hook.py
+
 ### 85. Add ElasticHook to the Plugin system
 
 docker-compose ps
@@ -706,3 +712,11 @@ priority_weight = ...
 cross_downstream([t0 ], [t1, t2])
 cross_downstream([t0, t1, t2], [t3, t4])
 chain(t0, [t1, t2], [t3, t4])
+
+### Providers
+
+<https://registry.astronomer.io/>
+<https://airflow.apache.org/docs/apache-airflow-providers-amazon/8.24.0/operators/index.html>
+
+Example
+<https://registry.astronomer.io/dags/snowflake_write_audit_publish/versions/1.4.0>

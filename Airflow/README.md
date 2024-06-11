@@ -818,3 +818,8 @@ airflow tasks test my_bash_dag_v_0 execute_command 2024-06-01
   [2024-06-11 11:53:28,394] {subprocess.py:93} INFO - aws_key=***# Protected info
   [2024-06-11 11:53:28,394] {subprocess.py:93} INFO - AIRFLOW_CTX_TRY_NUMBER=1
   ...
+
+### 36. Quick note about templated fields
+
+<https://airflow.apache.org/docs/apache-airflow/stable/operators-and-hooks-ref.html>
+<https://airflow.apache.org/docs/apache-airflow/stable/templates-ref.html>

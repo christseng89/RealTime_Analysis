@@ -784,3 +784,16 @@ Airflow UI => Admin => Variables => + Add a new record
   "filename": "my_data.csv"
   }
 ) => Save
+
+### 34. The PythonOperator with the TaskFlow API (Decorator)
+
+// my_python_dag_v1.py
+
+airflow tasks test my_python_dag_v_1 task_a 2024-06-01
+  ...
+  Path: /usr/local/***/data, Filename: my_data.csv
+  Logical date's month-day: 6-1, Task Id: task_a
+  [2024-06-11 09:57:36,233] {python.py:177} INFO - Done. Returned value was: None
+  [2024-06-11 09:57:36,233] {taskinstance.py:1406} INFO - Marking task as SUCCESS. dag_id=my_python_dag_v_1, task_id=task_a, execution_date=20240601T000000, start_date=, end_date=20240611T095736
+
+airflow tasks test my_python_dag_v_1 store 2024-06-01

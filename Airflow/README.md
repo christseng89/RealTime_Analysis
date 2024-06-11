@@ -797,3 +797,24 @@ airflow tasks test my_python_dag_v_1 task_a 2024-06-01
   [2024-06-11 09:57:36,233] {taskinstance.py:1406} INFO - Marking task as SUCCESS. dag_id=my_python_dag_v_1, task_id=task_a, execution_date=20240601T000000, start_date=, end_date=20240611T095736
 
 airflow tasks test my_python_dag_v_1 store 2024-06-01
+
+### 35. The BashOperator
+
+Airflow UI => Admin => Variables => + Add a new record
+=> '+' => Key (api_key_aws) / Value (echo "123456789012345678901234")
+=> Save
+
+airflow tasks test my_bash_dag_v_0 execute_command 2024-06-01
+  ...
+  [2024-06-11 11:53:28,391] {subprocess.py:86} INFO - Output:
+  [2024-06-11 11:53:28,391] {subprocess.py:93} INFO - Execute command
+  [2024-06-11 11:53:28,392] {subprocess.py:93} INFO - Task Id: execute_command
+  [2024-06-11 11:53:28,392] {subprocess.py:93} INFO - AWS API Key: ***# Protected info
+  [2024-06-11 11:53:28,392] {subprocess.py:93} INFO - Who am I?
+  [2024-06-11 11:53:28,392] {subprocess.py:93} INFO - ***# Protected info
+  [2024-06-11 11:53:28,393] {subprocess.py:93} INFO - AIRFLOW_CTX_DAG_OWNER=mark
+  [2024-06-11 11:53:28,393] {subprocess.py:93} INFO - AIRFLOW_CTX_DAG_RUN_ID=__***...
+  [2024-06-11 11:53:28,393] {subprocess.py:93} INFO - PWD=/tmp/***tmp2b8jup82
+  [2024-06-11 11:53:28,394] {subprocess.py:93} INFO - aws_key=***# Protected info
+  [2024-06-11 11:53:28,394] {subprocess.py:93} INFO - AIRFLOW_CTX_TRY_NUMBER=1
+  ...

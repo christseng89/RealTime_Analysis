@@ -54,6 +54,21 @@ id | conn_id          | conn_type | description  | host                   | logi
 2  | elastic_default  | http      | Elastic      | elastic                |         | None     | 9200
 3  | user_api         | http      | User API     | https://randomuser.me/ |         | None     | None
 
+### Pools
+
+Airflow UI => Admin => Pools => + Add a new record
+
+- Pool (process_tasks)
+- Slots (1)
+- Description (Pool to run Process Tasks sequentially - test_dag_v2.1.py)
+=> Save
+
+airflow pools list
+    pool          | slots | description
+    ==============+=======+==========================================================
+    default_pool  | 128   | Default pool
+    process_tasks | 1     | Pool to run Process Tasks sequentially - test_dag_v2.1.py
+
 ### Docker Compose (WSL2)
 
 curl -LfO <https://airflow.apache.org/docs/apache-airflow/2.4.2/docker-compose.yaml>

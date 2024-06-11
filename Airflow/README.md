@@ -192,7 +192,7 @@ Dataset Consumers:
 
 ### 50. Create the Consumer DAG
 
-Airflow UI 
+Airflow UI
 
 // Run producer => consumer
 // Run producer2 => consumer2
@@ -462,7 +462,7 @@ docker exec -it airflow-scheduler /bin/bash
 
 ### 83. Create the Elastic connection
 
-Admin => Connections => + Add a new record
+Airflow UI => Admin => Connections => + Add a new record
 
 - Connection Id (elastic_default)
 - Connection Type (HTTP)
@@ -667,7 +667,7 @@ with DAG(
 Airflow UI => Admin => Pools => + Add a new record
 
 - Pool (process_tasks)
-- Slots (1) => Save
+- Slots (1)
 - Description (Pool to run Process Tasks sequentially - test_dag_v2.1.py)
 => Save
 
@@ -720,3 +720,44 @@ chain(t0, [t1, t2], [t3, t4])
 
 Example
 <https://registry.astronomer.io/dags/snowflake_write_audit_publish/versions/1.4.0>
+
+### 32. Introduction to Providers - build owned Docker Images
+
+<https://airflow.apache.org/docs/docker-stack/build.html#build-build-image>
+
+// Test Dockerfile first
+docker build -t my-airflow:2.4.2 .
+
+docker image ls | grep my-airflow
+  my-airflow            2.4.2    2f34ece5dc6d   28 minutes ago   1.14GB
+
+docker image rm my-airflow:2.4.2
+
+// Edit docker-compose.yaml
+...
+x-airflow-common: &airflow-common
+  ...
+  // image: ${AIRFLOW_IMAGE_NAME:-apache/airflow:2.5.1}
+  build: .
+...
+
+docker-compose --profile flower down && docker-compose --profile flower up -d
+
+docker exec airflow_scheduler airflow info
+  apache-airflow-providers-amazon          | 6.0.0 ***
+  apache-airflow-providers-celery          | 3.0.0
+  apache-airflow-providers-cncf-kubernetes | 4.4.0
+  ...
+  apache-airflow-providers-elasticsearch   | 4.2.1
+  apache-airflow-providers-ftp             | 3.1.0
+  apache-airflow-providers-google          | 8.4.0
+  apache-airflow-providers-grpc            | 3.0.0
+  apache-airflow-providers-hashicorp       | 3.1.0
+  apache-airflow-providers-http            | 4.0.0 ***
+  apache-airflow-providers-imap            | 3.0.0
+  apache-airflow-providers-microsoft-azure | 4.3.0
+  apache-airflow-providers-mysql           | 3.2.1
+  apache-airflow-providers-odbc            | 3.1.2
+  apache-airflow-providers-postgres        | 5.2.2 ***
+  apache-airflow-providers-redis           | 3.0.0
+  ...

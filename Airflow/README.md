@@ -761,3 +761,26 @@ docker exec airflow_scheduler airflow info
   apache-airflow-providers-postgres        | 5.2.2 ***
   apache-airflow-providers-redis           | 3.0.0
   ...
+
+### 33. The PythonOperator
+
+// my_python_dag_v0.py
+
+docker exec -it airflow_scheduler /bin/bash
+
+  airflow tasks test my_python_dag_v.0 task_a 2024-06-01
+  ...
+  Execution month-day: 6-1, Task Id: task_a
+  [2024-06-11 08:34:09,687] {python.py:177} INFO - Done. Returned value was: None
+  [2024-06-11 08:34:09,688] {taskinstance.py:1406} INFO - Marking task as SUCCESS. dag_id=my_python_dag_v.0, task_id=task_a, execution_date=20240601T000000, start_date=, end_date=20240611T083409
+
+Airflow UI => Admin => Variables => + Add a new record
+
+- '+' => Key (path) / Value (/usr/local/airflow/data) => Save
+- '+' => Key (filename) / Value (my_data.csv) => Save
+- '+' => Key (my_settings) / Value (
+  {
+  "path": "/usr/local/airflow/data",
+  "filename": "my_data.csv"
+  }
+) => Save

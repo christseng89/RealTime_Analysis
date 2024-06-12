@@ -832,3 +832,22 @@ docker build -t stock_image:1.0.0 .
 docker run --rm -v /d/development/Real_Time_Analysis/Airflow/docker/stock_image/scripts:/tmp/scripts stock_image:1.0.0 bash /tmp/scripts/output.sh
 
   Hello from the output.sh script!
+
+### Docker in Docker
+
+<https://medium.com/@shivam77kushwah/docker-inside-docker-e0483c51cc2c>
+docker pull docker:dind
+docker run --privileged --name dind-test -d docker:dind
+docker exec dind-test docker run hello-world
+docker exec dind-test docker images
+docker rm dind-test -f
+
+<https://devopscube.com/run-docker-in-docker/>
+docker run --privileged -d --name dind-test docker:dind
+docker exec -it dind-test /bin/sh
+  docker run hello-world
+  docker images
+  exit
+
+docker exec dind-test docker images
+docker rm dind-test -f

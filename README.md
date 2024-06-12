@@ -105,3 +105,8 @@ cd flink-1.17.2
 
 cd kafka_2.12-3.5.2
 bin/kafka-server-stop.sh
+
+### Docker Operations
+
+cd docker\stock_image
+docker build -t stock_image:1.0.0 .

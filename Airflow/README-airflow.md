@@ -72,3 +72,40 @@ airflow pools list
 ### Docker Compose (WSL2)
 
 curl -LfO <https://airflow.apache.org/docs/apache-airflow/2.4.2/docker-compose.yaml>
+
+### Variables
+
+docker exec airflow_scheduler airflow variables list
+
+    key
+    ----------------
+    path
+    filename
+    my_settings
+    api_key_aws
+    password_postgres
+
+### Backup Airflow Database
+
+<https://medium.com/@fninsiima/de-mini-series-part-two-57770ff7cdf9>
+
+// Same practices could be applied for Microservices databases.
+
+### Postgres Backup and Restore
+
+// Backup
+pg_dump -U airflow -d airflow > airflow.sql
+
+// Restore (Not tested)
+dropdb -U airflow airflow
+createdb -U airflow airflow
+
+psql -U airflow -d airflow -f airflow.sql
+
+// Backup to local machine
+docker exec airflow_postgres pg_dump -U airflow -d airflow > airflow.sql
+
+// Restore from local machine (Not tested)
+docker exec dropdb -U airflow airflow
+docker exec createdb -U airflow airflow
+docker exec psql -U airflow -d airflow -f airflow.sql

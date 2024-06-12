@@ -5,4 +5,5 @@ apache-airflow-providers-http
 apache-airflow-providers-sqlite
 apache-airflow-providers-amazon
 airflow-provider-great-expectations
+apache-airflow-providers-docker
 # apache-airflow-providers-great-expectations

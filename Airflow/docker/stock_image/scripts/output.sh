@@ -1,3 +1,3 @@
 #!/bin/bash
 
-echo "Current working directory: $(pwd)"
+echo "Hello from the output.sh script!"

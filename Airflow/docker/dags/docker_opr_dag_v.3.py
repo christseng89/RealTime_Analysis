@@ -12,6 +12,11 @@ default_args = {
     'email_on_retry': False,
 }
 
+class CustomDockerOperator(DockerOperator):
+    def pre_execute(self, context):
+        self.command = "bash /tmp/scripts/output.sh"
+        super().pre_execute(context)
+
 @dag(
     dag_id='docker_opr_dag_v_3',
     description='Test DockerImage stock_image:1.0.0 with Mount',
@@ -25,16 +30,15 @@ def docker_operator():
     def t1():
         return 1
 
-    t2 = DockerOperator(
+    t2 = CustomDockerOperator(
         task_id='docker_command',
         image='stock_image:1.0.0',
         api_version='auto',
         auto_remove=True,
-        command='bash /tmp/output.sh',
         docker_url='unix://var/run/docker.sock',
         network_mode='bridge',
         xcom_all=True,
-        mounts=[Mount(source='/d/development/Real_Time_Analysis/Airflow/docker/stock_image/scripts', target='/tmp', type='bind')],
+        mounts=[Mount(source='/d/development/Real_Time_Analysis/Airflow/docker/stock_image/scripts', target='/tmp/scripts', type='bind')],
     )
     
     t1() >> t2

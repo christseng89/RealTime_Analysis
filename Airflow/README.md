@@ -823,3 +823,12 @@ airflow tasks test my_bash_dag_v_0 execute_command 2024-06-01
 
 <https://airflow.apache.org/docs/apache-airflow/stable/operators-and-hooks-ref.html>
 <https://airflow.apache.org/docs/apache-airflow/stable/templates-ref.html>
+
+### Docker Operations
+
+cd docker\stock_image
+docker build -t stock_image:1.0.0 .
+
+docker run --rm -v /d/development/Real_Time_Analysis/Airflow/docker/stock_image/scripts:/tmp/scripts stock_image:1.0.0 bash /tmp/scripts/output.sh
+
+  Hello from the output.sh script!

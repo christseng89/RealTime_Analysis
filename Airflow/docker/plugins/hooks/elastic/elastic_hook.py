@@ -1,6 +1,5 @@
 from airflow.plugins_manager import AirflowPlugin
 from airflow.hooks.base import BaseHook
-
 from elasticsearch import Elasticsearch
 
 class ElasticHook(BaseHook):
@@ -14,8 +13,14 @@ class ElasticHook(BaseHook):
 
         if conn.host:
             hosts = conn.host.split(',')
-        if conn.port:
-            conn_config['port'] = int(conn.port)
+            scheme = 'http'  # Default scheme
+            if conn.schema:
+                scheme = conn.schema
+            if conn.port:
+                hosts = [f"{scheme}://{host}:{conn.port}" for host in hosts]
+            else:
+                hosts = [f"{scheme}://{host}" for host in hosts]
+
         if conn.login:
             conn_config['http_auth'] = (conn.login, conn.password)
 
@@ -36,4 +41,3 @@ class ElasticHook(BaseHook):
 class ElasticPlugin(AirflowPlugin):
     name = "elastic"
     hooks = [ElasticHook]
-    

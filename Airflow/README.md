@@ -726,20 +726,19 @@ Example
 <https://airflow.apache.org/docs/docker-stack/build.html#build-build-image>
 
 // Test Dockerfile first
-docker build -t my-airflow:2.4.2 .
+docker build -t my-airflow:2.7.3 .
 
 docker image ls | grep my-airflow
-  my-airflow            2.4.2    2f34ece5dc6d   28 minutes ago   1.14GB
+  my-airflow            2.7.3    2f34ece5dc6d   28 minutes ago   1.14GB
 
-docker image rm my-airflow:2.4.2
+docker image rm my-airflow:2.7.3
 
 // Edit docker-compose.yaml
 ...
 x-airflow-common: &airflow-common
   ...
-  // image: ${AIRFLOW_IMAGE_NAME:-apache/airflow:2.5.1}
-  build: .
-...
+  image: my-airflow:2.7.3
+  ...
 
 docker-compose --profile flower down && docker-compose --profile flower up -d
 
@@ -778,6 +777,7 @@ Airflow UI => Admin => Variables => + Add a new record
 
 - '+' => Key (path) / Value (/usr/local/airflow/data) => Save
 - '+' => Key (filename) / Value (my_data.csv) => Save
+- '+' => Key (password_postgres) / Value (test12345678) => Save
 - '+' => Key (my_settings) / Value (
   {
   "path": "/usr/local/airflow/data",
@@ -801,7 +801,7 @@ airflow tasks test my_python_dag_v_1 store 2024-06-01
 ### 35. The BashOperator
 
 Airflow UI => Admin => Variables => + Add a new record
-=> '+' => Key (api_key_aws) / Value (echo "123456789012345678901234")
+=> '+' => Key (api_key_aws) / Value (123456789012345678901234)
 => Save
 
 airflow tasks test my_bash_dag_v_0 execute_command 2024-06-01

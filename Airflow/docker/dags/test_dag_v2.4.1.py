@@ -39,7 +39,7 @@ with DAG(
     extract_a = BashOperator(
         owner='mark',
         task_id='extract_a',
-        bash_command='echo "Task A" && sleep 15',
+        bash_command='echo "Task A Timeout" && sleep 15',
         wait_for_downstream=True,
         execution_timeout=timedelta(seconds=10), # Timeout for the task
         on_success_callback=_extract_on_success,
@@ -50,7 +50,7 @@ with DAG(
     extract_b = BashOperator(
         owner='mark',
         task_id='extract_b',
-        bash_command='echo "Task B" && sleep 15',
+        bash_command='echo "Task B Timeout" && sleep 15',
         wait_for_downstream=True,
         execution_timeout=timedelta(seconds=10), # Timeout for the task
         on_success_callback=_extract_on_success,

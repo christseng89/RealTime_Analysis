@@ -6,7 +6,7 @@ from datetime import datetime, timedelta
 
 default_args = {
     'owner': 'mark, john, luke, matthew',
-    'start_date': datetime(2024, 5, 1),
+    'start_date': datetime(2024, 6, 1),
     'email': ['samfire5200@gmail.com', 'samfire5201@gmail.com'],
     'email_on_failure': True,
     'email_on_retry': False,
@@ -14,8 +14,8 @@ default_args = {
 
 def _test_task(execution_date):
     print(f"Execution month-day: {execution_date.month}-{execution_date.day}")
-    if execution_date.day == 5:
-        raise ValueError("Error on the 5th day of the month!")    
+    if execution_date.day == 32:
+        raise ValueError("Error on the 32nd day of the month!")    
 
 with DAG(
     dag_id='test_dag_v2.0',

@@ -6,4 +6,5 @@ apache-airflow-providers-sqlite
 apache-airflow-providers-amazon
 airflow-provider-great-expectations
 apache-airflow-providers-docker
+elasticsearch
 # apache-airflow-providers-great-expectations

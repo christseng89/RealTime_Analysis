@@ -851,3 +851,19 @@ docker exec -it dind-test /bin/sh
 
 docker exec dind-test docker images
 docker rm dind-test -f
+
+### 37. The PostgresOperator
+
+<https://airflow.apache.org/docs/apache-airflow-providers-postgres/stable/index.html>
+
+// Access Postgres from the command line
+docker exec -it airflow_postgres /bin/bash
+  psql -U airflow
+    \l
+    \c airflow
+    \dt
+    SELECT * FROM users;
+    \q
+    exit
+  exit
+  

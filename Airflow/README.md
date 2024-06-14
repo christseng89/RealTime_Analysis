@@ -855,7 +855,8 @@ docker rm dind-test -f
 
 ### 37. The PostgresOperator
 
-<https://airflow.apache.org/docs/apache-airflow-providers-postgres/stable/index.html>
+docker exec airflow_webserver airflow providers list
+docker exec airflow_webserver airflow providers list | grep Postgre
 
 // Access Postgres from the command line
 docker exec -it airflow_postgres /bin/bash
@@ -867,4 +868,14 @@ docker exec -it airflow_postgres /bin/bash
     \q
     exit
   exit
-  
+
+// Test PostgresOperator
+docker exec -it airflow_postgres /bin/bash
+  psql -U airflow
+    \c airflow
+    \dt
+    DROP TABLE IF EXISTS my_table
+    CREATE TABLE my_table (id INT,value VARCHAR(255))
+    \q
+    exit
+  exit

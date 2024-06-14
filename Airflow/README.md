@@ -879,3 +879,9 @@ docker exec -it airflow_postgres /bin/bash
     \q
     exit
   exit
+
+### 38. Passing Dynamic Parameters to the PostgresOperator
+
+docker exec airflow_scheduler airflow tasks test my_postgres_dag_v.0 postgres_insert_record 2024-06-01
+
+docker exec airflow_scheduler airflow tasks test my_postgres_dag_v.1 postgres_insert_record 2024-06-01

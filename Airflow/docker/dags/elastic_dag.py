@@ -4,13 +4,22 @@ from hooks.elastic.elastic_hook import ElasticHook
 from pprint import pprint  
 from datetime import datetime
 
+default_args = {
+    'owner': 'mark, john, luke, matthew',
+    'start_date': datetime(2024, 6, 1),
+    'email': ['samfire5200@gmail.com', 'samfire5201@gmail.com'],
+    'email_on_failure': True,
+    'email_on_retry': False,
+}
+
 def _print_es_info():
     hook = ElasticHook()
+    print ("Elasticsearch info:")
     pprint(hook.info())
 
 with DAG(
     dag_id='elastic_dag', 
-    start_date=datetime(2023, 1, 1), 
+    default_args=default_args, 
     schedule_interval='@daily', 
     catchup=False) as dag:
 

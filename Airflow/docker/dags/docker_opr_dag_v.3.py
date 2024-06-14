@@ -1,5 +1,6 @@
 from airflow import DAG
 from airflow.decorators import task, dag
+from airflow.operators.bash_operator import BashOperator
 from airflow.providers.docker.operators.docker import DockerOperator
 from datetime import datetime
 from docker.types import Mount
@@ -24,7 +25,7 @@ class CustomDockerOperator(DockerOperator):
     schedule_interval='@daily', 
     catchup=False,
 )
-def docker_operator():
+def docker_operator_dag():
     
     @task()
     def t1():
@@ -38,9 +39,14 @@ def docker_operator():
         docker_url='unix://var/run/docker.sock',
         network_mode='bridge',
         xcom_all=True,
-        mounts=[Mount(source='/d/development/Real_Time_Analysis/Airflow/docker/stock_image/scripts', target='/tmp/scripts', type='bind')],
+        mounts=[Mount(source='/d/development/Real_Time_Analysis/stock_image/scripts', target='/tmp/scripts', type='bind')],
     )
     
-    t1() >> t2
+    run_docker_version = BashOperator(
+        task_id='run_docker_version',
+        bash_command='docker --version'
+    )
+    
+    t1() >> t2 >> run_docker_version
 
-dag = docker_operator()
+dag = docker_operator_dag()

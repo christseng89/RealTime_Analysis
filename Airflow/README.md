@@ -826,12 +826,13 @@ airflow tasks test my_bash_dag_v_0 execute_command 2024-06-01
 
 ### Docker Operations
 
-cd docker\stock_image
+cd stock_image
 docker build -t stock_image:1.0.0 .
 
-docker run --rm -v /d/development/Real_Time_Analysis/Airflow/docker/stock_image/scripts:/tmp/scripts stock_image:1.0.0 bash /tmp/scripts/output.sh
+docker run --rm -v /d/development/Real_Time_Analysis/stock_image/scripts:/tmp/scripts stock_image:1.0.0 bash /tmp/scripts/output.sh
 
   Hello from the output.sh script!
+  /usr/local/bin/python3
 
 ### Docker in Docker
 

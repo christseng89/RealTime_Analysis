@@ -880,8 +880,20 @@ docker exec -it airflow_postgres /bin/bash
     exit
   exit
 
-### 38. Passing Dynamic Parameters to the PostgresOperator
-
 docker exec airflow_scheduler airflow tasks test my_postgres_dag_v.0 postgres_insert_record 2024-06-01
 
+### 38. Passing Dynamic Parameters to the PostgresOperator
+
 docker exec airflow_scheduler airflow tasks test my_postgres_dag_v.1 postgres_insert_record 2024-06-01
+
+docker exec airflow_scheduler airflow tasks test my_postgres_dag_v.2 python_a 2024-06-01
+  ...
+  Execution month-day: 6-1, Task Id: python_a
+  [2024-06-14T11:38:46.584+0000] {python.py:194} INFO - Done. Returned value was: Python A Task Completed
+  [2024-06-14T11:38:46.593+0000] {taskinstance.py:1400} INFO - Marking task as SUCCESS. dag_id=my_postgres_dag_v.2, task_id=python_a, execution_date=20240601T000000, start_date=, end_date=20240614T113846
+
+docker exec airflow_scheduler airflow tasks test my_postgres_dag_v.2 postgres_insert_record 2024-06-01
+  ...
+  ON CONFLICT (id) DO UPDATE SET value = EXCLUDED.value;, parameters: {'id': 1, 'value': 'Python A Task Completed'}
+  [2024-06-14T11:40:05.451+0000] {sql.py:427} INFO - Rows affected: 1
+  [2024-06-14T11:40:05.455+0000] {taskinstance.py:1400} INFO - Marking task as SUCCESS. dag_id=my_postgres_dag_v.2, task_id=postgres_insert_record, execution_date=20240601T000000, start_date=, end_date=20240614T114005

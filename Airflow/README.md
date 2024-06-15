@@ -904,3 +904,8 @@ docker exec airflow_scheduler airflow tasks test my_postgres_dag_v.2 postgres_in
 ### 41. DAG scheduling based on Calendar
 
 // my_calendar_dag_v.1.py
+
+### 42. The BranchSQLOperator
+
+// my_branch_sql_dag_v.0.py
+// my_branch_sql_dag_v.1.py

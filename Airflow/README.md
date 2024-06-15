@@ -896,3 +896,7 @@ docker exec airflow_scheduler airflow tasks test my_postgres_dag_v.2 postgres_in
   ON CONFLICT (id) DO UPDATE SET value = EXCLUDED.value;, parameters: {'id': 1, 'value': 'Python A Task Completed'}
   [2024-06-14T11:40:05.451+0000] {sql.py:427} INFO - Rows affected: 1
   [2024-06-14T11:40:05.455+0000] {taskinstance.py:1400} INFO - Marking task as SUCCESS. dag_id=my_postgres_dag_v.2, task_id=postgres_insert_record, execution_date=20240601T000000, start_date=, end_date=20240614T114005
+
+### 40. The BranchPythonOperator
+
+// my_branch_dag_v.0.py

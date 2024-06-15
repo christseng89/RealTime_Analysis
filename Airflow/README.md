@@ -877,12 +877,11 @@ docker exec -it airflow_postgres /bin/bash
     DROP TABLE IF EXISTS my_table
     CREATE TABLE my_table (id INT,value VARCHAR(255))
     \q
-    exit
   exit
 
 docker exec airflow_scheduler airflow tasks test my_postgres_dag_v.0 postgres_insert_record 2024-06-01
 
-### 38. Passing Dynamic Parameters to the PostgresOperator
+### 38. Passing Dynamic Parameters to the PostgresOperator (CustomPostgresOperator)
 
 docker exec airflow_scheduler airflow tasks test my_postgres_dag_v.1 postgres_insert_record 2024-06-01
 

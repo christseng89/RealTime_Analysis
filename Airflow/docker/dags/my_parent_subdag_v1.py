@@ -13,12 +13,14 @@ default_args = {
     'email_on_failure': True,
     'email_on_retry': False,
     'schedule_interval': '@daily',
-    'catchup': False,
 }
 
+dag_id = "my_parent_subdag_v1.0"
+
 with DAG(
-    dag_id='my_parent_dag_v1.0', 
+    dag_id=dag_id, 
     default_args=default_args,
+    catchup=False,
 ) as dag:
 
     start = BashOperator(
@@ -29,10 +31,12 @@ with DAG(
     group_process = SubDagOperator(
         task_id='group_process',
         subdag=subdag_processes(
-            'my_parent_dag_v1.0',
+            dag_id,
             'group_process',
             default_args,
         ),
+        mode='reschedule',
+        timeout=60,
     )
     
     end = BashOperator(

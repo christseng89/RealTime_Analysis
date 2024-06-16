@@ -12,7 +12,7 @@ default_args = {
 }
 
 with DAG(
-    dag_id='my_parent_dag_v0.0', 
+    dag_id='my_parent_subdag_v0.0', 
     default_args=default_args,
     schedule_interval='@daily',
     catchup=False,

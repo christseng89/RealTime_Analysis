@@ -2,7 +2,7 @@ from airflow import DAG
 from airflow.operators.dummy import DummyOperator
 from airflow.operators.python import BranchPythonOperator
 
-from datetime import datetime, date
+from datetime import datetime
 import yaml
 import os
 

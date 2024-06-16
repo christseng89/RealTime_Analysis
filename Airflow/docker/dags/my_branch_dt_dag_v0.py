@@ -3,8 +3,6 @@ from airflow import DAG
 from airflow.operators.dummy import DummyOperator
 from airflow.operators.datetime import BranchDateTimeOperator
 
-from airflow.providers.postgres.operators.postgres import PostgresOperator
-
 from datetime import datetime, time
 
 default_args = {

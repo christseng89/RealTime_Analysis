@@ -913,3 +913,7 @@ docker exec airflow_scheduler airflow tasks test my_postgres_dag_v.2 postgres_in
 ### 43. The BranchDateTimeOperator
 
 // my_branch_dt_dag_v.0.py
+
+### 44. The BranchDayOfWeekOperator
+
+// my_branch_weekday_dag_v.0.py

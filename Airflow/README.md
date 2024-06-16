@@ -917,3 +917,9 @@ docker exec airflow_scheduler airflow tasks test my_postgres_dag_v.2 postgres_in
 ### 44. The BranchDayOfWeekOperator
 
 // my_branch_weekday_dag_v.0.py
+
+### 46. SubDagOperator
+
+// my_parent_dag_v.0.py
+// my_parent_dag_v.1.py
+   my_parent_subdag_v1.py

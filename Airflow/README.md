@@ -926,5 +926,11 @@ docker exec airflow_scheduler airflow tasks test my_postgres_dag_v.2 postgres_in
 
 ### 47. Deep dive into the SubDagOperator
 
-// my_parent_dag_v.2.py
+// my_parent_subdag_v.2.py
     my_parent_subdag_v2.py
+
+### 48. Discover the TaskGroups
+
+// my_parent_taskgroup_v.0.py
+    my_parent_taskgroup_v0.py
+  

@@ -933,4 +933,9 @@ docker exec airflow_scheduler airflow tasks test my_postgres_dag_v.2 postgres_in
 
 // my_parent_taskgroup_v.0.py
     my_parent_taskgroup_v0.py
+
+### 49. TriggerDagRunOperator
+
+// my_parent_subdag_v.3.py
+// my_parent_target_v0.py
   

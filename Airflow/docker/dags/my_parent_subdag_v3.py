@@ -48,7 +48,7 @@ with DAG(
             dag_id,
             'group_process2',
             default_args,
-            conf={'process_a': 4, 'process_b': 6, 'process_c': 6}
+            conf={'process_a': 4, 'process_b': 5, 'process_c': 6}
         ),
         mode='reschedule',
         timeout=60,
@@ -70,7 +70,7 @@ with DAG(
 
     trigger_dag = TriggerDagRunOperator(
         task_id='trigger_dag',
-        trigger_dag_id='my_parent_subdag_v2.0',
+        trigger_dag_id='my_parent_target_v0',  # Correct target DAG ID
         conf={'process_a': 10, 'process_b': 11, 'process_c': 12},
         execution_date="{{ ds }}",
         reset_dag_run=True,

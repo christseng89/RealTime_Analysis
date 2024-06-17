@@ -47,7 +47,7 @@ with DAG(
             dag_id,
             'group_process2',
             default_args,
-            conf={'process_a': 4, 'process_b': 6, 'process_c': 6}
+            conf={'process_a': 4, 'process_b': 5, 'process_c': 6}
         ),
         mode='reschedule',
         timeout=60,

@@ -955,3 +955,7 @@ No. Parent DAG                      Target DAG
 ### 52. One DAG different schedules with the ShortCircuitOperator
 
 // my_short_circuit_dag_v.0.py
+
+### 53. Prevent from running past tasks with the LatestOnlyOperator
+
+// my_latest_only_dag_v.0.py

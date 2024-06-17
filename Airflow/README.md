@@ -938,4 +938,16 @@ docker exec airflow_scheduler airflow tasks test my_postgres_dag_v.2 postgres_in
 
 // my_parent_subdag_v.3.py
 // my_parent_target_v0.py
-  
+
+### 50. The famous ExternalTaskSensor
+
+// my_ext_task_sensor_parent_v0.py
+// my_ext_task_sensor_target_v0.py
+// my_ext_task_sensor_target_v1.py
+
+No. Parent DAG                      Target DAG
+1   my_ext_task_sensor_parent_v0    my_ext_task_sensor_target_v0
+
+- Clean all Task Id and Dag Run for both Parent and Target DAGs
+- Trigger the Parent DAG - until the Parent DAG is completed
+- Trigger the Target DAG & Check the Target DAG Status

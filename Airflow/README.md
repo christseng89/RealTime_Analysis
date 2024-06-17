@@ -951,3 +951,7 @@ No. Parent DAG                      Target DAG
 - Clean all Task Id and Dag Run for both Parent and Target DAGs
 - Trigger the Parent DAG - until the Parent DAG is completed
 - Trigger the Target DAG & Check the Target DAG Status
+
+### 52. One DAG different schedules with the ShortCircuitOperator
+
+// my_short_circuit_dag_v.0.py

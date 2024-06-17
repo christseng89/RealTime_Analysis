@@ -1,7 +1,6 @@
 from airflow import DAG
 from airflow.operators.bash import BashOperator
 from airflow.operators.subdag import SubDagOperator
-
 from subdags.my_parent_subdag_v2 import subdag_processes
 
 from datetime import datetime
@@ -18,7 +17,7 @@ default_args = {
 dag_id = "my_parent_subdag_v2.0"
 
 with DAG(
-    dag_id=dag_id, 
+    dag_id=dag_id,
     default_args=default_args,
     catchup=False,
 ) as dag:
@@ -40,7 +39,7 @@ with DAG(
         timeout=60,
         propagate_skipped_state=False,
     )
-    
+
     group_process2 = SubDagOperator(
         task_id='group_process2',
         subdag=subdag_processes(
@@ -66,10 +65,10 @@ with DAG(
         timeout=60,
         propagate_skipped_state=False,
     )
-            
+
     end = BashOperator(
         task_id='end',
         bash_command='echo "End"',
     )
-    
+
     start >> [group_process1, group_process2, group_process3] >> end

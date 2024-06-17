@@ -959,3 +959,15 @@ No. Parent DAG                      Target DAG
 ### 53. Prevent from running past tasks with the LatestOnlyOperator
 
 // my_latest_only_dag_v.0.py
+
+### 55. You think you know the DummyOperator?
+
+// my_dummy_dag_v.0.py
+
+### Airflow REST API
+
+<https://airflow.apache.org/docs/apache-airflow/stable/stable-rest-api-ref.html#operation/test_connection>
+
+Example:
+<http://localhost:8080/api/v1/dags>
+<http://localhost:8080/api/v1/dags/elastic_dag>

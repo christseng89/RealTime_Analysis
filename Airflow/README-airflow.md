@@ -109,3 +109,11 @@ docker exec airflow_postgres pg_dump -U airflow -d airflow > airflow.sql
 docker exec dropdb -U airflow airflow
 docker exec createdb -U airflow airflow
 docker exec psql -U airflow -d airflow -f airflow.sql
+
+### Airflow REST API
+
+<https://airflow.apache.org/docs/apache-airflow/stable/stable-rest-api-ref.html#operation/test_connection>
+
+Example:
+<http://localhost:8080/api/v1/dags>
+<http://localhost:8080/api/v1/dags/elastic_dag>

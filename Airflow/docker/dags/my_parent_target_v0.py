@@ -8,7 +8,7 @@ default_args = {
     'email': ['samfire5200@gmail.com'],
     'email_on_failure': True,
     'email_on_retry': False,
-    'schedule_interval': None,  # Ensure this is set to None
+    # 'schedule_interval': None,  # Ensure this is set to None
 }
 
 dag_id = "my_parent_target_v0"
@@ -16,6 +16,7 @@ dag_id = "my_parent_target_v0"
 with DAG(
     dag_id=dag_id, 
     default_args=default_args,
+    schedule_interval=None,
     catchup=False,
 ) as dag:
 

@@ -17,6 +17,7 @@ with DAG(
     dag_id=dag_id,
     default_args=default_args,
     schedule_interval='@daily',
+    tags=['ext_task_sensor'],
     catchup=False,
 ) as dag:
 

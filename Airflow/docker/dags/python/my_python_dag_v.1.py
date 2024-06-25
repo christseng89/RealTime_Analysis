@@ -27,6 +27,7 @@ with DAG(
     dag_id='my_python_dag_v_1', 
     default_args=default_args,
     schedule_interval='@daily',
+    tags=['python'],
     catchup=False,
     
 ) as dag:

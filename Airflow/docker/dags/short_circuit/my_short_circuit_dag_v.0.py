@@ -23,6 +23,7 @@ with DAG(
     dag_id=dag_id,
     default_args=default_args,
     schedule_interval='@daily',  # Change to '@daily
+    tags=['short_circuit'],
     catchup=False,
 ) as dag:
 

@@ -22,6 +22,7 @@ with DAG(
     dag_id='test_elastic_connection_dag', 
     default_args=default_args,
     schedule_interval='@daily', 
+    tags=['elastic'],
     catchup=False) as dag:
 
     test_connection = PythonOperator(

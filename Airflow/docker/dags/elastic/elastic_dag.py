@@ -21,6 +21,7 @@ with DAG(
     dag_id='elastic_dag', 
     default_args=default_args, 
     schedule_interval='@daily', 
+    tags=['elastic'],
     catchup=False) as dag:
 
     print_es_info = PythonOperator(

@@ -27,6 +27,7 @@ with DAG(
     ## Although days_ago() it is working, but not recommended...
     # start_date=datetime(2023, 1, 1), 
     ## change the start_date to default_args
+    # dag_display_name='test_dag_v1.1 with exit 1',
     default_args=default_args,
     schedule_interval='@daily',
     tags=['test'],

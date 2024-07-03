@@ -39,7 +39,7 @@ with DAG(
             conf={'process_a': 1, 'process_b': 2, 'process_c': 3}
         ),
         mode='reschedule',
-        timeout=60,
+        timeout=180, # 60 conducts timeout error
         propagate_skipped_state=False,
     )
     

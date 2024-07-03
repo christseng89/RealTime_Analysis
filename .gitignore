@@ -19,3 +19,4 @@ Airflow/docker/logs/
 __pycache__/
 airflow_source/
 airflow_test/logs/
+Airflow/docker/include/data/

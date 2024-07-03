@@ -87,6 +87,7 @@ x-airflow-common: &airflow-common
 services:
   postgres:
     image: postgres:13
+    container_name: airflow_postgres
     environment:
       POSTGRES_USER: airflow
       POSTGRES_PASSWORD: airflow
@@ -104,6 +105,7 @@ services:
     # Redis is limited to 7.2-bookworm due to licencing change
     # https://redis.io/blog/redis-adopts-dual-source-available-licensing/
     image: redis:7.2-bookworm
+    container_name: airflow_redis
     expose:
       - 6379
     healthcheck:
@@ -117,6 +119,7 @@ services:
   airflow-webserver:
     <<: *airflow-common
     command: webserver
+    container_name: airflow_webserver
     ports:
       - "8080:8080"
     healthcheck:
@@ -134,6 +137,7 @@ services:
   airflow-scheduler:
     <<: *airflow-common
     command: scheduler
+    container_name: airflow_scheduler
     healthcheck:
       test: ["CMD", "curl", "--fail", "http://localhost:8974/health"]
       interval: 30s
@@ -149,6 +153,7 @@ services:
   airflow-worker:
     <<: *airflow-common
     command: celery worker
+    container_name: airflow_worker
     healthcheck:
       # yamllint disable rule:line-length
       test:
@@ -172,6 +177,7 @@ services:
   airflow-triggerer:
     <<: *airflow-common
     command: triggerer
+    container_name: airflow_triggerer
     healthcheck:
       test:
         [
@@ -241,6 +247,7 @@ services:
         chown -R "${AIRFLOW_UID}:0" /sources/{logs,dags,plugins}
         exec /entrypoint airflow version
     # yamllint enable rule:line-length
+    container_name: airflow_init
     environment:
       <<: *airflow-common-env
       _AIRFLOW_DB_MIGRATE: "true"
@@ -260,17 +267,101 @@ services:
       <<: *airflow-common-env
       CONNECTION_CHECK_MAX_COUNT: "0"
     # Workaround for entrypoint issue. See: https://github.com/apache/airflow/issues/16252
+    container_name: airflow_cli
     command:
       - bash
       - -c
       - airflow
 
+  # Add Elasticsearch to the stack
+  elastic:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.3.3
+    container_name: airflow_elastic
+    environment:
+      - "xpack.security.enabled=false"
+      - "discovery.type=single-node"
+      - "ES_JAVA_OPTS=-Xms750m -Xmx750m"
+    ports:
+      - 9200:9200
+
+  ### Copy from airflow folder ... start
+  minio:
+    image: minio/minio:RELEASE.2024-06-13T22-53-53Z
+    container_name: airflow-minio
+    hostname: minio
+    restart: always
+    volumes:
+      - ./include/data/minio:/data
+    ports:
+      - 9000:9000
+      - 9001:9001
+    environment:
+      MINIO_ROOT_USER: minio
+      MINIO_ROOT_PASSWORD: minio123
+    command: server /data --console-address ":9001"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 30s
+      timeout: 20s
+      retries: 3
+    networks:
+      - airflow
+
+  spark-master:
+    image: airflow/spark-master
+    build: ./spark/master
+    container_name: spark-master
+    ports:
+      - "8082:8080"
+      - "7077:7077"
+    environment:
+      - INIT_DAEMON_STEP=setup_spark
+    networks:
+      - airflow
+
+  spark-worker:
+    image: airflow/spark-worker
+    build: ./spark/worker
+    container_name: spark-worker
+    depends_on:
+      - spark-master
+    ports:
+      - "8081:8081"
+    environment:
+      - "SPARK_MASTER=spark://spark-master:7077"
+    networks:
+      - airflow
+
+  metabase:
+    image: metabase/metabase:v0.50.4
+    container_name: airflow-metabase
+    restart: always
+    ports:
+      - 3000:3000
+    volumes:
+      - ./include/data/metabase:/metabase-data
+    networks:
+      - airflow
+
+  docker-proxy:
+    image: alpine/socat
+    container_name: airflow-docker-proxy
+    command: "TCP4-LISTEN:2375,fork,reuseaddr UNIX-CONNECT:/var/run/docker.sock"
+    ports:
+      - "2376:2375"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - airflow
+
+  ## Copy from airflow folder ... end
   # You can enable flower by adding "--profile flower" option e.g. docker-compose --profile flower up
   # or by explicitly targeted on the command line e.g. docker-compose up flower.
   # See: https://docs.docker.com/compose/profiles/
   flower:
     <<: *airflow-common
     command: celery flower
+    container_name: airflow_flower
     profiles:
       - flower
     ports:
@@ -289,3 +380,7 @@ services:
 
 volumes:
   postgres-db-volume:
+
+networks:
+  airflow:
+    driver: bridge

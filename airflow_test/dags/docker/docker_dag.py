@@ -13,6 +13,7 @@ dag = DAG(
     default_args=default_args,
     description='A simple DAG to run Docker commands',
     schedule_interval='@daily',
+    tags=['docker'],
     catchup=False,
 )
 

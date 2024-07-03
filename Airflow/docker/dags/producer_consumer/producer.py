@@ -8,6 +8,7 @@ my_file = Dataset('/tmp/my_file.txt')
 with DAG(
     dag_id='producer', 
     schedule_interval='@daily',
+    tags=['producer_consumer'],
     start_date=datetime(2023, 1, 1), 
     catchup=False) as dag:
     

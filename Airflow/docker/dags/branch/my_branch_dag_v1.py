@@ -60,7 +60,7 @@ with DAG(
 
     publish_ml = DummyOperator(
         task_id='publish_ml',
-        trigger_rule='none_failed_or_skipped',
+        trigger_rule='none_failed_min_one_success',
     )
     
     ml_training >> check_holidays >> [process, top_process, stop] 

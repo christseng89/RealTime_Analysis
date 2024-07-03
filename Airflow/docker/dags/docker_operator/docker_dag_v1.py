@@ -6,11 +6,10 @@ default_args = {
     'owner': 'airflow',
     'start_date': datetime(2024, 1, 1),
     'retries': 1,
-    'tags': ['docker', 'operator'],
 }
 
 dag = DAG(
-    'docker_dag',
+    'docker_dag_v1',
     default_args=default_args,
     description='A simple DAG to run Docker commands',
     schedule_interval='@daily',

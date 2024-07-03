@@ -10,6 +10,7 @@ my_file_2 = Dataset('/tmp/my_file_2.txt')
 with DAG(
     dag_id='producer2', 
     schedule_interval='@daily',
+    tags=['producer_consumer'],
     start_date=datetime(2023, 1, 1), 
     catchup=False
 ) as dag:

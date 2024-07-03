@@ -16,6 +16,7 @@ default_args = {
 with DAG(
     dag_id='consumer2', 
     default_args=default_args,
+    tags=['producer_consumer'],    
     schedule=[my_file_1, my_file_2],
     catchup=False) as dag:
 

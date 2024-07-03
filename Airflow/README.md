@@ -976,6 +976,7 @@ Example:
 
 airflow connections export include/connections.json
 airflow variables export include/variables.json
+airflow pools export include/pools.json
 
 ### Upgrade to Airflow 2.9.2
 

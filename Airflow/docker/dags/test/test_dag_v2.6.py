@@ -48,7 +48,7 @@ with DAG(
         execution_timeout=timedelta(seconds=15), # Timeout for the task
         on_success_callback=_extract_on_success,
         on_failure_callback=_extract_on_failure,
-        task_concurrency=1, # Limit the number of tasks that can run at the same time
+        max_active_tis_per_dag=1, # Limit the number of tasks that can run at the same time
 
     )
     
@@ -60,7 +60,7 @@ with DAG(
         execution_timeout=timedelta(seconds=15), # Timeout for the task
         on_success_callback=_extract_on_success,
         on_failure_callback=_extract_on_failure,
-        task_concurrency=1, # Limit the number of tasks that can run at the same time
+        max_active_tis_per_dag=1, # Limit the number of tasks that can run at the same time
         
     )
 

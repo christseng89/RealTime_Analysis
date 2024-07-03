@@ -971,3 +971,16 @@ No. Parent DAG                      Target DAG
 Example:
 <http://localhost:8080/api/v1/dags>
 <http://localhost:8080/api/v1/dags/elastic_dag>
+
+### Backup Admin Settings
+
+airflow connections export include/connections.json
+airflow variables export include/variables.json
+
+### Upgrade to Airflow 2.9.2
+
+<https://airflow.apache.org/docs/apache-airflow/stable/installation/upgrading.html#>
+
+// Edit Dockerfile
+
+AIRFLOW_IMAGE_NAME=apache/airflow:2.9.2-python3.8

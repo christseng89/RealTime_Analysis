@@ -1,0 +1,32 @@
+{
+  "elastic_default": {
+    "conn_type": "http",
+    "description": "",
+    "login": "",
+    "password": null,
+    "host": "elastic",
+    "port": 9200,
+    "schema": "",
+    "extra": ""
+  },
+  "postgres": {
+    "conn_type": "postgres",
+    "description": "Postgres",
+    "login": "airflow",
+    "password": "airflow",
+    "host": "postgres",
+    "port": 5432,
+    "schema": "",
+    "extra": "{}"
+  },
+  "user_api": {
+    "conn_type": "http",
+    "description": "",
+    "login": "",
+    "password": null,
+    "host": "https://randomuser.me/",
+    "port": null,
+    "schema": "",
+    "extra": ""
+  }
+}

@@ -1,0 +1,1 @@
+docker exec -it airflow_webserver /bin/bash

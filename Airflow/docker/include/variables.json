@@ -1,0 +1,10 @@
+{
+    "api_key_aws": 123456789012345678901234,
+    "filename": "my_data.csv",
+    "my_settings": {
+        "filename": "my_data.csv",
+        "path": "/usr/local/airflow/data"
+    },
+    "password_postgres": "test12345678",
+    "path": "/usr/local/airflow/data"
+}

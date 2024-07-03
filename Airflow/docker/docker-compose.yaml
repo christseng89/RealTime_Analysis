@@ -63,10 +63,11 @@ x-airflow-common: &airflow-common
     AIRFLOW__SCHEDULER__DAG_DIR_LIST_INTERVAL: 30
     _PIP_ADDITIONAL_REQUIREMENTS: ${_PIP_ADDITIONAL_REQUIREMENTS:-}
   volumes:
-    - ./airflow.cfg:/opt/airflow/airflow.cfg
+    # - ./airflow.cfg:/opt/airflow/airflow.cfg
     - ./dags:/opt/airflow/dags
     - ./logs:/opt/airflow/logs
     - ./plugins:/opt/airflow/plugins
+    - ./include:/opt/airflow/include
     - ./includes:/opt/airflow/includes
     - ./data:/opt/airflow/data
     - /var/run/docker.sock:/var/run/docker.sock # Mount Docker socket

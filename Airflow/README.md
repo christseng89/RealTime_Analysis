@@ -1009,3 +1009,16 @@ Admin => Pools => + Add a new record
 - process_tasks
 - Pool to run Process Tasks sequentially
 - 2
+
+// docker-compose.yaml
+
+  airflow-worker-2:
+    <<: *airflow-common
+    command: celery worker -q high_cpu # Configure the queue, parallel_dag.py
+    container_name: airflow_worker-2
+    healthcheck:
+  ...
+
+<http://localhost:5555/workers>
+
+Queue => Name (high_cpu)

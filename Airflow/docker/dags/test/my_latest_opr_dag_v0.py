@@ -20,6 +20,7 @@ dag_id = "my_latest_opr_dag_v0"
 with DAG(
     dag_id=dag_id,
     default_args=default_args,
+    tags=['test', 'latest_only_operator'],
     schedule_interval='@daily',  # Change to '@daily
     catchup=True,
 ) as dag:

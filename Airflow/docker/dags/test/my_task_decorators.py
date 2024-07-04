@@ -23,6 +23,7 @@ def my_short_circuit_task():
 with DAG(
     dag_id='my_task_decorators',
     default_args=default_args,
+    tags=['test', 'decorators'],
     schedule_interval='@daily',
     catchup=False,
 ) as dag:

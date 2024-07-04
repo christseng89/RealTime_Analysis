@@ -15,6 +15,7 @@ default_args = {
 with DAG(
     dag_id='my_dummy_dag_v_0', 
     default_args=default_args,
+    tags=['test'],
     schedule_interval='@daily',
     catchup=False,
     

@@ -28,7 +28,7 @@ pg_dump -h airflow_postgres -p 5432 -U airflow airflow > $FILENAME
 backup_task = BashOperator(
     task_id='backup_task',
     bash_command=backup_command,
-    env={'PGPASSWORD': 'airflow'},
+    # env={'PGPASSWORD': 'airflow'},
     dag=dag,
 )
 

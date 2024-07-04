@@ -7,6 +7,7 @@ with DAG(
     dag_id='parallel_dag', 
     start_date=datetime(2022, 1, 1), 
     schedule_interval='@daily', 
+    tags=['test', 'parallel'],
     catchup=False) as dag:
  
     extract_a = BashOperator(

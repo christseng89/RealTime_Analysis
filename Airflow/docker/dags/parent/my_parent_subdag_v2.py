@@ -37,7 +37,7 @@ with DAG(
             conf={'process_a': 1, 'process_b': 2, 'process_c': 3}
         ),
         mode='reschedule',
-        timeout=60,
+        timeout=120,
         propagate_skipped_state=False,
     )
 
@@ -50,7 +50,7 @@ with DAG(
             conf={'process_a': 4, 'process_b': 5, 'process_c': 6}
         ),
         mode='reschedule',
-        timeout=60,
+        timeout=120,
         propagate_skipped_state=False,
     )
 
@@ -63,7 +63,7 @@ with DAG(
             conf={'process_a': 7, 'process_b': 8, 'process_c': 9}
         ),
         mode='reschedule',
-        timeout=60,
+        timeout=120,
         propagate_skipped_state=False,
     )
 

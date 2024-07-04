@@ -33,6 +33,7 @@ with DAG(
     default_args=default_args,
     schedule_interval='@daily',
     # dagrun_timeout=timedelta(seconds=60),
+    dag_display_name='test_dag_v2.4 with all_failed',
     tags=['test'],
     catchup=False,
 ) as dag:

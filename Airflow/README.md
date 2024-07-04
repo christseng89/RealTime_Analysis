@@ -978,6 +978,12 @@ airflow connections export include/connections.json
 airflow variables export include/variables.json
 airflow pools export include/pools.json
 
+### Restore Admin Settings
+
+airflow connections import include/connections.json
+airflow variables import include/variables.json
+airflow pools import include/pools.json
+
 ### Upgrade to Airflow 2.9.2
 
 <https://airflow.apache.org/docs/apache-airflow/stable/installation/upgrading.html#>
@@ -985,3 +991,19 @@ airflow pools export include/pools.json
 // Edit Dockerfile
 
 AIRFLOW_IMAGE_NAME=apache/airflow:2.9.2-python3.8
+
+### Postgres Backup
+
+// postgres_backup.py
+
+docker exec -it airflow_postgres /bin/bash
+  export PGPASSWORD="airflow"
+  pg_dump -h airflow_postgres -p 5432 -U airflow airflow  > test.sql
+  ls -l test.sql
+  exit
+
+// Pool Settings
+
+- process_tasks
+- Pool to run Process Tasks sequentially - test_dag_v2.1.py
+- 1

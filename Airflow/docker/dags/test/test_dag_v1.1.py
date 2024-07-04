@@ -29,6 +29,7 @@ with DAG(
     ## change the start_date to default_args
     # dag_display_name='test_dag_v1.1 with exit 1',
     default_args=default_args,
+    dag_display_name='test_dag_v1.1 with exit 1',
     schedule_interval='@daily',
     tags=['test'],
     catchup=False,

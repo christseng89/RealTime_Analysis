@@ -16,11 +16,12 @@ default_args = {
     'schedule_interval': '@daily',
 }
 
-dag_id = "my_parent_subdag_v3.0"
+dag_id = "my_parent_subdag_v3"
 
 with DAG(
     dag_id=dag_id, 
     default_args=default_args,
+    dag_display_name='my_parent_subdag_v3 w TriggerDagRun',
     tags=['parent'],
     catchup=False,
 ) as dag:

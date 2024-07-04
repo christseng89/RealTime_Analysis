@@ -1004,6 +1004,8 @@ docker exec -it airflow_postgres /bin/bash
 
 // Pool Settings
 
+Admin => Pools => + Add a new record
+
 - process_tasks
-- Pool to run Process Tasks sequentially - test_dag_v2.1.py
-- 1
+- Pool to run Process Tasks sequentially
+- 2

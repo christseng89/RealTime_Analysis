@@ -43,7 +43,7 @@ with DAG(
     postgres_insert_record = PostgresOperator(
         task_id='postgres_insert_record',
         postgres_conn_id='postgres',
-        sql="sql/insert_record_my_table.sql"
+        sql="sql/insert_record_my_table_v0.sql"
     )
 
     postgres_query = PostgresOperator(

@@ -1,1 +1,0 @@
-SELECT value FROM my_table where id = 1

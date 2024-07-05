@@ -6,9 +6,9 @@ from datetime import datetime
 default_args = {
     'owner': 'mark, john',
     'start_date': datetime(2024, 6, 1),
-    'email': ['samfire5200@gmail.com'],
-    'email_on_failure': True,
-    'email_on_retry': False,
+    # 'email': ['samfire5200@gmail.com'],
+    # 'email_on_failure': True,
+    # 'email_on_retry': False,
     # 'tags': ['bash', 'operator'],
 }
 

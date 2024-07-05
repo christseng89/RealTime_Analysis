@@ -321,8 +321,8 @@ services:
     volumes:
       - ./include/data/minio:/data
     ports:
-      - 9000:9000
-      - 9001:9001
+      - 9090:9000
+      - 9010:9001
     environment:
       MINIO_ROOT_USER: minio
       MINIO_ROOT_PASSWORD: minio123
@@ -365,7 +365,7 @@ services:
     container_name: airflow-metabase
     restart: always
     ports:
-      - 3000:3000
+      - 3010:3000
     volumes:
       - ./include/data/metabase:/metabase-data
     networks:

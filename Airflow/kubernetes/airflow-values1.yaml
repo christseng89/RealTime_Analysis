@@ -1,6 +1,6 @@
 fernetKey: aGZTV1dWZ2lqU1ByaVlwcU1WaU94V2tyUzFBOGZOdnU=
 webserverSecretKey: aGZTV1dWZ2lqU1ByaVlwcU1WaU94V2tyUzFBOGZOdnU=
-executor: KubernetesExecutor
+# executor: KubernetesExecutor # Conduct errors when viewing logs ...
 
 ingress:
   enabled: true
@@ -31,17 +31,3 @@ dags:
     rev: HEAD
     depth: 1
     maxFailures: 0
-
-# webserver:
-#   baseUrl: http://myairflow.com
-#   logUrl: http://myairflow.com/logs
-
-logging:
-  remote_logging: true
-  remote_base_log_folder: /opt/airflow/logs
-  remote_log_conn_id: Airflow
-  remote_log_fetch_timeout_sec: 5
-  remote_log_host: "http://myairflow.com"
-  remote_log_port: 8080
-  remote_log_username: "admin"
-  remote_log_password: "admin"

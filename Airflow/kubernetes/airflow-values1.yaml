@@ -21,3 +21,27 @@ ingress:
       secretName: ""
     precedingPaths: []
     succeedingPaths: []
+
+dags:
+  gitSync:
+    enabled: true
+    repo: https://github.com/christseng89/RealTime_Analysis.git
+    branch: master
+    subPath: Airflow/kubernetes/dags
+    rev: HEAD
+    depth: 1
+    maxFailures: 0
+
+# webserver:
+#   baseUrl: http://myairflow.com
+#   logUrl: http://myairflow.com/logs
+
+logging:
+  remote_logging: true
+  remote_base_log_folder: /opt/airflow/logs
+  remote_log_conn_id: Airflow
+  remote_log_fetch_timeout_sec: 5
+  remote_log_host: "http://myairflow.com"
+  remote_log_port: 8080
+  remote_log_username: "admin"
+  remote_log_password: "admin"

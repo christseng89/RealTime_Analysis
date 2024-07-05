@@ -119,18 +119,12 @@ hello_world.py
 fetch_and_preview.py
 
 git add .
+git commit -m "Add DAGs"
 git push
 
 // Edit airflow-values1.yaml
-dags:
-  gitSync:
-    enabled: true
-    repo:
-        url:
-        branch:
-        user:
-        password:
-    syncInterval: 30
+
+helm upgrade --install airflow apache-airflow/airflow --namespace airflow --create-namespace -f airflow-values1.yaml
 
 ### Install MinIO
 

@@ -1,0 +1,1 @@
+SELECT COUNT(*) FROM partners where status = TRUE;

@@ -1,0 +1,1 @@
+Airflow Job Failed Dag: {{ti.dag_id}} / Task: {{ti.task_id}}

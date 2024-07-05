@@ -143,7 +143,23 @@ kubectl describe deploy airflow-webserver -n airflow | grep Image
 kubectl get po -n airflow
 kubectl exec -it airflow-webserver-68f7f7f67-kvvjl -n airflow -- /bin/bash
 
-### Unknown Issues
+### Requirements
 
-- requirements.txt
-- environments
+<https://airflow.apache.org/docs/docker-stack/build.html>
+
+// Dockerfile
+FROM apache/airflow:2.9.2
+COPY requirements.txt /
+RUN pip install --no-cache-dir "apache-airflow==${AIRFLOW_VERSION}" -r /requirements.txt
+
+docker build -t airflow-requirements:2.9.2 .
+
+### Environments ???
+
+// Edit airflow-values1.yaml
+
+
+### Force delete Airflow
+
+kubectl delete all --all -n airflow --force
+kubectl delete ns airflow

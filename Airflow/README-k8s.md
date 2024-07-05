@@ -215,6 +215,10 @@ helm ls -n airflow
     NAME    NAMESPACE       REVISION        UPDATED                  STATUS          CHART           APP VERSION
     airflow airflow         2               2024-07-04 17:46:58.99   deployed        airflow-1.14.0  2.9.2
 
+echo Fernet Key: $(kubectl get secret --namespace airflow airflow-fernet-key -o jsonpath="{.data.fernet-key}" | base64 --decode)
+
+    Fernet Key: aGZTV1dWZ2lqU1ByaVlwcU1WaU94V2tyUzFBOGZOdnU=
+
 // Create airflow-ingress.yaml
 kubectl apply -f airflow-ingress.yaml
     ingress.networking.k8s.io/airflow-webserver-ingress created
@@ -229,3 +233,17 @@ notepad C:\Windows\System32\drivers\etc\hosts
         127.0.0.1       myairflow.com
 
 <http://myairflow.com> # admin/admin
+
+### Update Airflow Configuration
+
+// airflow-values1.yaml
+helm upgrade --install airflow apache-airflow/airflow --namespace airflow --create-namespace -f airflow-values1.yaml
+kubectl apply -f ingress-nginx.yaml
+<http://myairflow.com/>
+
+Airflow UI > Cluster Activity
+
+Airflow UI > Admin > Connections > Create
+    Conn Id: kubernetes_default
+    Conn Type: Kubernetes
+    Extra: {"in_cluster": "true", "namespace": "airflow"}

@@ -1,0 +1,23 @@
+fernetKey: aGZTV1dWZ2lqU1ByaVlwcU1WaU94V2tyUzFBOGZOdnU=
+webserverSecretKey: aGZTV1dWZ2lqU1ByaVlwcU1WaU94V2tyUzFBOGZOdnU=
+executor: KubernetesExecutor
+
+ingress:
+  enabled: true
+  web:
+    enabled: true
+    annotations:
+      nginx.ingress.kubernetes.io/rewrite-target: /
+    path: "/"
+    pathType: "ImplementationSpecific"
+    hosts:
+      - name: myairflow.com
+        tls:
+          enabled: false
+          secretName: ""
+    ingressClassName: "nginx"
+    tls:
+      enabled: false
+      secretName: ""
+    precedingPaths: []
+    succeedingPaths: []

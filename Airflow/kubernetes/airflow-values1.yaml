@@ -2,25 +2,46 @@ fernetKey: aGZTV1dWZ2lqU1ByaVlwcU1WaU94V2tyUzFBOGZOdnU=
 webserverSecretKey: aGZTV1dWZ2lqU1ByaVlwcU1WaU94V2tyUzFBOGZOdnU=
 # executor: KubernetesExecutor # Conduct errors when viewing logs ...
 
+flower:
+  enabled: true
+
+elasticsearch:
+  enabled: false
+
 ingress:
   enabled: true
   web:
     enabled: true
     annotations:
       nginx.ingress.kubernetes.io/rewrite-target: /
-    path: "/"
-    pathType: "ImplementationSpecific"
+    path: /
+    pathType: ImplementationSpecific
     hosts:
       - name: myairflow.com
         tls:
           enabled: false
           secretName: ""
-    ingressClassName: "nginx"
+    ingressClassName: nginx
     tls:
       enabled: false
       secretName: ""
     precedingPaths: []
     succeedingPaths: []
+  flower:
+    enabled: true
+    annotations:
+      nginx.ingress.kubernetes.io/rewrite-target: /
+    path: /
+    pathType: ImplementationSpecific
+    hosts:
+      - name: myflower.com
+        tls:
+          enabled: false
+          secretName: ""
+    ingressClassName: nginx
+    tls:
+      enabled: false
+      secretName: ""
 
 dags:
   gitSync:
@@ -31,3 +52,6 @@ dags:
     rev: HEAD
     depth: 1
     maxFailures: 0
+
+workers:
+  replicas: 2

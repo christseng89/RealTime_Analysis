@@ -87,15 +87,18 @@ kubectl apply -f airflow-ingress.yaml
     ingress.networking.k8s.io/airflow-webserver-ingress created
 
 kubectl get ingress -n airflow
-    NAME              CLASS   HOSTS           ADDRESS     PORTS   AGE
-    airflow-ingress   nginx   myairflow.com   localhost   80      7m56s
+    NAME                     CLASS   HOSTS           ADDRESS     PORTS   AGE
+    airflow-flower-ingress   nginx   myflower.com    localhost   80      28m
+    airflow-ingress          nginx   myairflow.com   localhost   80      32m
 
 // Edit hosts file
 notepad C:\Windows\System32\drivers\etc\hosts
 
         127.0.0.1       myairflow.com
+        127.0.0.1       myflower.com
 
 <http://myairflow.com> # admin/admin
+<http://myflower.com/>
 
 ### Update Airflow
 

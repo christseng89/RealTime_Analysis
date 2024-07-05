@@ -1,11 +1,11 @@
 # lxml
 # beautifulsoup4
-apache-airflow-providers-postgres
-apache-airflow-providers-http
-apache-airflow-providers-sqlite
-apache-airflow-providers-amazon
+# apache-airflow-providers-postgres
+# apache-airflow-providers-http
+# apache-airflow-providers-sqlite
+# apache-airflow-providers-amazon
 airflow-provider-great-expectations
-apache-airflow-providers-docker
+# apache-airflow-providers-docker
 elasticsearch
 astro-sdk-python
 # apache-airflow-providers-great-expectations

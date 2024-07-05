@@ -134,3 +134,16 @@ helm upgrade --install airflow apache-airflow/airflow --namespace airflow --crea
 helm repo add minio https://operator.min.io/
 helm install minio-operator minio/minio-operator --namespace minio-operator --create-namespace
 kubectl get pods -n minio-operator
+
+kubectl describe deploy airflow-webserver -n airflow | grep Image
+    Image:      apache/airflow:2.9.2
+
+<https://stackoverflow.com/questions/74024512/how-to-install-dependencies-from-requirements-txt-in-apache-airflow>
+
+kubectl get po -n airflow
+kubectl exec -it airflow-webserver-68f7f7f67-kvvjl -n airflow -- /bin/bash
+
+### Unknown Issues
+
+- requirements.txt
+- environments

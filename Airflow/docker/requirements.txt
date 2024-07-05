@@ -7,4 +7,5 @@ apache-airflow-providers-amazon
 airflow-provider-great-expectations
 apache-airflow-providers-docker
 elasticsearch
+astro-sdk-python
 # apache-airflow-providers-great-expectations

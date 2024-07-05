@@ -70,8 +70,8 @@ with DAG(
         propagate_skipped_state=False,
     )
 
-    trigger_dag = TriggerDagRunOperator(
-        task_id='trigger_dag',
+    trigger_parent_target_dag = TriggerDagRunOperator(
+        task_id='trigger_parent_target_dag',
         trigger_dag_id='my_parent_target_v0',  # Correct target DAG ID
         conf={'process_a': 10, 'process_b': 11, 'process_c': 12},
         execution_date="{{ ds }}",
@@ -85,4 +85,4 @@ with DAG(
         bash_command='echo "End"',
     )
     
-    start >> [group_process1, group_process2, group_process3] >> trigger_dag >> end
+    start >> [group_process1, group_process2, group_process3] >> trigger_parent_target_dag >> end

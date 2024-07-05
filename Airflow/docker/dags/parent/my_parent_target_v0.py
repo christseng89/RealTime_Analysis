@@ -16,7 +16,7 @@ dag_id = "my_parent_target_v0"
 with DAG(
     dag_id=dag_id, 
     default_args=default_args,
-    dag_display_name='my_parent_target_v0 trigger from my_parent_subdag_v3.0',
+    # dag_display_name='my_parent_target_v0',
     schedule_interval=None,
     tags=['parent'],
     catchup=False,

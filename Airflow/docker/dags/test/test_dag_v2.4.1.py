@@ -16,8 +16,8 @@ default_args = {
 
 def _test_task(execution_date):
     print(f"Execution month-day: {execution_date.month}-{execution_date.day}")
-    if execution_date.day == 5:
-        raise ValueError("Error on the 5th day of the month!")    
+    if execution_date.day == 35:
+        raise ValueError("Error on the 35th day of the month!")    
 
 def _extract_on_success(context):
         print(f"Task id: {context['task_instance'].task_id} is successful!")
@@ -33,7 +33,7 @@ with DAG(
     default_args=default_args,
     schedule_interval='@daily',
     # dagrun_timeout=timedelta(seconds=60),
-    dag_display_name='test_dag_v2.4 with timeout and all_failed',
+    dag_display_name='test_dag_v2.4.1 with timeout and all_failed',
     tags=['test'],
     catchup=False,
 ) as dag:

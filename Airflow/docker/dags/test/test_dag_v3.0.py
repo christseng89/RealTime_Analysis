@@ -17,8 +17,8 @@ default_args = {
 
 def _test_task(execution_date):
     print(f"Execution month-day: {execution_date.month}-{execution_date.day}")
-    if execution_date.day == 5:
-        raise ValueError("Error on the 5th day of the month!")    
+    if execution_date.day == 35:
+        raise ValueError("Error on the 35th day of the month!")    
 
 def _test_sleep():
     print("Sleeping for 15 seconds...")

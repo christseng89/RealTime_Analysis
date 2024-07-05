@@ -22,3 +22,5 @@ airflow_test/logs/
 Airflow/docker/include/data/
 # include/data
 include
+airflow_helm/
+images/

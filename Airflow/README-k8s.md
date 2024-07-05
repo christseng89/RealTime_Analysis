@@ -136,3 +136,95 @@ By configuring the KubernetesExecutor and KubernetesPodOperator correctly, you c
 <https://airflow.apache.org/docs/apache-airflow/stable/administration-and-deployment/kubernetes.html>
 <https://airflow.apache.org/docs/apache-airflow-providers-cncf-kubernetes/stable/kubernetes_executor.html>
 <https://airflow.apache.org/docs/apache-airflow-providers-cncf-kubernetes/stable/operators.html#howto-operator-kubernetespodoperator>
+
+### Install Airflow on Docker Desktop k8s
+
+helm repo add apache-airflow https://airflow.apache.org
+
+// Get helm source files
+md airflow_helm && cd airflow_helm
+helm pull apache-airflow/airflow --untar
+
+cd ..
+
+helm upgrade --install airflow apache-airflow/airflow --namespace airflow --create-namespace
+helm upgrade airflow apache-airflow/airflow --namespace airflow
+
+  Release "airflow" has been upgraded. Happy Helming!
+  NAME: airflow
+  ...
+  Thank you for installing Apache Airflow 2.9.2!
+
+  Your release is named airflow.
+  You can now access your dashboard(s) by executing the following command(s) and visiting the corresponding port at localhost in your browser:
+
+  Airflow Webserver:     kubectl port-forward svc/airflow-webserver 8089:8080 --namespace airflow
+  Default Webserver (Airflow UI) Login credentials:
+      username: admin/password: admin
+  Default Postgres connection credentials:
+      username: postgres/password: postgres
+      port: 5432
+
+  You can get Fernet Key value by running the following:
+
+      echo Fernet Key: $(kubectl get secret --namespace airflow airflow-fernet-key -o jsonpath="{.data.fernet-key}" | base64 --decode)
+  ... end ...
+
+helm ls -n airflow
+    NAME    NAMESPACE       REVISION        UPDATED                                 STATUS          CHART           APP VERSION
+    airflow airflow         2               2024-07-04 17:46:58.9962884 +0800 CST   deployed        airflow-1.14.0  2.9.2
+
+kubectl port-forward svc/airflow-webserver 8090:8080 --namespace airflow
+
+<http://localhost:8090>
+
+<https://www.youtube.com/watch?v=GDOw8ByzMyY>
+<https://robust-dinosaur-2ef.notion.site/Airflow-Helm-Chart-Quick-start-for-Beginners-3e8ee61c8e234a0fb775a07f38a0a8d4>
+
+helm upgrade --install airflow apache-airflow/airflow -n airflow
+helm show values apache-airflow/airflow > values.yaml
+
+### Reference Links
+
+- [Kubetools](https://collabnix.github.io/kubetools/)
+- [Kubernetes](https://kubernetes.io/docs/tasks/tools/)
+
+choco upgrade kubernetes-cli -y
+kubectl version
+kubectl cluster-info
+kubectl config get-contexts
+kubectl config use-context docker-desktop
+
+choco upgrade kubernetes-helm -y
+helm version
+
+### Nginx Ingress
+
+wget https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/cloud/deploy.yaml -O ingress-nginx.yaml
+kubectl apply -f ingress-nginx.yaml
+kubectl get pods -n ingress-nginx
+
+### Kubernetes Dashboard
+
+wget https://raw.githubusercontent.com/kubernetes/dashboard/v2.7.0/aio/deploy/recommended.yaml -O kubernetes-dashboard.yaml
+
+kubectl apply -f kubenertes-dashboard.yaml
+kubectl get pods -n kubernetes-dashboard
+
+// Write kubernetes-dashboard1.yaml with Ingress
+kubectl apply -f kubernetes-dashboard1.yaml
+    serviceaccount/admin-user created
+    clusterrolebinding.rbac.authorization.k8s.io/admin-user created
+    secret/admin-user created
+
+kubectl get ingress -n kubernetes-dashboard
+    NAMESPACE              NAME                           CLASS   HOSTS           ADDRESS     PORTS   AGE
+    kubernetes-dashboard   kubernetes-dashboard-ingress   nginx   dashboard.com   localhost   80      2m1s
+
+kubectl describe secret admin-user -n kubernetes-dashboard | grep token:
+
+    token: eyJhbGciOiJSUzI1...
+
+kubectl proxy
+
+<https://dashboard.com/>

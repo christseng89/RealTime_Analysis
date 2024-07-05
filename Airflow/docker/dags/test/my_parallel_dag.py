@@ -4,9 +4,10 @@ from airflow.operators.bash import BashOperator
 from datetime import datetime
  
 with DAG(
-    dag_id='parallel_dag', 
+    dag_id='my_parallel_dag', 
     start_date=datetime(2022, 1, 1), 
     schedule_interval='@daily', 
+    dag_display_name='my_parallel_dag w high_cpu queue',
     tags=['test', 'parallel'],
     catchup=False) as dag:
  

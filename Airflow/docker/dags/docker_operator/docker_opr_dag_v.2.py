@@ -17,6 +17,7 @@ default_args = {
     dag_id='docker_opr_dag_v_2',
     description='Test DockerImage stock_image:1.0.0',
     default_args=default_args,
+    dag_display_name='docker_opr_dag_v_2-stock_image',
     schedule_interval='@daily', 
     tags=['docker'],
     catchup=False,

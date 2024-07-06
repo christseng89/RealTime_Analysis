@@ -1,0 +1,78 @@
+fernetKey: aGZTV1dWZ2lqU1ByaVlwcU1WaU94V2tyUzFBOGZOdnU=
+webserverSecretKey: aGZTV1dWZ2lqU1ByaVlwcU1WaU94V2tyUzFBOGZOdnU=
+# executor: KubernetesExecutor # Conduct errors when viewing logs ...
+
+flower:
+  enabled: true
+
+env:
+  - name: AIRFLOW__SMTP__SMTP_HOST
+    value: "smtp.gmail.com"
+  - name: AIRFLOW__SMTP__SMTP_STARTTLS
+    value: "True"
+  - name: AIRFLOW__SMTP__SMTP_SSL
+    value: "False"
+  - name: AIRFLOW__SMTP__SMTP_USER
+    value: "samfire5200@gmail.com"
+  - name: AIRFLOW__SMTP__SMTP_PORT
+    value: "587"
+  - name: AIRFLOW__SMTP__SMTP_PASSWORD
+    value: "sxkbkfvtggmqchhn"
+  - name: AIRFLOW__SMTP__SMTP_MAIL_FROM
+    value: "samfire5200@gmail.com"
+  ## Using tailored Airflow Image to copy includes folder for email templates
+  - name: AIRFLOW__EMAIL__SUBJECT_TEMPLATE
+    value: "/opt/airflow/includes/subject_template_email.txt"
+  - name: AIRFLOW__EMAIL__HTML_CONTENT_TEMPLATE
+    value: "/opt/airflow/includes/content_template_email.txt"
+    
+elasticsearch:
+  enabled: false
+
+ingress:
+  enabled: true
+  web:
+    enabled: true
+    annotations:
+      nginx.ingress.kubernetes.io/rewrite-target: /
+    path: /
+    pathType: ImplementationSpecific
+    hosts:
+      - name: myairflow.com
+        tls:
+          enabled: false
+          secretName: ""
+    ingressClassName: nginx
+    tls:
+      enabled: false
+      secretName: ""
+    precedingPaths: []
+    succeedingPaths: []
+  flower:
+    enabled: true
+    annotations:
+      nginx.ingress.kubernetes.io/rewrite-target: /
+    path: /
+    pathType: ImplementationSpecific
+    hosts:
+      - name: myflower.com
+        tls:
+          enabled: false
+          secretName: ""
+    ingressClassName: nginx
+    tls:
+      enabled: false
+      secretName: ""
+
+dags:
+  gitSync:
+    enabled: true
+    repo: https://github.com/christseng89/RealTime_Analysis.git
+    branch: master
+    subPath: Airflow/kubernetes/dags
+    rev: HEAD
+    depth: 1
+    maxFailures: 0
+
+workers:
+  replicas: 2

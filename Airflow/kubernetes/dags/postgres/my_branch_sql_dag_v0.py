@@ -19,7 +19,7 @@ default_args = {
 
 
 with DAG(
-    dag_id='my_branch_sql_dag_v.0', 
+    dag_id='my_branch_sql_dag_v0', 
     default_args=default_args,
     schedule_interval='@daily',
     tags=['branch', 'postgres'],

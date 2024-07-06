@@ -19,7 +19,7 @@ def _python_a(ti, execution_date, path, filename):
     print(f"Execution month-day: {execution_date.month}-{execution_date.day}, Task Id: {ti.task_id}")
     
 with DAG(
-    dag_id='my_postgres_dag_v.1', 
+    dag_id='my_postgres_dag_v0', 
     default_args=default_args,
     schedule_interval='@daily',
     tags=['postgres'],
@@ -43,8 +43,7 @@ with DAG(
     postgres_insert_record = PostgresOperator(
         task_id='postgres_insert_record',
         postgres_conn_id='postgres',
-        sql="sql/insert_record_my_table_v1.sql",
-        parameters={"id": 1, "value": "my_value1"}
+        sql="sql/insert_record_my_table_v0.sql"
     )
 
     postgres_query = PostgresOperator(

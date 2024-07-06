@@ -13,7 +13,7 @@ default_args = {
 }
 
 with DAG(
-    dag_id='my_postgres_dag_v.3', 
+    dag_id='my_postgres_dag_v3', 
     default_args=default_args,
     schedule_interval='@daily',
     tags=['postgres'],

@@ -37,7 +37,7 @@ def _python_a(ti, execution_date, path, filename):
     return "Python A Task Completed"
 
 with DAG(
-    dag_id='my_postgres_dag_v.2', 
+    dag_id='my_postgres_dag_v2', 
     default_args=default_args,
     schedule_interval='@daily',
     tags=['postgres'],

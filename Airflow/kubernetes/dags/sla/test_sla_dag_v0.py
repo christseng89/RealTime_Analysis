@@ -42,7 +42,7 @@ with DAG(
     default_args=default_args,
     schedule_interval='0 */12 * * * *', # Every 12 hours
     dag_display_name="test_sla_dag_v0 - SLA missed callback",
-    tags=['sla'],
+    tags=['sla','xcom'],
     catchup=False,
     sla_miss_callback=sla_callback, # SLA missed callback
 ) as dag:

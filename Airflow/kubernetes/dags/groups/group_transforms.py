@@ -6,17 +6,17 @@ def transform_tasks():
 
         transform_a = BashOperator(
             task_id='transform_a',
-            bash_command='sleep 10'
+            bash_command='sleep 5'
         )
 
         transform_b = BashOperator(
             task_id='transform_b',
-            bash_command='sleep 10'
+            bash_command='sleep 5'
         )
 
         transform_c = BashOperator(
             task_id='transform_c',
-            bash_command='sleep 10'
+            bash_command='sleep 5'
         )
 
     return transforms

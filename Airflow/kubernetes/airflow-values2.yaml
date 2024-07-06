@@ -13,13 +13,13 @@ env:
   - name: AIRFLOW__SMTP__SMTP_SSL
     value: "False"
   - name: AIRFLOW__SMTP__SMTP_USER
-    value: "samfire5200@gmail.com"
+    value: "youremail@gmail.com"
   - name: AIRFLOW__SMTP__SMTP_PORT
     value: "587"
   - name: AIRFLOW__SMTP__SMTP_PASSWORD
-    value: "sxkbkfvtggmqchhn"
+    value: "sxkbkfvtg..."
   - name: AIRFLOW__SMTP__SMTP_MAIL_FROM
-    value: "samfire5200@gmail.com"
+    value: "youremail@gmail.com"
   ## Using tailored Airflow Image to copy includes folder for email templates
   - name: AIRFLOW__EMAIL__SUBJECT_TEMPLATE
     value: "/opt/airflow/includes/subject_template_email.txt"

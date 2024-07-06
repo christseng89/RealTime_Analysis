@@ -55,6 +55,7 @@ default_args = {
 
 dag = DAG(
     'fetch_and_preview',
+    tags=['datamasterylab'],
     default_args = default_args,
     schedule=timedelta(days=1)
 )

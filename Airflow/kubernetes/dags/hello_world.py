@@ -11,6 +11,7 @@ default_args = {
 dag = DAG(
     'hello_world',
     default_args = default_args,
+    tags=['datamasterylab'],
     schedule=timedelta(days=1)
 )
 

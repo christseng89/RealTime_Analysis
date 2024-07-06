@@ -1,14 +1,14 @@
 from airflow import DAG
 from airflow.operators.python import PythonOperator
 from airflow.operators.bash import BashOperator
-from airflow.utils.helpers import cross_downstream, chain
+from airflow.utils.helpers import cross_downstream
 from airflow.exceptions import AirflowTaskTimeout
 
 from datetime import datetime, timedelta
 
 default_args = {
     'owner': 'mark, john, luke, matthew',
-    'start_date': datetime(2024, 6, 1),
+    'start_date': datetime(2024, 5, 1),
     'email': ['samfire5200@gmail.com', 'samfire5201@gmail.com'],
     'email_on_failure': True,
     'email_on_retry': False,
@@ -19,8 +19,8 @@ def _test_task(ti, execution_date):
     print(f"Xcoms: {xcoms}")
         
     print(f"Execution month-day: {execution_date.month}-{execution_date.day}")
-    if execution_date.day == 32:
-        raise ValueError("Error on the 32nd day of the month!")    
+    if execution_date.day == 35:
+        raise ValueError("Error on the 35th day of the month!")    
 
 def _extract_on_success(context):
         print(f"Task id: {context['task_instance'].task_id} is successful!")
@@ -32,12 +32,12 @@ def _extract_on_failure(context):
         print(f"Task id: {context['task_instance'].task_id} is failed with another Exception Error {context['exception']}!")
            
 with DAG(
-    dag_id='test_xcom_dag_v4', # Test all_failed trigger_rule
+    dag_id='test_xcom_dag_v2', # Test all_failed trigger_rule
     default_args=default_args,
     schedule_interval='@daily',
     # dagrun_timeout=timedelta(seconds=60),
     tags=['xcom'],
-    catchup=True,
+    catchup=False,
 ) as dag:
 
     extract_a = BashOperator(
@@ -48,7 +48,6 @@ with DAG(
         execution_timeout=timedelta(seconds=15), # Timeout for the task
         on_success_callback=_extract_on_success,
         on_failure_callback=_extract_on_failure,
-        max_active_tis_per_dag=1, # Limit the number of tasks that can run at the same time
 
     )
     
@@ -60,8 +59,6 @@ with DAG(
         execution_timeout=timedelta(seconds=15), # Timeout for the task
         on_success_callback=_extract_on_success,
         on_failure_callback=_extract_on_failure,
-        max_active_tis_per_dag=1, # Limit the number of tasks that can run at the same time
-        
     )
 
     process_a = BashOperator(
@@ -145,9 +142,7 @@ with DAG(
     )
     
     cross_downstream([extract_a, extract_b], [process_a, process_b, process_c])
-    # process_a >> clean_a
-    # process_b >> clean_b
-    # process_c >> clean_c
-    # [process_a, process_b, process_c] >> store  
-    chain([process_a, process_b, process_c], [clean_a, clean_b, clean_c])
-    cross_downstream([process_a, process_b, process_c], store)
+    process_a >> clean_a
+    process_b >> clean_b
+    process_c >> clean_c
+    [process_a, process_b, process_c] >> store    

@@ -32,11 +32,11 @@ def _extract_on_failure(context):
         print(f"Task id: {context['task_instance'].task_id} is failed with another Exception Error {context['exception']}!")
            
 with DAG(
-    dag_id='test_dag_v2.5', # Test all_failed trigger_rule
+    dag_id='test_xcom_dag_v3', # Test all_failed trigger_rule
     default_args=default_args,
     schedule_interval='@daily',
     # dagrun_timeout=timedelta(seconds=60),
-    tags=['test'],
+    tags=['xcom'],
     catchup=False,
 ) as dag:
 

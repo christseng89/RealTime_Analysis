@@ -19,7 +19,7 @@ def _branch(ti):
         return 't2'
  
 with DAG(
-    dag_id="test_xcom_dag_v0", 
+    dag_id="test_xcom_dag_v4", 
     start_date=datetime(2023, 1, 1), 
     schedule_interval='@daily', 
     tags=['xcom'],

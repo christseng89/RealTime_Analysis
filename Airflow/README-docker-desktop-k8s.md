@@ -150,13 +150,32 @@ kubectl exec -it airflow-webserver-68f7f7f67-kvvjl -n airflow -- /bin/bash
 // Dockerfile
 FROM apache/airflow:2.9.2
 COPY requirements.txt /
+COPY includes/ includes/
 RUN pip install --no-cache-dir "apache-airflow==${AIRFLOW_VERSION}" -r /requirements.txt
 
 docker build -t airflow-requirements:2.9.2 .
 
-### Environments ???
+### Environments SMTP
+
+<https://airflow.apache.org/docs/apache-airflow/stable/howto/email-config.html>
 
 // Edit airflow-values1.yaml
+env:
+  - name: AIRFLOW__SMTP__SMTP_HOST
+    value: "smtp.gmail.com"
+  - name: AIRFLOW__SMTP__SMTP_STARTTLS
+    value: "True"
+  - name: AIRFLOW__SMTP__SMTP_SSL
+    value: "False"
+  ...
+
+kubectl exec -it airflow-webserver-68f7f7f67-kvvjl -n airflow -- /bin/bash
+    env | grep SMTP
+    AIRFLOW__SMTP__SMTP_PORT=587
+    AIRFLOW__SMTP__SMTP_PASSWORD=s...
+    AIRFLOW__SMTP__SMTP_USER=...@gmail.com
+    AIRFLOW__SMTP__SMTP_MAIL_FROM=...@gmail.com
+    AIRFLOW__SMTP__SMTP_STARTTLS=True
 
 
 ### Force delete Airflow

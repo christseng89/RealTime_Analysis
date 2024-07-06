@@ -24,3 +24,4 @@ Airflow/docker/include/data/
 include
 airflow_helm/
 images/
+airflow-values2.yaml

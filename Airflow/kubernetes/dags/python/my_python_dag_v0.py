@@ -18,7 +18,7 @@ def _task_a(ti, execution_date, path, filename):
     print(f"Execution month-day: {execution_date.month}-{execution_date.day}, Task Id: {ti.task_id}")
     
 with DAG(
-    dag_id='my_python_dag_v.0', 
+    dag_id='my_python_dag_v0', 
     default_args=default_args,
     schedule_interval='@daily',
     tags=['python'],

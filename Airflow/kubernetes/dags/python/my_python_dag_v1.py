@@ -24,7 +24,7 @@ def task_a(**kwargs):
     print(f"Logical date's month-day: {logical_date.month}-{logical_date.day}, Task Id: {ti.task_id}")
 
 with DAG(
-    dag_id='my_python_dag_v_1', 
+    dag_id='my_python_dag_v1', 
     default_args=default_args,
     schedule_interval='@daily',
     tags=['python'],

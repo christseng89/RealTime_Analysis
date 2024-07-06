@@ -13,28 +13,28 @@ with DAG(
  
     extract_a = BashOperator(
         task_id='extract_a',
-        bash_command='sleep 10'
+        bash_command='sleep 5'
     )
  
     extract_b = BashOperator(
         task_id='extract_b',
-        bash_command='sleep 10'
+        bash_command='sleep 5'
     )
  
     load_a = BashOperator(
         task_id='load_a',
-        bash_command='sleep 10'
+        bash_command='sleep 5'
     )
  
     load_b = BashOperator(
         task_id='load_b',
-        bash_command='sleep 10'
+        bash_command='sleep 5'
     )
  
     transform = BashOperator(
         task_id='transform',
-        queue='high_cpu',
-        bash_command='sleep 10'
+        # queue='high_cpu', # Not working in k8s
+        bash_command='sleep 5'
     )
  
     extract_a >> load_a

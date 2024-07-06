@@ -38,11 +38,11 @@ def sla_callback(dag, task_list, blocking_task_list, slas, blocking_tis):
 
 # SLA - Service Level Agreement
 with DAG(
-    dag_id='test_dag_v3.0', # Test all_failed trigger_rule
+    dag_id='test_sla_dag_v1', # Test all_failed trigger_rule
     default_args=default_args,
-    schedule_interval='*/5 * * * *',
-    dag_display_name="test_dag_v3.0 - SLA missed callback",
-    tags=['test', 'sla'],
+    schedule_interval='20 /12 * * * *', # Every 0:20 and 12:20
+    dag_display_name="test_dag_v3.1 - SLA passed",
+    tags=['sla'],
     catchup=False,
     sla_miss_callback=sla_callback, # SLA missed callback
 ) as dag:
@@ -52,7 +52,7 @@ with DAG(
         task_id='extract_a',
         python_callable=_test_sleep,
         wait_for_downstream=True,
-        sla=timedelta(seconds=5) # Sleep for 15 seconds already
+        sla=timedelta(seconds=60) # Sleep for 15 seconds only
 
     )
     

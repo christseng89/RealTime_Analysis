@@ -40,7 +40,7 @@ def sla_callback(dag, task_list, blocking_task_list, slas, blocking_tis):
 with DAG(
     dag_id='test_sla_dag_v0', # Test all_failed trigger_rule
     default_args=default_args,
-    schedule_interval='0 /12 * * * *', # Every 12 hours
+    schedule_interval='0 */12 * * * *', # Every 12 hours
     dag_display_name="test_dag_v3.0 - SLA missed callback",
     tags=['sla'],
     catchup=False,

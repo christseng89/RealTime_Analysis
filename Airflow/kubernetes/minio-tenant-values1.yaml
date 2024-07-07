@@ -1,0 +1,17 @@
+secrets:
+  name: minio-tenant1-env-configuration
+  accessKey: minio 
+  secretKey: minio123
+
+tenant:
+  name: minio-tenant1
+  configuration:
+    name: minio-tenant1-env-configuration  
+
+# ingress:
+#   console:
+#     enabled: true
+#     annotations:
+#       nginx.ingress.kubernetes.io/rewrite-target: /
+#     host: myminio.com  
+#     ingressClassName: nginx    

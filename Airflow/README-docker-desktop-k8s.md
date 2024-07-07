@@ -55,24 +55,7 @@ helm repo add apache-airflow https://airflow.apache.org
 
 helm upgrade --install airflow apache-airflow/airflow --namespace airflow --create-namespace
 helm upgrade airflow apache-airflow/airflow --namespace airflow
-
 helm show values apache-airflow/airflow > airflow-values.yaml
-
-  Release "airflow" has been upgraded. Happy Helming!
-  NAME: airflow
-  ...
-  Thank you for installing Apache Airflow 2.9.2!
-  ...
-  Default Webserver (Airflow UI) Login credentials:
-      username: admin/password: admin
-  Default Postgres connection credentials:
-      username: postgres/password: postgres
-      port: 5432
-
-  You can get Fernet Key value by running the following:
-
-      echo Fernet Key: $(kubectl get secret --namespace airflow airflow-fernet-key -o jsonpath="{.data.fernet-key}" | base64 --decode)
-  ... end ...
 
 helm ls -n airflow
     NAME    NAMESPACE       REVISION        UPDATED                  STATUS          CHART           APP VERSION
@@ -82,9 +65,12 @@ echo Fernet Key: $(kubectl get secret --namespace airflow airflow-fernet-key -o 
 
     Fernet Key: aGZTV1dWZ2lqU1ByaVlwcU1WaU94V2tyUzFBOGZOdnU=
 
-// Create airflow-ingress.yaml
-kubectl apply -f airflow-ingress.yaml
-    ingress.networking.k8s.io/airflow-webserver-ingress created
+### Update Airflow
+
+// Create airflow-values.yaml
+// Create helm-airflow.bat
+
+helm-airflow.bat
 
 kubectl get ingress -n airflow
     NAME                     CLASS   HOSTS           ADDRESS     PORTS   AGE
@@ -100,20 +86,6 @@ notepad C:\Windows\System32\drivers\etc\hosts
 <http://myairflow.com> # admin/admin
 <http://myflower.com/>
 
-### Update Airflow
-
-// airflow-values1.yaml
-helm upgrade --install airflow apache-airflow/airflow --namespace airflow --create-namespace -f airflow-values1.yaml
-kubectl apply -f ingress-nginx.yaml
-<http://myairflow.com/>
-
-Airflow UI > Cluster Activity
-
-Airflow UI > Admin > Connections > Create
-    Conn Id: kubernetes_default
-    Conn Type: Kubernetes
-    Extra: {"in_cluster": "true", "namespace": "airflow"}
-
 ### Add DAGs to Airflow
 
 // Add 2 Dags
@@ -125,37 +97,16 @@ git add .
 git commit -m "Add DAGs"
 git push
 
-// Edit airflow-values1.yaml
+### Airflow UI Setting Connections and Variables
 
-helm upgrade --install airflow apache-airflow/airflow --namespace airflow --create-namespace -f airflow-values1.yaml
+Airflow UI > Cluster Activity
 
-### Install MinIO
+Airflow UI > Admin > Connections > Create
+    Conn Id: kubernetes_default
+    Conn Type: Kubernetes
+    Extra: {"in_cluster": "true", "namespace": "airflow"}
 
-helm repo add minio https://operator.min.io/
-helm install minio-operator minio/minio-operator --namespace minio-operator --create-namespace
-kubectl get pods -n minio-operator
-
-kubectl describe deploy airflow-webserver -n airflow | grep Image
-    Image:      apache/airflow:2.9.2
-
-<https://stackoverflow.com/questions/74024512/how-to-install-dependencies-from-requirements-txt-in-apache-airflow>
-
-kubectl get po -n airflow
-kubectl exec -it airflow-webserver-68f7f7f67-kvvjl -n airflow -- /bin/bash
-
-### Requirements
-
-<https://airflow.apache.org/docs/docker-stack/build.html>
-
-// Dockerfile
-FROM apache/airflow:2.9.2
-COPY requirements.txt /
-COPY includes/ includes/
-RUN pip install --no-cache-dir "apache-airflow==${AIRFLOW_VERSION}" -r /requirements.txt
-
-docker build -t airflow-requirements:2.9.2 .
-
-### Environments SMTP
+### Airflow Environments SMTP
 
 <https://airflow.apache.org/docs/apache-airflow/stable/howto/email-config.html>
 
@@ -169,13 +120,56 @@ env:
     value: "False"
   ...
 
-kubectl exec -it airflow-webserver-68f7f7f67-kvvjl -n airflow -- /bin/bash
+helm-airflow.bat
+
+kubectl exec -it airflow-webserver-586666dd95-96hnz -n airflow -- /bin/bash
     env | grep SMTP
     AIRFLOW__SMTP__SMTP_PORT=587
     AIRFLOW__SMTP__SMTP_PASSWORD=s...
     AIRFLOW__SMTP__SMTP_USER=...@gmail.com
     AIRFLOW__SMTP__SMTP_MAIL_FROM=...@gmail.com
     AIRFLOW__SMTP__SMTP_STARTTLS=True
+
+kubectl describe deploy airflow-webserver -n airflow | grep Image
+    Image:      apache/airflow:2.9.2
+
+### Airflow for requirements.txt (not yet)
+
+<https://airflow.apache.org/docs/docker-stack/build.html>
+
+// Dockerfile
+FROM apache/airflow:2.9.2
+COPY requirements.txt /
+COPY includes/ includes/
+RUN pip install --no-cache-dir "apache-airflow==${AIRFLOW_VERSION}" -r /requirements.txt
+
+docker build -t airflow-requirements:2.9.2 .
+
+### Install MinIO by Helm
+
+// Helm Minio Operator
+<https://min.io/docs/minio/kubernetes/upstream/operations/install-deploy-manage/deploy-operator-helm.html>
+
+helm repo add minio-operator https://operator.min.io
+helm upgrade --install minio-operator minio-operator/operator --namespace minio-operator --create-namespace
+
+kubectl get po -n minio-operator
+kubectl port-forward svc/console -n minio-operator 9090:9090
+kubectl -n minio-operator get secret/console-sa-secret -o jsonpath="{.data.token}" | base64 --decode
+
+<http://localhost:9090/>
+
+// Minio Tenant
+<https://min.io/docs/minio/kubernetes/upstream/operations/install-deploy-manage/deploy-minio-tenant-helm.html>
+
+helm search repo minio-operator
+helm upgrade --install minio-tenant1 minio-operator/tenant --namespace minio-tenant1 --create-namespace
+helm show values minio-operator/tenant > minio-tenant-values.yaml
+
+helm-minio-tanent.bat
+kubectl port-forward svc/minio-tenant1-console -n minio-tenant1 9443:9443
+
+<http://localhost:9443>
 
 ### Spark Installation
 
@@ -200,7 +194,16 @@ mkdir spark
 // Edit spark-process.py
 python spark/spark-process.py
 
+### Metabase
+
+helm repo add stable https://charts.helm.sh/stable
+helm install --name metabase stable/metabase
+
 ### Force delete Airflow
 
 kubectl delete all --all -n airflow --force
 kubectl delete ns airflow
+
+### Helm Uninstall
+
+helm uninstall minio-operator -n minio-operator

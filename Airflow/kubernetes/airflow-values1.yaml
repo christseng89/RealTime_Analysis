@@ -30,39 +30,27 @@ elasticsearch:
   enabled: false
 
 ingress:
-  enabled: true
   web:
     enabled: true
     annotations:
       nginx.ingress.kubernetes.io/rewrite-target: /
-    path: /
-    pathType: ImplementationSpecific
     hosts:
       - name: myairflow.com
         tls:
           enabled: false
           secretName: ""
     ingressClassName: nginx
-    tls:
-      enabled: false
-      secretName: ""
-    precedingPaths: []
-    succeedingPaths: []
+
   flower:
     enabled: true
     annotations:
       nginx.ingress.kubernetes.io/rewrite-target: /
-    path: /
-    pathType: ImplementationSpecific
     hosts:
       - name: myflower.com
         tls:
           enabled: false
           secretName: ""
     ingressClassName: nginx
-    tls:
-      enabled: false
-      secretName: ""
 
 dags:
   gitSync:

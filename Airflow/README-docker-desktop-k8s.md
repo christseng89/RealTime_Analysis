@@ -177,6 +177,28 @@ kubectl exec -it airflow-webserver-68f7f7f67-kvvjl -n airflow -- /bin/bash
     AIRFLOW__SMTP__SMTP_MAIL_FROM=...@gmail.com
     AIRFLOW__SMTP__SMTP_STARTTLS=True
 
+### Spark Installation
+
+choco install hadoop -y
+
+// Git Bash
+
+
+pip install spark pyspark
+
+cd Airflow/kubernetes/
+python -m venv spark
+source spark/bin/activate
+
+whick spark
+whick pyspark
+which spark-submit
+    /c/Python312/Scripts/spark-submit
+    (spark)
+mkdir spark
+
+// Edit spark-process.py
+python spark/spark-process.py
 
 ### Force delete Airflow
 

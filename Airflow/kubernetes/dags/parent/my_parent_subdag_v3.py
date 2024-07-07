@@ -40,7 +40,8 @@ with DAG(
             conf={'process_a': 1, 'process_b': 2, 'process_c': 3}
         ),
         mode='reschedule',
-        timeout=180, # 60 conducts timeout error
+        # timeout=180, # 60 conducts timeout error
+        timeout=240, # 60 conducts timeout error
         propagate_skipped_state=False,
     )
     
@@ -53,7 +54,8 @@ with DAG(
             conf={'process_a': 4, 'process_b': 5, 'process_c': 6}
         ),
         mode='reschedule',
-        timeout=60,
+        # Timeout=60 # 60 conducts timeout error
+        timeout=120,
         propagate_skipped_state=False,
     )
 
@@ -66,7 +68,7 @@ with DAG(
             conf={'process_a': 7, 'process_b': 8, 'process_c': 9}
         ),
         mode='reschedule',
-        timeout=60,
+        timeout=120,
         propagate_skipped_state=False,
     )
 
@@ -77,7 +79,7 @@ with DAG(
         execution_date="{{ ds }}",
         reset_dag_run=True,
         wait_for_completion=True,
-        poke_interval=60,
+        poke_interval=120,
     )
                 
     end = BashOperator(

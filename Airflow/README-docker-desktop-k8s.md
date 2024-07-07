@@ -40,7 +40,7 @@ kubectl get ingress -n kubernetes-dashboard
 // Git Bash
 kubectl -n kubernetes-dashboard get secret admin-user -o jsonpath="{.data.token}" | base64 --decode
 
-eyJhbGciOiJSUzI1NiIsImtpZCI6IkVGRVFHU1pYY3hMNnhlQ0F5TkMtLUdtSEh6UXNVRmhsRHgyTHhsX1dYaTgifQ.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJrdWJlcm5ldGVzLWRhc2hib2FyZCIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VjcmV0Lm5hbWUiOiJhZG1pbi11c2VyIiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZXJ2aWNlLWFjY291bnQubmFtZSI6ImFkbWluLXVzZXIiLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlcnZpY2UtYWNjb3VudC51aWQiOiIyMzFiYzk3OC01YmI4LTQ4ZDYtOWU4YS0wMDkwNDU4OTAwMDYiLCJzdWIiOiJzeXN0ZW06c2VydmljZWFjY291bnQ6a3ViZXJuZXRlcy1kYXNoYm9hcmQ6YWRtaW4tdXNlciJ9.uWKxzzITzVhRGTGUlsEBhCG0C_zZMn-EnvWyGdrPfX9EEw3ba54XAEF6ntJ5FRaMeOcf39YFFR7Rt5jpjBqk82uOG0Cn9019rmTJiCf6bupsNDUM4YBVJMUXevLSNCgUpDgFPoRqFYSo_vDIr7TCN6VgIXwkfIrbuYZYJGDtFXoo6eYRWB_Pxh14KfRht5oQW9Zc4_vj91cEG8VQcMXUpgUj3yxDKD26YPqlADW3VA5KlXU8BOadM76f5fetNNEgT_DQ-NG1E3-vl8kuByeAS2guGKUYIAj0IURJwoO-ENCsXY8VTvQ7elIAxkRUB8ZNXQvNG-uDg7ZdEMCMSTUx1A
+eyJhbGciOiJSUzI1N...
 
 // Edit hosts file
 notepad C:\Windows\System32\drivers\etc\hosts
@@ -152,12 +152,17 @@ docker build -t airflow-requirements:2.9.2 .
 
 helm repo add minio-operator https://operator.min.io
 helm upgrade --install minio-operator minio-operator/operator --namespace minio-operator --create-namespace
+helm show values minio-operator/operator > minio-operator-values.yaml
 
-kubectl get po -n minio-operator
-kubectl port-forward svc/console -n minio-operator 9090:9090
+helm-minio-operator.bat
 kubectl -n minio-operator get secret/console-sa-secret -o jsonpath="{.data.token}" | base64 --decode
 
-<http://localhost:9090/>
+// Edit hosts file
+notepad C:\Windows\System32\drivers\etc\hosts
+    ...
+    127.0.0.1       minio-tenant1.com
+
+<https://minio-operator.com/>
 
 // Minio Tenant
 <https://min.io/docs/minio/kubernetes/upstream/operations/install-deploy-manage/deploy-minio-tenant-helm.html>
@@ -166,10 +171,13 @@ helm search repo minio-operator
 helm upgrade --install minio-tenant1 minio-operator/tenant --namespace minio-tenant1 --create-namespace
 helm show values minio-operator/tenant > minio-tenant-values.yaml
 
-helm-minio-tanent.bat
+helm-minio-tenant.bat
 kubectl port-forward svc/minio-tenant1-console -n minio-tenant1 9443:9443
 
-<http://localhost:9443>
+<http://localhost:9443> # minio/minio123
+<https://minio-operator.com/>
+
+Login with JWT => minio-tenant1 => Management Console (icon) => Minio Tenant1
 
 ### Spark Installation
 

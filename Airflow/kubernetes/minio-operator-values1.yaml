@@ -1,0 +1,8 @@
+console:
+  ingress:
+    enabled: true                    # Enable Ingress
+    ingressClassName: nginx          # Set your desired Ingress Class
+    annotations:
+      nginx.ingress.kubernetes.io/rewrite-target: /
+    host: minio-operator.com         # Set your desired hostname
+    path: /

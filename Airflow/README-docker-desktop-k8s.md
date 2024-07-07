@@ -160,7 +160,7 @@ kubectl -n minio-operator get secret/console-sa-secret -o jsonpath="{.data.token
 // Edit hosts file
 notepad C:\Windows\System32\drivers\etc\hosts
     ...
-    127.0.0.1       minio-tenant1.com
+    127.0.0.1       minio-operator.com
 
 <https://minio-operator.com/>
 
@@ -178,6 +178,27 @@ kubectl port-forward svc/minio-tenant1-console -n minio-tenant1 9443:9443
 <https://minio-operator.com/>
 
 Login with JWT => minio-tenant1 => Management Console (icon) => Minio Tenant1
+
+### Metabase
+
+helm repo add stable https://charts.helm.sh/stable
+helm repo update
+
+helm search repo stable/metabase
+helm upgrade --install metabase stable/metabase --namespace metabase --create-namespace
+
+// Edit Metabase Components Manually
+
+kubectl get deployment metabase -o=jsonpath='{$.spec.template.spec.containers[:1].image}' -n metabase
+kubectl set image deployment/metabase metabase=metabase/metabase:v0.50.4 -n metabase
+kubectl apply -f metabase-ingress.yaml
+
+// Edit hosts file
+notepad C:\Windows\System32\drivers\etc\hosts
+    ...
+    127.0.0.1       mymetabase.com
+
+<https://mymetabase.com>
 
 ### Spark Installation
 
@@ -202,10 +223,6 @@ mkdir spark
 // Edit spark-process.py
 python spark/spark-process.py
 
-### Metabase
-
-helm repo add stable https://charts.helm.sh/stable
-helm install --name metabase stable/metabase
 
 ### Force delete Airflow
 

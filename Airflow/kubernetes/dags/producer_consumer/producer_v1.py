@@ -8,7 +8,7 @@ my_file_1 = Dataset('/tmp/my_file_1.txt')
 my_file_2 = Dataset('/tmp/my_file_2.txt')
 
 with DAG(
-    dag_id='producer2', 
+    dag_id='producer_v1', 
     schedule_interval='@daily',
     tags=['producer_consumer'],
     start_date=datetime(2023, 1, 1), 

@@ -64,3 +64,8 @@ dags:
 
 workers:
   replicas: 2
+
+# triggerer:
+#   persistence:
+#     enabled: true
+#     fixPermissions: true

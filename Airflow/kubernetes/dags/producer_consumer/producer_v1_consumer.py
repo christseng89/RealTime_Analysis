@@ -14,7 +14,7 @@ default_args = {
 }
 
 with DAG(
-    dag_id='consumer2', 
+    dag_id='producer_v1consumer', 
     default_args=default_args,
     tags=['producer_consumer'],    
     schedule=[my_file_1, my_file_2],

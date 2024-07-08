@@ -205,6 +205,16 @@ notepad C:\Windows\System32\drivers\etc\hosts
 
 <https://mymetabase.com>
 
+// Add Database
+
+- Data Type: PostgreSQL
+- Display Name: Postgres DW
+- Host: airflow-postgresql.airflow.svc.cluster.local
+- Port: 5432
+- Database Name: postgres
+- Username: postgres
+- Password: postgres
+
 ### Spark Installation
 
 choco install hadoop -y

@@ -26,3 +26,4 @@ airflow_helm/
 images/
 aairflow-values1.yaml
 temp/
+.venv/

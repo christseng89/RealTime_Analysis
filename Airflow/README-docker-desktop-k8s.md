@@ -241,3 +241,29 @@ kubectl get pods -n spark
     spark-master-cff6f984d-6vhqr    1/1     Running   0          8m44s
     spark-worker-7d45b479b9-wq9lr   1/1     Running   0          8m44s
     spark-worker-7d45b479b9-z7mvv   1/1     Running   0          8m44s
+
+kubectl exec -it spark-master-cff6f984d-6vhqr -n spark -- /bin/bash
+
+### Preparing Spark Jobs to run on Kubernetes
+
+pip install spark pyspark
+where spark
+where pyspark
+
+Git Bash (Run as Administrator)
+
+cd /d/development/Real_Time_Analysis/Airflow/kubernetes
+python -m venv .venv
+source .venv/Scripts/activate
+    #(.venv)
+
+    pip install spark pyspark
+    where spark
+        D:\development\Real_Time_Analysis\Airflow\kubernetes\.venv\Scripts\spark
+    where spark-submit
+        D:\development\Real_Time_Analysis\Airflow\kubernetes\.venv\Scripts\spark-submit
+
+    python spark/spark-process.py
+        ...
+        Spark Session created
+        Hello World!

@@ -3,8 +3,8 @@ from airflow.decorators import task
 
 from datetime import datetime
 
-my_file_1 = Dataset('/tmp/my_file_1.txt')
-my_file_2 = Dataset('/tmp/my_file_2.txt')
+my_file1 = Dataset('/tmp/my_file1.txt')
+
 default_args = {
     'owner': 'mark, john',
     'start_date': datetime(2024, 5, 1),
@@ -17,18 +17,13 @@ with DAG(
     dag_id='producer_v1consumer', 
     default_args=default_args,
     tags=['producer_consumer'],    
-    schedule=[my_file_1, my_file_2],
+    schedule=[my_file1],
     catchup=False) as dag:
 
-    @task #(inlets=[my_file_1]) # Define the task with the dataset as an inlet
+    @task #(inlets=[my_file]) # Define the task with the dataset as an inlet
     def read_dataset1():
-        with open(my_file_1.uri, 'r') as f:
+        with open(my_file1.uri, 'r') as f:
             print(f.read())
-
-    @task #(inlets=[my_file_2]) # Define the task with the dataset as an inlet (Optional)
-    def read_dataset2():
-        with open(my_file_2.uri, 'r') as f:
-            print(f.read())
-                        
-    read_dataset1() >> read_dataset2() # (Optional)
+            
+    read_dataset1()
             

@@ -20,7 +20,7 @@ wget https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/stat
 kubectl apply -f ingress-nginx.yaml
 kubectl get pods -n ingress-nginx
 
-### Install Kubernetes Dashboard
+### Install Kubernetes Dashboard/Metrics Server
 
 wget https://raw.githubusercontent.com/kubernetes/dashboard/v2.7.0/aio/deploy/recommended.yaml -O kubernetes-dashboard.yaml
 
@@ -48,6 +48,11 @@ notepad C:\Windows\System32\drivers\etc\hosts
         127.0.0.1       dashboard.com
 
 <https://dashboard.com/>
+
+// Metrics Server
+<https://github.com/kubernetes-sigs/metrics-server?tab=readme-ov-file>
+
+kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/high-availability-1.21+.yaml
 
 ### Install Airflow
 

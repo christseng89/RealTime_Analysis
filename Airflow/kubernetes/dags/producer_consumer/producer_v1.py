@@ -29,6 +29,6 @@ with DAG(
         
         # Open the file and write the update
         with open(my_file2.uri, 'a+') as f:
-            f.write('producer update 1\n')    
+            f.write('producer update 2\n')    
             
     update_dataset1() >> update_dataset2()

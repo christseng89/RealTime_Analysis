@@ -1,5 +1,6 @@
 from airflow import DAG, Dataset
 from airflow.decorators import task
+from airflow.operators.bash import BashOperator
 
 from datetime import datetime
 
@@ -21,15 +22,15 @@ with DAG(
     schedule=[my_file1, my_file2],
     catchup=False) as dag:
 
-    @task #(inlets=[my_file]) # Define the task with the dataset as an inlet
+    @task (inlets=[my_file1]) 
     def read_dataset1():
         with open(my_file1.uri, 'r') as f:
             print(f.read())
 
-    @task #(inlets=[my_file]) # Define the task with the dataset as an inlet
+    @task (inlets=[my_file2]) 
     def read_dataset2():
         with open(my_file2.uri, 'r') as f:
             print(f.read())
-                        
+                     
     read_dataset1() >> read_dataset2()
             

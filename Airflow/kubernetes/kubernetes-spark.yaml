@@ -1,0 +1,105 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: spark
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: spark-service-account
+  namespace: spark
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: spark-config
+  namespace: spark
+data:
+  spark-defaults.conf: |
+    spark.master            spark://spark-master:7077
+    spark.eventLog.enabled  true
+    spark.eventLog.dir      hdfs://namenode:8021/directory
+    spark.history.fs.logDirectory hdfs://namenode:8021/directory
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spark-master
+  namespace: spark
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: spark
+      role: master
+  template:
+    metadata:
+      labels:
+        app: spark
+        role: master
+    spec:
+      serviceAccountName: spark-service-account
+      containers:
+      - name: spark-master
+        image: spark:latest  # Replace with your actual Spark image tag
+        command:
+        - /opt/spark/bin/spark-class
+        - org.apache.spark.deploy.master.Master
+        ports:
+        - containerPort: 7077
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: spark-master-service
+  namespace: spark
+spec:
+  selector:
+    app: spark
+    role: master
+  ports:
+    - protocol: TCP
+      port: 7077
+      targetPort: 7077
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spark-worker
+  namespace: spark
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: spark
+      role: worker
+  template:
+    metadata:
+      labels:
+        app: spark
+        role: worker
+    spec:
+      serviceAccountName: spark-service-account
+      containers:
+      - name: spark-worker
+        image: spark:latest  # Replace with your actual Spark image tag
+        command:
+        - /opt/spark/bin/spark-class
+        - org.apache.spark.deploy.worker.Worker
+        - spark://spark-master:7077
+        ports:
+        - containerPort: 7078
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: spark-worker-service
+  namespace: spark
+spec:
+  selector:
+    app: spark
+    role: worker
+  ports:
+    - protocol: TCP
+      port: 7078
+      targetPort: 7078

@@ -215,35 +215,29 @@ notepad C:\Windows\System32\drivers\etc\hosts
 - Username: postgres
 - Password: postgres
 
-### Spark Installation
+### Yunikorn (Spark) Installation
 
-choco install hadoop -y
+helm repo add yunikorn https://apache.github.io/yunikorn-release
+helm repo update
 
-// Git Bash
+helm upgrade --install yunikorn yunikorn/yunikorn --namespace yunikorn --create-namespace
+helm show values yunikorn/yunikorn > yunikorn-values.yaml
 
+kubectl port-forward svc/yunikorn-service 9889:9889 -n yunikorn
+<http://localhost:9889>
 
-pip install spark pyspark
+### Install Spark on Kubernetes
 
-cd Airflow/kubernetes/
-python -m venv spark
-source spark/bin/activate
+<https://hub.docker.com/_/spark>
 
-whick spark
-whick pyspark
-which spark-submit
-    /c/Python312/Scripts/spark-submit
-    (spark)
-mkdir spark
+docker pull spark
+docker run -it --rm --name spark spark /opt/spark/bin/spark-shell
+    spark.range(1000 * 1000 * 1000).count()
+    :q
 
-// Edit spark-process.py
-python spark/spark-process.py
-
-
-### Force delete Airflow
-
-kubectl delete all --all -n airflow --force
-kubectl delete ns airflow
-
-### Helm Uninstall
-
-helm uninstall minio-operator -n minio-operator
+kubectl apply -f kubernetes-spark.yaml
+kubectl get pods -n spark
+    NAME                            READY   STATUS    RESTARTS   AGE
+    spark-master-cff6f984d-6vhqr    1/1     Running   0          8m44s
+    spark-worker-7d45b479b9-wq9lr   1/1     Running   0          8m44s
+    spark-worker-7d45b479b9-z7mvv   1/1     Running   0          8m44s

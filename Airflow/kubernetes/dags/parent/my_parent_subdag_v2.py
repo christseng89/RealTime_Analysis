@@ -11,7 +11,7 @@ default_args = {
     'email': ['samfire5200@gmail.com'],
     'email_on_failure': True,
     'email_on_retry': False,
-    'schedule_interval': '@daily',
+    'schedule_interval': '20 * * * *',
 }
 
 dag_id = "my_parent_subdag_v2"
@@ -38,7 +38,7 @@ with DAG(
             conf={'process_a': 1, 'process_b': 2, 'process_c': 3}
         ),
         mode='reschedule',
-        timeout=120,
+        timeout=180,
         propagate_skipped_state=False,
     )
 
@@ -51,7 +51,7 @@ with DAG(
             conf={'process_a': 4, 'process_b': 5, 'process_c': 6}
         ),
         mode='reschedule',
-        timeout=120,
+        timeout=180,
         propagate_skipped_state=False,
     )
 
@@ -64,7 +64,7 @@ with DAG(
             conf={'process_a': 7, 'process_b': 8, 'process_c': 9}
         ),
         mode='reschedule',
-        timeout=120,
+        timeout=180,
         propagate_skipped_state=False,
     )
 

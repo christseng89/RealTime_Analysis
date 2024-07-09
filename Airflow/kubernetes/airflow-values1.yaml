@@ -63,7 +63,7 @@ dags:
     maxFailures: 0
 
 workers:
-  replicas: 2
+  replicas: 1
 
 # triggerer:
 #   persistence:

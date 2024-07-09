@@ -270,6 +270,7 @@ source .venv/Scripts/activate
 
 ### Packaging your Spark Job to Docker Image (not yet)
 
+    cd spark
     docker build -t christseng89/myspark:3.5.1 .
     docker push christseng89/myspark:3.5.1
 
@@ -287,3 +288,23 @@ source .venv/Scripts/activate
     --conf spark.kubernetes.container.image.pullPolicy=Always \
     --conf spark.jars.ivy=/.ivy2/local \
     local:///opt/bitnami/spark/spark-process.py
+
+### Velero Backup to local
+
+kubectl create namespace velero
+kubectl create secret generic cloud-credentials \
+  --namespace velero \
+  --from-literal=aws=aws_access_key_id=minio;aws_secret_access_key=minio123
+
+mkdir D:\k8s-backup
+echo '{}' > k8s-backup-secret.txt
+
+velero install \
+  --provider aws \
+  --plugins velero/velero-plugin-for-aws:v1.2.0 \
+  --bucket velero \
+  --secret-file k8s-backup-secret.txt \
+  --backup-location-config region=minio,s3ForcePathStyle="true",s3Url=http://minio-tenant1.minio.svc.cluster.local:9000 \
+  --snapshot-location-config region=minio
+
+k get po -n velero

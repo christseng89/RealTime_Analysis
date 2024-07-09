@@ -13,7 +13,7 @@ default_args = {
     'email': ['samfire5200@gmail.com'],
     'email_on_failure': True,
     'email_on_retry': False,
-    'schedule_interval': '30 * * * *',
+    'schedule_interval': '30 0 * * *',
 }
 
 dag_id = "my_parent_subdag_v3"

@@ -38,7 +38,7 @@ def sla_callback(dag, task_list, blocking_task_list, slas, blocking_tis):
 
 
 @dag(
-    schedule_interval="*/2 * * * *",
+    schedule_interval="*/20 0 * * *",
     start_date=datetime(2024, 5, 1),
     catchup=False,
     sla_miss_callback=sla_callback,

@@ -9,7 +9,7 @@ with DAG(
     dag_id='producer_v0', 
     schedule_interval='@daily',
     tags=['producer_consumer'],
-    start_date=datetime(2023, 1, 1), 
+    start_date=datetime(2024, 5, 1), 
     catchup=False) as dag:
     
     @task(outlets=[my_file])  # Define the task with the dataset as an outlet
@@ -19,6 +19,6 @@ with DAG(
         
         # Open the file and write the update
         with open(my_file.uri, 'a+') as f:
-            f.write('producer update\n')
+            f.write('producer update my_file\n')
     
     update_dataset()

@@ -267,3 +267,23 @@ source .venv/Scripts/activate
         ...
         Spark Session created
         Hello World!
+
+### Packaging your Spark Job to Docker Image (not yet)
+
+    docker build -t christseng89/myspark:3.5.1 .
+    docker push christseng89/myspark:3.5.1
+
+    spark-submit --name spark-processing --master k8s://http://dashboard.com --deploy-mode cluster --class org.apache.spark.examples.SparkPi --conf spark.kubernetes.authenticate.driver.serviceAccountName=admin-user --conf spark.kubernetes.namespace=kubernetes-dashboard --conf spark.executor.instances=1 --conf spark.kubernetes.container.image=christseng89/myspark:3.5.1 --conf spark.kubernetes.container.image.pullPolicy=Always --conf spark.jars.ivy=/.ivy2/local local:///opt/bitnami/spark/spark-process.py
+
+    spark-submit \
+    --name spark-processing \
+    --master k8s://http://dashboard.com \
+    --deploy-mode cluster \
+    --class org.apache.spark.examples.SparkPi \
+    --conf spark.kubernetes.authenticate.driver.serviceAccountName=admin-user \
+    --conf spark.kubernetes.namespace=kubernetes-dashboard \
+    --conf spark.executor.instances=1 \
+    --conf spark.kubernetes.container.image=christseng89/myspark:3.5.1 \
+    --conf spark.kubernetes.container.image.pullPolicy=Always \
+    --conf spark.jars.ivy=/.ivy2/local \
+    local:///opt/bitnami/spark/spark-process.py

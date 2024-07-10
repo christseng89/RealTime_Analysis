@@ -178,8 +178,8 @@ helm show values minio-operator/tenant > minio-tenant-values.yaml
 
 helm-minio-tenant.bat
 kubectl port-forward svc/minio-tenant1-console -n minio-tenant1 9443:9443
-
 <http://localhost:9443> # minio/minio123
+
 <https://minio-operator.com/>
 
 Login with JWT => minio-tenant1 => Management Console (icon) => Minio Tenant1
@@ -226,14 +226,18 @@ helm show values yunikorn/yunikorn > yunikorn-values.yaml
 kubectl port-forward svc/yunikorn-service 9889:9889 -n yunikorn
 <http://localhost:9889>
 
-### Install Spark on Kubernetes
+### Install Spark Job on Kubernetes (kubernetes-dashboard)
 
 <https://hub.docker.com/_/spark>
 
 docker pull spark
 docker run -it --rm --name spark spark /opt/spark/bin/spark-shell
     spark.range(1000 * 1000 * 1000).count()
+        res2: Long = 1000000000
     :q
+
+docker run -it --rm --name spark spark:latest python3 --version
+    Python 3.8.10
 
 kubectl apply -f kubernetes-spark.yaml
 kubectl get pods -n spark
@@ -244,50 +248,118 @@ kubectl get pods -n spark
 
 kubectl exec -it spark-master-cff6f984d-6vhqr -n spark -- /bin/bash
 
-### Preparing Spark Jobs to run on Kubernetes
+### Test Spark via PySpark
 
+// Install Hadoop for Windows
+<https://cwiki.apache.org/confluence/display/HADOOP2/WindowsProblems>
+
+git clone https://github.com/steveloughran/winutils
+<https://hadoop.apache.org/release/3.0.0.html>
+
+tar -xzvf hadoop-3.0.0.tar.gz
+ren hadoop-3.0.0 Hadoop
+copy winutils.exe to Hadop\bin
+
+- set HADOOP_HOME=C:\Hadoop
+- add C:\Hadoop\bin to PATH
+
+// Pip Install Spark for Windows
 pip install spark pyspark
 where spark
 where pyspark
 
-Git Bash (Run as Administrator)
-
-cd /d/development/Real_Time_Analysis/Airflow/kubernetes
 python -m venv .venv
+
+// Git Bash
+cd /d/development/Real_Time_Analysis/Airflow/kubernetes
+
 source .venv/Scripts/activate
-    #(.venv)
+    (.venv)
 
     pip install spark pyspark
-    where spark
-        D:\development\Real_Time_Analysis\Airflow\kubernetes\.venv\Scripts\spark
-    where spark-submit
-        D:\development\Real_Time_Analysis\Airflow\kubernetes\.venv\Scripts\spark-submit
+    which spark
+        /d/development/Real_Time_Analysis/Airflow/kubernetes/.venv/Scripts/spark
+    which spark-submit
+        /d/development/Real_Time_Analysis/Airflow/kubernetes/.venv/Scripts/spark-submit
+
+    export PATH="/c/Program Files/Java/jdk1.8.0_211/bin:$PATH"
+    java -version
+        java version "1.8.0_211"
+
+    which java
+        /c/Program Files/Java/jdk1.8.0_211/bin/java
+    which hadoop
+        /c/Hadoop/bin/hadoop
+    which winutils
+        /c/Hadoop/bin/winutils
 
     python spark/spark-process.py
         ...
         Spark Session created
         Hello World!
 
-### Packaging your Spark Job to Docker Image (not yet)
+    // *** SPECIAL NOTES ***
+    // ERROR ShutdownHookManager: Exception while deleting Spark temp dir:
+    // - Known Issue: <https://issues.apache.org/jira/browse/SPARK-12216?jql=text%20~%20%22ERROR%20ShutdownHookManager%22>
+    // Temporary Solution: Wait for 30 seconds for the Spark Session to be closed
+
+### Spark Submit a Spark Jobs to Kubernetes (kubernetes-dashboard)
+
+// Install Apache Spark for Windows
+tar -xzvf spark-3.5.1-bin-hadoop3.tgz
+ren spark-3.5.1-bin-hadoop3 spark-3.5.1
+
+- set SPARK_HOME=C:\spark-3.5.1
+- add C:\spark-3.5.1\bin to PATH
+
+#### Build and Test Spark Job's Docker Image
 
     cd spark
-    docker build -t christseng89/myspark:3.5.1 .
-    docker push christseng89/myspark:3.5.1
+    docker build -t christseng89/myspark:1.0 .
+    docker push christseng89/myspark:1.0
+    docker run -it --rm --name myspark christseng89/myspark:1.0 cat /opt/spark/spark-process.py
+    docker run -it --rm --name myspark christseng89/myspark:1.0 python3 --version
+        Python 3.8.10
+    
+    docker run -it --rm --name myspark christseng89/myspark:1.0
+        ...
+        Spark Session created
+        Hello World!
 
-    spark-submit --name spark-processing --master k8s://http://dashboard.com --deploy-mode cluster --class org.apache.spark.examples.SparkPi --conf spark.kubernetes.authenticate.driver.serviceAccountName=admin-user --conf spark.kubernetes.namespace=kubernetes-dashboard --conf spark.executor.instances=1 --conf spark.kubernetes.container.image=christseng89/myspark:3.5.1 --conf spark.kubernetes.container.image.pullPolicy=Always --conf spark.jars.ivy=/.ivy2/local local:///opt/bitnami/spark/spark-process.py
+#### Running Spark Job on Kubernetes
 
-    spark-submit \
-    --name spark-processing \
-    --master k8s://http://dashboard.com \
-    --deploy-mode cluster \
-    --class org.apache.spark.examples.SparkPi \
-    --conf spark.kubernetes.authenticate.driver.serviceAccountName=admin-user \
-    --conf spark.kubernetes.namespace=kubernetes-dashboard \
-    --conf spark.executor.instances=1 \
-    --conf spark.kubernetes.container.image=christseng89/myspark:3.5.1 \
-    --conf spark.kubernetes.container.image.pullPolicy=Always \
-    --conf spark.jars.ivy=/.ivy2/local \
-    local:///opt/bitnami/spark/spark-process.py
+    kubectl apply -f spark-job.yaml
+    kubectl get pods -n kubernetes-dashboard
+        NAME                                         READY   STATUS      RESTARTS       AGE
+        dashboard-metrics-scraper-5657497c4c-8l4s2   1/1     Running     19 (23h ago)   5d22h
+        kubernetes-dashboard-78f87ddfc-62b9c         1/1     Running     22 (23h ago)   5d22h
+        spark-application-v64jl                      0/1     Completed   0              97s
+
+    kubectl logs spark-application-v64jl -n kubernetes-dashboard
+        ...
+        Spark Session created
+        Hello World!
+
+    deactivate
+
+#### Spark Submit a Spark Jobs to Kubernetes
+// Spark Submit
+spark-submit \
+  --name spark-processing \
+  --master k8s://https://kubernetes.docker.internal:6443 \
+  --deploy-mode cluster \
+  --conf spark.kubernetes.authenticate.driver.serviceAccountName=admin-user \
+  --conf spark.kubernetes.namespace=kubernetes-dashboard \
+  --conf spark.executor.instances=1 \
+  --conf spark.kubernetes.container.image=christseng89/myspark:1.0 \
+  --conf spark.kubernetes.container.image.pullPolicy=Always \
+  local:///opt/spark/spark-process.py
+
+    ...
+    24/07/10 21:45:12 INFO ShutdownHookManager: Shutdown hook called
+    24/07/10 21:45:12 INFO ShutdownHookManager: Deleting directory C:\Users\Chris Tseng\AppData\Local\Temp\spark-52b51970-95ab-47aa-9038-f18133d54e11
+
+deactivate
 
 ### Velero Backup to local
 

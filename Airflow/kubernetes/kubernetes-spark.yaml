@@ -41,7 +41,7 @@ spec:
       serviceAccountName: spark-service-account
       containers:
       - name: spark-master
-        image: spark:latest  # Replace with your actual Spark image tag
+        image: apache/spark:latest
         command:
         - /opt/spark/bin/spark-class
         - org.apache.spark.deploy.master.Master
@@ -82,7 +82,7 @@ spec:
       serviceAccountName: spark-service-account
       containers:
       - name: spark-worker
-        image: spark:latest  # Replace with your actual Spark image tag
+        image: apache/spark:latest
         command:
         - /opt/spark/bin/spark-class
         - org.apache.spark.deploy.worker.Worker

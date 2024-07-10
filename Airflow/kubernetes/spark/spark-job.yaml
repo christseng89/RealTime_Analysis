@@ -1,0 +1,30 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: spark-application
+  namespace: kubernetes-dashboard
+spec:
+  template:
+    metadata:
+      labels:
+        app: spark-application
+    spec:
+      containers:
+      - name: spark-application
+        image: christseng89/myspark:1.0
+        ports:
+        - containerPort: 4040
+        env:
+        - name: PYSPARK_PYTHON
+          value: "python3"
+        - name: PYTHONHASHSEED
+          value: "1"
+        resources:
+          limits:
+            memory: "2Gi"
+            cpu: "1"
+          requests:
+            memory: "1Gi"
+            cpu: "0.5"
+      restartPolicy: Never
+  backoffLimit: 4

@@ -27,3 +27,5 @@ images/
 aairflow-values1.yaml
 temp/
 .venv/
+credentials-velero
+velero-v1.14.0-linux-amd64.tar.gz

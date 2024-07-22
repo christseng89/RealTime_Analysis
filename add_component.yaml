@@ -22,10 +22,12 @@ implementation:
           return file_path
 
       def add(a, b, output_path):
+          import time  # Import time module here
           result = a + b
           print(f"Adding {a} + {b} = {result}")
           with open(output_path, 'w') as f:
               f.write(str(result))
+          time.sleep(30)  # Adding a delay to prevent the container from exiting too quickly
           return result
 
       def _serialize_int(int_value: int) -> str:

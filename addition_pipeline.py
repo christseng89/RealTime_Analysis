@@ -4,10 +4,12 @@ from kfp.compiler import Compiler
 
 # Define a simple addition function
 def add(a: int, b: int, output_path: OutputPath(int)) -> int:
+    import time  # Import time module here
     result = a + b
     print(f"Adding {a} + {b} = {result}")
     with open(output_path, 'w') as f:
         f.write(str(result))
+    time.sleep(30)  # Adding a delay to prevent the container from exiting too quickly
     return result
 
 # Create a component from the add function

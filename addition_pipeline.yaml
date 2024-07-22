@@ -2,7 +2,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: Workflow
 metadata:
   generateName: simple-addition-pipeline-
-  annotations: {pipelines.kubeflow.org/kfp_sdk_version: 1.8.5, pipelines.kubeflow.org/pipeline_compilation_time: '2024-07-22T21:19:50.961438',
+  annotations: {pipelines.kubeflow.org/kfp_sdk_version: 1.8.5, pipelines.kubeflow.org/pipeline_compilation_time: '2024-07-22T21:26:16.277686',
     pipelines.kubeflow.org/pipeline_spec: '{"description": "A simple pipeline that
       adds two numbers", "inputs": [{"name": "x", "type": "Integer"}, {"name": "y",
       "type": "Integer"}], "name": "Simple Addition Pipeline"}'}
@@ -28,10 +28,12 @@ spec:
             return file_path
 
         def add(a, b, output_path):
+            import time  # Import time module here
             result = a + b
             print(f"Adding {a} + {b} = {result}")
             with open(output_path, 'w') as f:
                 f.write(str(result))
+            time.sleep(30)  # Adding a delay to prevent the container from exiting too quickly
             return result
 
         def _serialize_int(int_value: int) -> str:
@@ -88,8 +90,10 @@ spec:
           "command": ["sh", "-ec", "program_path=$(mktemp)\nprintf \"%s\" \"$0\" >
           \"$program_path\"\npython3 -u \"$program_path\" \"$@\"\n", "def _make_parent_dirs_and_return_path(file_path:
           str):\n    import os\n    os.makedirs(os.path.dirname(file_path), exist_ok=True)\n    return
-          file_path\n\ndef add(a, b, output_path):\n    result = a + b\n    print(f\"Adding
-          {a} + {b} = {result}\")\n    with open(output_path, ''w'') as f:\n        f.write(str(result))\n    return
+          file_path\n\ndef add(a, b, output_path):\n    import time  # Import time
+          module here\n    result = a + b\n    print(f\"Adding {a} + {b} = {result}\")\n    with
+          open(output_path, ''w'') as f:\n        f.write(str(result))\n    time.sleep(30)  #
+          Adding a delay to prevent the container from exiting too quickly\n    return
           result\n\ndef _serialize_int(int_value: int) -> str:\n    if isinstance(int_value,
           str):\n        return int_value\n    if not isinstance(int_value, int):\n        raise
           TypeError(''Value \"{}\" has type \"{}\" instead of int.''.format(\n            str(int_value),

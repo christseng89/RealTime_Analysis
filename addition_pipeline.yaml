@@ -2,7 +2,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: Workflow
 metadata:
   generateName: simple-addition-pipeline-
-  annotations: {pipelines.kubeflow.org/kfp_sdk_version: 1.8.5, pipelines.kubeflow.org/pipeline_compilation_time: '2024-07-22T20:34:15.861435',
+  annotations: {pipelines.kubeflow.org/kfp_sdk_version: 1.8.5, pipelines.kubeflow.org/pipeline_compilation_time: '2024-07-22T21:19:50.961438',
     pipelines.kubeflow.org/pipeline_spec: '{"description": "A simple pipeline that
       adds two numbers", "inputs": [{"name": "x", "type": "Integer"}, {"name": "y",
       "type": "Integer"}], "name": "Simple Addition Pipeline"}'}
@@ -12,64 +12,106 @@ spec:
   templates:
   - name: add
     container:
-      args: []
+      args: [--a, '{{inputs.parameters.x}}', --b, '{{inputs.parameters.y}}', --output,
+        /tmp/outputs/output/data, '----output-paths', /tmp/outputs/Output/data]
       command:
-      - python3
-      - -c
+      - sh
+      - -ec
       - |
-        import argparse
-        import os
+        program_path=$(mktemp)
+        printf "%s" "$0" > "$program_path"
+        python3 -u "$program_path" "$@"
+      - |
+        def _make_parent_dirs_and_return_path(file_path: str):
+            import os
+            os.makedirs(os.path.dirname(file_path), exist_ok=True)
+            return file_path
 
-        def add(a, b):
+        def add(a, b, output_path):
             result = a + b
             print(f"Adding {a} + {b} = {result}")
-            with open("/tmp/output", "w") as f:
+            with open(output_path, 'w') as f:
                 f.write(str(result))
+            return result
 
-        if __name__ == "__main__":
-            _parser = argparse.ArgumentParser(prog='Add', description='')
-            _parser.add_argument("--a", dest="a", type=int, required=True)
-            _parser.add_argument("--b", dest="b", type=int, required=True)
-            _parser.add_argument("----output-paths", dest="_output_paths", type=str, nargs=1)
-            _parsed_args = vars(_parser.parse_args())
-            _output_files = _parsed_args.pop("_output_paths", [])
+        def _serialize_int(int_value: int) -> str:
+            if isinstance(int_value, str):
+                return int_value
+            if not isinstance(int_value, int):
+                raise TypeError('Value "{}" has type "{}" instead of int.'.format(
+                    str(int_value), str(type(int_value))))
+            return str(int_value)
 
-            _outputs = add(**_parsed_args)
+        import argparse
+        _parser = argparse.ArgumentParser(prog='Add', description='')
+        _parser.add_argument("--a", dest="a", type=int, required=True, default=argparse.SUPPRESS)
+        _parser.add_argument("--b", dest="b", type=int, required=True, default=argparse.SUPPRESS)
+        _parser.add_argument("--output", dest="output_path", type=_make_parent_dirs_and_return_path, required=True, default=argparse.SUPPRESS)
+        _parser.add_argument("----output-paths", dest="_output_paths", type=str, nargs=1)
+        _parsed_args = vars(_parser.parse_args())
+        _output_files = _parsed_args.pop("_output_paths", [])
 
-            with open(_output_files[0], 'w') as f:
-                f.write(str(_outputs))
+        _outputs = add(**_parsed_args)
+
+        _outputs = [_outputs]
+
+        _output_serializers = [
+            _serialize_int,
+
+        ]
+
+        import os
+        for idx, output_file in enumerate(_output_files):
+            try:
+                os.makedirs(os.path.dirname(output_file))
+            except OSError:
+                pass
+            with open(output_file, 'w') as f:
+                f.write(_output_serializers[idx](_outputs[idx]))
       image: python:3.8
     inputs:
-      artifacts:
-      - {name: x, path: /tmp/inputs/a/data}
+      parameters:
+      - {name: x}
       - name: "y"
-        path: /tmp/inputs/b/data
     outputs:
       artifacts:
-      - {name: add-output, path: /tmp/output}
+      - {name: add-Output, path: /tmp/outputs/Output/data}
+      - {name: add-output, path: /tmp/outputs/output/data}
     metadata:
       labels:
         pipelines.kubeflow.org/kfp_sdk_version: 1.8.5
         pipelines.kubeflow.org/pipeline-sdk-type: kfp
         pipelines.kubeflow.org/enable_caching: "true"
-      annotations: {pipelines.kubeflow.org/component_spec: '{"description": "Adds
-          two integers", "implementation": {"container": {"command": ["python3", "-c",
-          "import argparse\nimport os\n\ndef add(a, b):\n    result = a + b\n    print(f\"Adding
-          {a} + {b} = {result}\")\n    with open(\"/tmp/output\", \"w\") as f:\n        f.write(str(result))\n\nif
-          __name__ == \"__main__\":\n    _parser = argparse.ArgumentParser(prog=''Add'',
-          description='''')\n    _parser.add_argument(\"--a\", dest=\"a\", type=int,
-          required=True)\n    _parser.add_argument(\"--b\", dest=\"b\", type=int,
-          required=True)\n    _parser.add_argument(\"----output-paths\", dest=\"_output_paths\",
-          type=str, nargs=1)\n    _parsed_args = vars(_parser.parse_args())\n    _output_files
-          = _parsed_args.pop(\"_output_paths\", [])\n\n    _outputs = add(**_parsed_args)\n\n    with
-          open(_output_files[0], ''w'') as f:\n        f.write(str(_outputs))\n"],
-          "fileOutputs": {"output": "/tmp/output"}, "image": "python:3.8"}}, "inputs":
-          [{"name": "a", "type": "Integer"}, {"name": "b", "type": "Integer"}], "name":
-          "Add", "outputs": [{"name": "output", "type": "Integer"}]}', pipelines.kubeflow.org/component_ref: '{"digest":
-          "f60da73ebb19567150930ff94da45d3bd75c7e51d030045b65c148bdac4ef015"}'}
+      annotations: {pipelines.kubeflow.org/component_spec: '{"implementation": {"container":
+          {"args": ["--a", {"inputValue": "a"}, "--b", {"inputValue": "b"}, "--output",
+          {"outputPath": "output"}, "----output-paths", {"outputPath": "Output"}],
+          "command": ["sh", "-ec", "program_path=$(mktemp)\nprintf \"%s\" \"$0\" >
+          \"$program_path\"\npython3 -u \"$program_path\" \"$@\"\n", "def _make_parent_dirs_and_return_path(file_path:
+          str):\n    import os\n    os.makedirs(os.path.dirname(file_path), exist_ok=True)\n    return
+          file_path\n\ndef add(a, b, output_path):\n    result = a + b\n    print(f\"Adding
+          {a} + {b} = {result}\")\n    with open(output_path, ''w'') as f:\n        f.write(str(result))\n    return
+          result\n\ndef _serialize_int(int_value: int) -> str:\n    if isinstance(int_value,
+          str):\n        return int_value\n    if not isinstance(int_value, int):\n        raise
+          TypeError(''Value \"{}\" has type \"{}\" instead of int.''.format(\n            str(int_value),
+          str(type(int_value))))\n    return str(int_value)\n\nimport argparse\n_parser
+          = argparse.ArgumentParser(prog=''Add'', description='''')\n_parser.add_argument(\"--a\",
+          dest=\"a\", type=int, required=True, default=argparse.SUPPRESS)\n_parser.add_argument(\"--b\",
+          dest=\"b\", type=int, required=True, default=argparse.SUPPRESS)\n_parser.add_argument(\"--output\",
+          dest=\"output_path\", type=_make_parent_dirs_and_return_path, required=True,
+          default=argparse.SUPPRESS)\n_parser.add_argument(\"----output-paths\", dest=\"_output_paths\",
+          type=str, nargs=1)\n_parsed_args = vars(_parser.parse_args())\n_output_files
+          = _parsed_args.pop(\"_output_paths\", [])\n\n_outputs = add(**_parsed_args)\n\n_outputs
+          = [_outputs]\n\n_output_serializers = [\n    _serialize_int,\n\n]\n\nimport
+          os\nfor idx, output_file in enumerate(_output_files):\n    try:\n        os.makedirs(os.path.dirname(output_file))\n    except
+          OSError:\n        pass\n    with open(output_file, ''w'') as f:\n        f.write(_output_serializers[idx](_outputs[idx]))\n"],
+          "image": "python:3.8"}}, "inputs": [{"name": "a", "type": "Integer"}, {"name":
+          "b", "type": "Integer"}], "name": "Add", "outputs": [{"name": "output",
+          "type": "Integer"}, {"name": "Output", "type": "Integer"}]}', pipelines.kubeflow.org/component_ref: '{}',
+        pipelines.kubeflow.org/arguments.parameters: '{"a": "{{inputs.parameters.x}}",
+          "b": "{{inputs.parameters.y}}"}'}
   - name: simple-addition-pipeline
     inputs:
-      artifacts:
+      parameters:
       - {name: x}
       - name: "y"
     dag:
@@ -77,17 +119,12 @@ spec:
       - name: add
         template: add
         arguments:
-          artifacts:
-          - {name: x, from: '{{inputs.artifacts.x}}'}
+          parameters:
+          - {name: x, value: '{{inputs.parameters.x}}'}
           - name: "y"
-            from: '{{inputs.artifacts.y}}'
+            value: '{{inputs.parameters.y}}'
   arguments:
     parameters:
     - {name: x}
     - name: "y"
-    artifacts:
-    - name: x
-      raw: {data: '{{workflow.parameters.x}}'}
-    - name: "y"
-      raw: {data: '{{workflow.parameters.y}}'}
   serviceAccountName: pipeline-runner

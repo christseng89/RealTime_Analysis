@@ -39,3 +39,17 @@ python3 hello_pipeline.py
 
 <http://localhost:8080/#/runs> => Run of Hello pipeline => Graph (Say hello) => Logs
     Hello !
+
+## Katib (AutoML) Installation
+
+<https://v1-6-branch.kubeflow.org/docs/components/katib/hyperparameter/#installing-katib>
+
+kubectl apply -k "github.com/kubeflow/katib.git/manifests/v1beta1/installs/katib-standalone?ref=master"
+kubectl port-forward svc/katib-ui -n kubeflow 8180:80
+<http://localhost:8180/katib>
+
+### Git Clone
+
+git clone https://github.com/kubeflow/manifests.git
+cd manifests
+git checkout v1.8.0

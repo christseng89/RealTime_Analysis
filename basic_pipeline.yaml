@@ -1,0 +1,66 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: basic-pipeline-
+  annotations: {pipelines.kubeflow.org/kfp_sdk_version: 1.8.5, pipelines.kubeflow.org/pipeline_compilation_time: '2024-07-22T20:21:01.373874',
+    pipelines.kubeflow.org/pipeline_spec: '{"description": "A basic pipeline that
+      prints a message", "inputs": [{"name": "message", "type": "String"}], "name":
+      "Basic Pipeline"}'}
+  labels: {pipelines.kubeflow.org/kfp_sdk_version: 1.8.5}
+spec:
+  entrypoint: basic-pipeline
+  templates:
+  - name: basic-pipeline
+    inputs:
+      parameters:
+      - {name: message}
+    dag:
+      tasks:
+      - name: print-message
+        template: print-message
+        arguments:
+          parameters:
+          - {name: message, value: '{{inputs.parameters.message}}'}
+  - name: print-message
+    container:
+      args: [--message, '{{inputs.parameters.message}}']
+      command:
+      - sh
+      - -ec
+      - |
+        program_path=$(mktemp)
+        printf "%s" "$0" > "$program_path"
+        python3 -u "$program_path" "$@"
+      - |
+        def print_message(message):
+            print(message)
+
+        import argparse
+        _parser = argparse.ArgumentParser(prog='Print message', description='')
+        _parser.add_argument("--message", dest="message", type=str, required=True, default=argparse.SUPPRESS)
+        _parsed_args = vars(_parser.parse_args())
+
+        _outputs = print_message(**_parsed_args)
+      image: python:3.8
+    inputs:
+      parameters:
+      - {name: message}
+    metadata:
+      labels:
+        pipelines.kubeflow.org/kfp_sdk_version: 1.8.5
+        pipelines.kubeflow.org/pipeline-sdk-type: kfp
+        pipelines.kubeflow.org/enable_caching: "true"
+      annotations: {pipelines.kubeflow.org/component_spec: '{"implementation": {"container":
+          {"args": ["--message", {"inputValue": "message"}], "command": ["sh", "-ec",
+          "program_path=$(mktemp)\nprintf \"%s\" \"$0\" > \"$program_path\"\npython3
+          -u \"$program_path\" \"$@\"\n", "def print_message(message):\n    print(message)\n\nimport
+          argparse\n_parser = argparse.ArgumentParser(prog=''Print message'', description='''')\n_parser.add_argument(\"--message\",
+          dest=\"message\", type=str, required=True, default=argparse.SUPPRESS)\n_parsed_args
+          = vars(_parser.parse_args())\n\n_outputs = print_message(**_parsed_args)\n"],
+          "image": "python:3.8"}}, "inputs": [{"name": "message", "type": "String"}],
+          "name": "Print message"}', pipelines.kubeflow.org/component_ref: '{}', pipelines.kubeflow.org/arguments.parameters: '{"message":
+          "{{inputs.parameters.message}}"}'}
+  arguments:
+    parameters:
+    - {name: message}
+  serviceAccountName: pipeline-runner

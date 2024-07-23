@@ -30,3 +30,5 @@ temp/
 credentials-velero
 velero-v1.14.0-linux-amd64.tar.gz
 manifests/
+katib/
+kubeflow/

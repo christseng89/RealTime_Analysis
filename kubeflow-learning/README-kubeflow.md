@@ -40,6 +40,12 @@ python3 hello_pipeline.py
 <http://localhost:8080/#/runs> => Run of Hello pipeline => Graph (Say hello) => Logs
     Hello !
 
+### Kubeflow Git Clone
+
+git clone https://github.com/kubeflow/manifests.git
+cd manifests
+git checkout v1.8.0
+
 ## Katib (AutoML) Installation
 
 <https://v1-6-branch.kubeflow.org/docs/components/katib/hyperparameter/#installing-katib>
@@ -48,8 +54,23 @@ kubectl apply -k "github.com/kubeflow/katib.git/manifests/v1beta1/installs/katib
 kubectl port-forward svc/katib-ui -n kubeflow 8180:80
 <http://localhost:8180/katib>
 
-### Git Clone
+pip install -U kubeflow-katib==0.17.0
 
-git clone https://github.com/kubeflow/manifests.git
-cd manifests
-git checkout v1.8.0
+### Create Katib Experiments
+
+git clone https://github.com/kubeflow/katib.git
+cd katib\examples\v1beta1\hp-tuning
+
+kubectl create -f grid.yaml
+kubectl create -f hyperband.yaml
+python3 random_experiment.py
+
+kubectl get experiment -n kubeflow
+    NAME        TYPE        STATUS   AGE
+    grid        Running     True     25s
+    hyperband   Succeeded   True     4h44m
+    random      Running     True     34m
+
+kubectl get po -n kubeflow
+
+<http://localhost:8180/katib/> => Namespace (kubeflow)
